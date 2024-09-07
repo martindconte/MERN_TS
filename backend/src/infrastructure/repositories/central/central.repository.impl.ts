@@ -15,9 +15,6 @@ export class CentralRepositoryImpl implements CentralRepository {
     getById( id: string ): Promise<CentralEntity> {
         return this.datasource.getById( id )
     }
-    // getOneBy( query: { [key: string]: any; } ): Promise<CentralEntity | null> {
-    //     return this.datasource.getOneBy( query )
-    // }
     updateById( updateCentralDTO: UpdateCentralDTO ): Promise<CentralEntity> {
         return this.datasource.updateById( updateCentralDTO )
     }

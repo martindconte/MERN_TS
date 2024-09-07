@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { validateObjectId } from '../../helpers/pre.helpers';
 
 const centralSchema = new mongoose.Schema(
     {
@@ -83,12 +84,5 @@ centralSchema.pre('find', function (next) {
 centralSchema.pre('findOne', function (next) {
     validateObjectId(this.getQuery(), next);
 });
-
-function validateObjectId(query: any, next: (err?: any) => void) {
-    if (query._id && !mongoose.Types.ObjectId.isValid(query._id)) {
-        return next('Invalid ID');
-    }
-    next();
-}
 
 export const CentralModel = mongoose.model('Central', centralSchema)
