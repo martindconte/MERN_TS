@@ -21,7 +21,9 @@ export class CentralEntity {
                 public readonly latitude?: number,
                 public readonly longitude?: number,
                 public readonly description?: string,
-                public readonly observations?: string
+                public readonly observations?: string,
+                public readonly createdAt?: Date,
+                public readonly updatedAt?: Date,
         ) { }
 
         static fromObject(object: { [key: string]: any }) {
@@ -41,6 +43,8 @@ export class CentralEntity {
                         longitude,
                         description,
                         observations,
+                        createdAt,
+                        updatedAt,
                 } = object
 
                 if (!id && !id) throw CustomError.badRequest('Missinbg id')
@@ -49,6 +53,7 @@ export class CentralEntity {
                 if (!siteCode) throw CustomError.badRequest('Missinbg Site Code')
                 if (!owner) throw CustomError.badRequest('Missinbg Owner')
                 if (status === undefined || status === null || typeof status !== 'boolean') throw CustomError.badRequest('Missinbg status')
+                if( typeof latitude !== 'number' || typeof longitude !== 'number' ) throw CustomError.badRequest('Latitude and Longitude must be a number')
 
                 return new CentralEntity(
                         id || _id,
@@ -65,6 +70,8 @@ export class CentralEntity {
                         longitude,
                         description,
                         observations,
+                        createdAt,
+                        updatedAt,
                 )
         }
 }

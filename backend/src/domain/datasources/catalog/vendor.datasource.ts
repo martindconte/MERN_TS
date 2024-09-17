@@ -8,5 +8,4 @@ export abstract class VendorDataSource {
     abstract getById( id: string ): Promise<VendorEntity>
     abstract updateById( updateVendorDTO: UpdateVendorDTO ): Promise<VendorEntity>
     abstract deleteById( id: string ): Promise<VendorEntity>
-
 }

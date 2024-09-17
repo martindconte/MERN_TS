@@ -22,32 +22,38 @@ const centralSchema = new mongoose.Schema(
             unique: true,
             uppercase: true
         },
-        province_name: {
+        provinceName: {
             type: String,
             trim: true,
             uppercase: true,
+            default: '',
         },
-        district_name: {
+        districtName: {
             type: String,
             trim: true,
             uppercase: true,
+            default: '',
         },
-        locality_name: {
+        localityName: {
             type: String,
             trim: true,
             uppercase: true,
+            default: '',
         },
         address: {
             type: String,
             trim: true,
+            default: '',
         },
         latitude: {
             type: Number,
             trim: true,
+            default: 0,
         },
         longitude: {
             type: Number,
             trim: true,
+            default: 0,
         },
         description: {
             type: String,

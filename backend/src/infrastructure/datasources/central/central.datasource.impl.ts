@@ -7,7 +7,7 @@ import {
     QueriesDTO,
     UpdateCentralDTO,
 } from "../../../domain";
-import { parseSubFilter, sortBy } from "../../../helpers";
+import { sortBy } from "../../../helpers";
 
 export class CentralDatasourceImpl implements CentralDatasource {
 
@@ -42,13 +42,13 @@ export class CentralDatasourceImpl implements CentralDatasource {
                         case 'status':
                             query[key] = filters[key];
                             break;
-                        case 'and': // Soportar $and
-                            query['$and'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
-                            break;
+                        // case 'and': // Soportar $and
+                        //     query['$and'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
+                        //     break;
 
-                        case 'or': // Soportar $or
-                            query['$or'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
-                            break;
+                        // case 'or': // Soportar $or
+                        //     query['$or'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
+                        //     break;
                         default:
                             const regex = new RegExp(filters[key], 'i');
                             query[key] = { $regex: regex };

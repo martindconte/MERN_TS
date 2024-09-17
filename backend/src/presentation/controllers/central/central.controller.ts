@@ -10,12 +10,22 @@ export class CentralController {
 
     createCentral = (req: Request, res: Response) => {
         const [error, centralDTO] = CreateCentralDTO.create(req.body)
-        if (error) return res.status(400).json({ error })
+        if (error) return res.status(400).json({
+            status: 'error',
+            msg: error
+        })
 
         new CentralUseCase.CreateCentral(this.centralRepository)
             .execute( centralDTO! )
-            .then(central => res.json(central))
-            .catch(error => res.status(400).json({ error }))
+            .then(central => res.json({
+                status: 'success',
+                msg: 'The Central has been successfully created',
+                payload: central
+            }))
+            .catch(error => res.status(400).json({
+                status: 'error',
+                msg: error
+            }))
     }
 
     getAllCentrals = (req: Request, res: Response) => {
@@ -31,7 +41,6 @@ export class CentralController {
         new CentralUseCase.GetCentral(this.centralRepository)
             .execute(centralid)
             .then(central => res.json(central))
-            // .catch(error => console.log(error))
             .catch(error => res.status(400).json({ error }))
     }
 

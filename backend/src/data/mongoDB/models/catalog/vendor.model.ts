@@ -5,7 +5,7 @@ const vendorSchema = new mongoose.Schema(
     {
         vendorName: {
             type: String,
-            require: true,
+            require: [true, 'vendorName is required!'],
             trim: true,
             uppercase: true
         },

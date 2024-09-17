@@ -11,10 +11,10 @@ export class VendorController {
         const [ error, vendorDTO ] = CreateVendorDTO.create( req.body )
         if( error ) return res.status(400).json({ error })
         
-            new VendorUseCase.CreateVendor( this.vendorRepository )
-                .execute( vendorDTO! )
-                .then( vendor => res.json( vendor ) )
-                .catch( error => res.status(400).json({ error }) )
+        new VendorUseCase.CreateVendor( this.vendorRepository )
+            .execute( vendorDTO! )
+            .then( vendor => res.json( vendor ) )
+            .catch( error => res.status(400).json({ error }) )
     }
 
     getAllCentrals = ( req: Request, res: Response ) => {

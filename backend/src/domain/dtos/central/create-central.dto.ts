@@ -16,6 +16,8 @@ export class CreateCentralDTO {
         public readonly longitude?: number,
         public readonly description?: string,
         public readonly observations?: string,
+        // public readonly createdAt?: Date,
+        // public readonly updatedAt?: Date,
       ) {}
 
     static create( central: { [key: string]: any } ): [ string?, CreateCentralDTO?] {
@@ -33,7 +35,9 @@ export class CreateCentralDTO {
             latitude,
             longitude,
             description,
-            observations
+            observations,
+            // createdAt,
+            // updatedAt,
         } = central;
 
         let statusBoolean = status;
@@ -45,6 +49,7 @@ export class CreateCentralDTO {
         if( typeof status !== 'boolean' ) {
             statusBoolean = ( status === 'true' )
         };
+        if( typeof latitude !== 'number' || typeof longitude !== 'number' ) return ['Latitude and Longitude must be a number']
         
         return [ undefined, new CreateCentralDTO(
             centralName,
@@ -60,6 +65,8 @@ export class CreateCentralDTO {
             longitude,
             description,
             observations,
+            // createdAt,
+            // updatedAt,
         )]
 
     }

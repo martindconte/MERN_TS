@@ -1,4 +1,6 @@
 import express, { Router } from 'express';
+import { corsConfig } from '../config/cors';
+import cors from 'cors'
 
 interface Options {
     port: number;
@@ -25,6 +27,9 @@ export class Server {
         //* Middleware
         this.app.use( express.json() ) // raw
         this.app.use( express.urlencoded({ extended: true }) ); // x-www-form-urlencoded
+
+        //* Cors
+        this.app.use( cors(corsConfig) )
 
         //* Public Folder
         this.app.use( express.static( this.publicPath ) );

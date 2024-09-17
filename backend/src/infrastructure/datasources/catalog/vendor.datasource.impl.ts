@@ -2,7 +2,7 @@ import { VendorModel } from '../../../data';
 import { VendorDataSource, CreateVendorDTO, UpdateVendorDTO, VendorEntity } from '../../../domain';
 import { sortBy } from '../../../helpers';
 
-export class VendorDatasourceImpl extends VendorDataSource {
+export class VendorDatasourceImpl implements VendorDataSource {
 
     async create(createVendorDTO: CreateVendorDTO): Promise<VendorEntity> {
         const vendorDuplicate = await VendorModel.findOne({ vendorName: createVendorDTO.vendorName })
