@@ -6,7 +6,8 @@ const centralSchema = new mongoose.Schema(
         centralName: {
             type: String,
             require: [true, 'Central Name is required'],
-            trim: true
+            trim: true,
+            uppercase: true,
         },
         codeName: {
             type: String,

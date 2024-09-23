@@ -7,6 +7,7 @@ export const NewCentralView = () => {
   const { mutationCreateCentral } = useCentralMutation()
 
   const handleForm = (data: CentralFormData) => {
+      console.log(data);
       mutationCreateCentral.mutateAsync( data );
   };
 
@@ -19,6 +20,7 @@ export const NewCentralView = () => {
         <FormCentral
           onSubmit={ handleForm }
           status={ mutationCreateCentral.status }
+          buttonLabel='Crear Central'
           requiredFields
         />
         <BtnNavCentral />

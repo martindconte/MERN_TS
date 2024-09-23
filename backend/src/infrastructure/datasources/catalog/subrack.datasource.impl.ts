@@ -72,13 +72,15 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
 
             return {
                 payload: subracks.map(SubrackEntity.fromObject),
-                totalDocs,
-                totalPages,
-                prevPage: page > 1 ? `${baseUrl}&page=${page - 1}` : null,
-                nextPage: page < totalPages ? `${baseUrl}&page=${page + 1}` : null,
-                page,
-                hasPrevPage: page > 1,
-                hasNextPage: page < totalPages,
+                pagination: {
+                    totalDocs,
+                    totalPages,
+                    prevPage: page > 1 ? `${baseUrl}&page=${page - 1}` : null,
+                    nextPage: page < totalPages ? `${baseUrl}&page=${page + 1}` : null,
+                    page,
+                    hasPrevPage: page > 1,
+                    hasNextPage: page < totalPages,
+                }
             };
         }
         

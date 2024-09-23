@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify'
 import { useMutation } from '@tanstack/react-query'
-import { createCentral } from '../../api'
+import { createCentral, updateCentral } from '../../api'
+import { CentralFormData } from '../../types';
 
 export const useCentralMutation = () => {
   
@@ -17,10 +18,26 @@ export const useCentralMutation = () => {
             })
           }
         }
-      })
+      });
+
+      const mutationUpdateCentral = useMutation({
+        mutationFn: async ({ centralId, formData }: { centralId: string; formData: CentralFormData }) => await updateCentral({ id: centralId, formData }),
+        onError: (error) => toast.error(error.message, { theme: 'colored' }),
+        onSuccess: ( response ) => {
+          console.log(response);
+          if( response ) {
+            const { msg, payload } = response
+
+            toast.success(`${msg} // ${payload.codeName.toUpperCase()} - ${payload.centralName.toUpperCase()} - ${payload.siteCode.toUpperCase()}`, {
+              theme: 'colored'
+            })
+          }
+        }
+    });
 
       return {
         mutationCreateCentral,
+        mutationUpdateCentral,
       }
 }
 // import { toast } from 'react-toastify'

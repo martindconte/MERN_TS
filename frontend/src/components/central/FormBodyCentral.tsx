@@ -1,6 +1,6 @@
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import { ErrorMsgForm } from "../shared"
 import { CentralFormData } from "../../types";
+import { ErrorMsgForm } from "../shared/errors/ErrorMsgForm";
 
 type FormBodyCentralProps = {
     register: UseFormRegister<CentralFormData>
@@ -20,7 +20,8 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         id="centralName"
                         placeholder="Nombre de la Central"
                         {...register('centralName', {
-                            required: requiredFields && 'El Nombre de la Central es Obligatorio'
+                            required: requiredFields && 'El Nombre de la Central es Obligatorio',
+                            setValueAs: value => value.trim(),
                         })}
                     />
                 </div>
@@ -35,7 +36,8 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         id="codeName"
                         placeholder="Codigo de la Central (centro IU)"
                         {...register('codeName', {
-                            required: requiredFields && 'El Codigo (IU) es Obligatorio'
+                            required: requiredFields && 'El Codigo (IU) es Obligatorio',
+                            setValueAs: value => value.trim(),
                         })}
                     />
                 </div>
@@ -50,7 +52,8 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         id="siteCode"
                         placeholder="Codigo de EMPLAZAMIENTO"
                         {...register('siteCode', {
-                            required: requiredFields && 'El Emplazamiento es Obligatorio'
+                            required: requiredFields && 'El Emplazamiento es Obligatorio',
+                            setValueAs: value => value.trim(),
                         })}
                     />
                 </div>
@@ -63,7 +66,9 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                     type="text"
                     id="description"
                     placeholder="Descripcion"
-                    {...register('description')}
+                    {...register('description', {
+                        setValueAs: value => value.trim(),
+                    })}
                 />
             </div>
             <div className="flex justify-between my-2 items-center space-x-3">
@@ -73,7 +78,9 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                     type="text"
                     id="provinceName"
                     placeholder="Ingrese la provincia"
-                    {...register('provinceName')}
+                    {...register('provinceName', {
+                        setValueAs: value => value.trim(),
+                    })}
                 />
             </div>
             <div className="flex justify-between my-2 items-center space-x-3">
@@ -83,7 +90,9 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                     type="text"
                     id="districtName"
                     placeholder="Ingrese el partido"
-                    {...register('districtName')}
+                    {...register('districtName', {
+                        setValueAs: value => value.trim(),
+                    })}
                 />
             </div>
             <div className="flex justify-between my-2 items-center space-x-3">
@@ -93,7 +102,9 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                     type="text"
                     id="localityName"
                     placeholder="Ingrese la localidad"
-                    {...register('localityName')}
+                    {...register('localityName', {
+                        setValueAs: value => value.trim(),
+                    })}
                 />
             </div>
             <div className="flex justify-between my-2 items-center space-x-3">
@@ -103,7 +114,9 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                     type="text"
                     id="address"
                     placeholder="Ingrese domicilio"
-                    {...register('address')}
+                    {...register('address', {
+                        setValueAs: value => value.trim(),
+                    })}
                 />
             </div>
             <div className="flex flex-col-reverse">
@@ -116,6 +129,7 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         placeholder="Ingrese Latitud en Decimales"
                         {...register('latitude', {
                             valueAsNumber: true,
+                            setValueAs: value => value.trim(),
                             min: {
                                 value: -90,
                                 message: 'La Latitud no puede ser menor a -90'
@@ -139,6 +153,7 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         placeholder="Ingrese Longuitd en Decimales"
                         {...register('longitude', {
                             valueAsNumber: true,
+                            setValueAs: value => value.trim(),
                             min: {
                                 value: -180,
                                 message: 'La Longitud no puede ser menor a -180'
@@ -158,7 +173,7 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
                         id="owner"
                         {...register('owner', {
-                            required: requiredFields && 'El Propietario es Obligatorio'
+                            required: requiredFields && 'El Propietario es Obligatorio',
                         })}
                     >
                         <option value="TASA">TASA</option>
@@ -176,7 +191,9 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                     type="text"
                     id="observations"
                     placeholder="Informacion adicional"
-                    {...register('observations')}
+                    {...register('observations', {
+                        setValueAs: value => value.trim(),
+                    })}
                 />
             </div>
             <div className='flex flex-col-reverse'>
@@ -186,7 +203,7 @@ export const FormBodyCentral = ({ register, errors, requiredFields = true }: For
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
                         id="status"
                         {...register('status', {
-                            required: requiredFields && 'Debe Indicar el estado del Sitio'
+                            required: requiredFields && 'Debe Indicar el estado del Sitio',
                         })}
                     >
                         <option value="true" >Activo</option>

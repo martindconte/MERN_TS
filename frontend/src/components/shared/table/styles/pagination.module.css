@@ -1,0 +1,63 @@
+.paginationContainer {
+    /* background-color: #e4e4e4; */
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 5px 100px;
+    margin-top: 10px;
+}
+
+.page {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.page span {
+    font-size: 12px;
+}
+
+.page button p {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+.page button p span {
+    font-size: 16px;
+}
+
+.btnPrev {
+    background-color: #6161ff;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.btnNext {
+    background-color: #2fa86c;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.btnDisable {
+    opacity: .5;
+}
+
+.selectLimit {
+    display: flex;
+    font-size: 14px;
+    gap: 10px;
+}
+
+.selectLimit select {
+    color: black;
+    font-size: 12px;
+}
+
+.selectLimit select:focus{
+    outline: none;
+}
+
+.docs {
+    display: flex;
+    font-size: 12px;
+}

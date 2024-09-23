@@ -3,14 +3,27 @@ import { CentralEntity } from "../../entities/central/central.entity";
 
 export interface CentralEntityWithPagination {
     payload: CentralEntity[]
-    totalDocs: number
-    totalPages: number
-    prevPage: string | null
-    nextPage: string | null
-    page: number
-    hasPrevPage: boolean
-    hasNextPage: boolean
+    pagination: {
+        totalDocs: number;
+        totalResults: number;
+        totalPages: number;
+        prevPage: string | null;
+        nextPage: string | null;
+        page: number;
+        hasPrevPage: boolean;
+        hasNextPage: boolean;
+    }
 }
+// export interface CentralEntityWithPagination {
+//     payload: CentralEntity[]
+//     totalDocs: number
+//     totalPages: number
+//     prevPage: string | null
+//     nextPage: string | null
+//     page: number
+//     hasPrevPage: boolean
+//     hasNextPage: boolean
+// }
 
 export abstract class CentralDatasource {
     abstract create( CreateCentralDTO: CreateCentralDTO ): Promise<CentralEntity>

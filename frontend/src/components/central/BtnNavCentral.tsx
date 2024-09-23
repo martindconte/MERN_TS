@@ -5,10 +5,10 @@ export const BtnNavCentral = () => {
   const location = useLocation();
 
   return (
-    <div className="text-sm font-oswald py-5 my-5 flex justify-center items-stretch gap-4">
+    <div className="w-full text-sm font-oswald py-5 flex justify-center items-stretch gap-4">
       <button
         onClick={() => navigate(-1)}
-        className="basis-1/2 flex justify-center items-center bg-red-800 py-2 px-3 text-white rounded-lg text-sm font-semibold hover:bg-red-400 hover:text-black"
+        className="basis-1/2 uppercase flex justify-center items-center bg-red-800 py-2 px-3 text-white rounded-lg text-sm font-semibold hover:bg-red-400 hover:text-black"
       >
         <span className="material-symbols-outlined mr-2">arrow_back</span>Atras
       </button>
@@ -16,14 +16,14 @@ export const BtnNavCentral = () => {
       {location.pathname.includes("search") ? (
         <Link
           to="../new"
-          className="text-center bg-teal-500 py-2 px-3 text-white rounded-lg text-sm font-semibold hover:bg-green-400 hover:text-black"
+          className="basis-1/2 uppercase text-center bg-teal-500 py-2 px-3 text-white rounded-lg text-sm font-semibold hover:bg-green-400 hover:text-black"
         >
           Crear Central
         </Link>
       ) : (
         <Link
           to="../search"
-          className="basis-1/2 text-center bg-teal-500 py-2 px-3 rounded-lg text-sm font-semibold hover:bg-green-400 hover:text-black"
+          className="basis-1/2 uppercase text-center bg-teal-500 py-2 px-3 rounded-lg text-sm font-semibold hover:bg-green-400 hover:text-black"
         >
           Buscar Central
         </Link>

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { CentralController } from "../../controllers/central/central.controller";
 import { CentralDatasourceImpl, CentralRepositoryImpl } from "../../../infrastructure";
 
+//* Path /api/central
 export class CentralRoutes {
 
     static get routes(): Router {

@@ -12,7 +12,7 @@ import { sortBy } from "../../../helpers";
 export class CentralDatasourceImpl implements CentralDatasource {
 
     async create(createCentralDTO: CreateCentralDTO): Promise<CentralEntity> {
-        
+
         const duplicateCentral = await CentralModel.findOne({
             $or: [
                 { codeName: createCentralDTO.codeName },
@@ -20,7 +20,7 @@ export class CentralDatasourceImpl implements CentralDatasource {
             ]
         });
         if (duplicateCentral) throw `The central: ${createCentralDTO.codeName.toUpperCase()} or Site Code ${createCentralDTO.siteCode.toUpperCase()} is already registered`
-        
+
         const newCentral = await CentralModel.create(createCentralDTO);
         return CentralEntity.fromObject(newCentral);
     }
@@ -50,7 +50,7 @@ export class CentralDatasourceImpl implements CentralDatasource {
                         //     query['$or'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
                         //     break;
                         default:
-                            const regex = new RegExp(filters[key], 'i');
+                            const regex = new RegExp(filters[key].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
                             query[key] = { $regex: regex };
                             break;
                     }
@@ -61,30 +61,33 @@ export class CentralDatasourceImpl implements CentralDatasource {
         if (pagination) {
             const { page, limit } = pagination;
             const [totalDocs, centrals] = await Promise.all([
-                CentralModel.countDocuments(),
+                CentralModel.countDocuments( query ),
                 CentralModel.find(query || {})
-                    .skip(page - 1)
-                    .limit(limit)
+                    .limit( limit )
+                    .skip( (page - 1) * limit )
                     .sort({ codeName: 1, centralName: 1 })
             ]);
 
             const totalPages = Math.ceil(totalDocs / limit);
-            const baseUrl = `api/central?limit=${limit}&${new URLSearchParams(filters).toString()}`;
+            const baseUrl = `api/central?limit=${ limit }&${new URLSearchParams( filters ).toString()}`;
 
             return {
                 payload: centrals.map(CentralEntity.fromObject),
-                totalDocs,
-                totalPages,
-                prevPage: page > 1 ? `${baseUrl}&page=${page - 1}` : null,
-                nextPage: page < totalPages ? `${baseUrl}&page=${page + 1}` : null,
-                page,
-                hasPrevPage: page > 1,
-                hasNextPage: page < totalPages,
+                pagination: {
+                    totalDocs,
+                    totalResults: centrals.length,
+                    totalPages,
+                    prevPage: page > 1 ? `${baseUrl}&page=${page - 1}` : null,
+                    nextPage: page < totalPages ? `${baseUrl}&page=${page + 1}` : null,
+                    page,
+                    hasPrevPage: page > 1,
+                    hasNextPage: page < totalPages,
+                }
             };
-        }
-        
+        };
+
         const centrals = await CentralModel.find(query || {});
-        return sortBy( centrals.map(CentralEntity.fromObject), [ 'codeName', 'centralName' ] );
+        return sortBy(centrals.map(CentralEntity.fromObject), ['codeName', 'centralName']);
     }
 
     async getById(id: string): Promise<CentralEntity> {

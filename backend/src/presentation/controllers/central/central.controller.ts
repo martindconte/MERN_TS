@@ -31,8 +31,11 @@ export class CentralController {
     getAllCentrals = (req: Request, res: Response) => {
         new CentralUseCase.GetCentrals(this.centralRepository)
             .execute(req.query)
-            .then(centrals => res.json(centrals))
-            .catch(error => res.status(400).json({ error }))
+            .then(centrals => res.send(centrals))
+            .catch(error => res.status(400).json({
+                status: 'error',
+                msg: error.message
+            }))
     }
 
     getCentralsById = (req: Request, res: Response) => {
@@ -51,8 +54,15 @@ export class CentralController {
         
         new CentralUseCase.UpdateCentral(this.centralRepository)
             .execute( updateCentralDTO! )
-            .then(central => res.json(central))
-            .catch(error => res.status(400).json({ error }))
+            .then(central => res.json({
+                status: 'success',
+                msg: 'The Central has been updated successfully',
+                payload: central
+            }))
+            .catch(error => res.status(400).json({
+                status: 'error',
+                msg: error.message
+            }))
     }
 
     deleteCentral = (req: Request, res: Response) => {
