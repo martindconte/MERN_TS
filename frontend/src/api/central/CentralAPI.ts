@@ -10,7 +10,7 @@ export const centralMapped = (central: Central) => {
         codeName: central.codeName || '',
         siteCode: central.siteCode || '',
         owner: central.owner || '',
-        status: central.status || '',
+        status: central.status,
         provinceName: central.provinceName || '',
         districtName: central.districtName || '',
         localityName: central.localityName || '',
@@ -19,8 +19,8 @@ export const centralMapped = (central: Central) => {
         longitude: central.longitude || 0,
         description: central.description || '',
         observations: central.observations || '',
-        createdAt: central.createdAt ? new Date(central.createdAt) : '',
-        updatedAt: central.updatedAt ? new Date(central.updatedAt) : '',
+        createdAt: central.createdAt ? new Date(central.createdAt) : new Date(),
+        updatedAt: central.updatedAt ? new Date(central.updatedAt) : new Date(),
     }
 }
 
@@ -103,4 +103,32 @@ export const updateCentral = async ({ id, formData }: { id: string; formData: Ce
         }
         throw error; // Re-throw the error if it's not an AxiosError
     }
+};
+
+export const deleteCentral = async ( id: string ) => {
+
+    try {
+        const { data } = await api.delete(`/central/${ id }`)
+        const { msg, payload } = data
+
+        const mappedPayload = centralMapped( payload )
+
+        const response = responseCentralsSchema.safeParse({
+            msg,
+            payload: mappedPayload
+        });
+
+        if (response.success) return {
+            msg: response.data.msg,
+            payload: centralMapped(response.data.payload)
+        };
+        
+    } catch (error) {
+        console.log(error);
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.msg)
+        }
+        throw error; // Re-throw the error if it's not an AxiosError
+    }
+
 };

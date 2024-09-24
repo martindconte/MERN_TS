@@ -60,6 +60,3 @@ export type CentralFormData = Pick<
   | "description"
   | "observations"
 >;
-
-//! nunca UTILIZADA!!!!!!!!!!!!!!!!!!!
-// export type ResponseCentrals = z.infer<typeof responseGetCentralsSchema>

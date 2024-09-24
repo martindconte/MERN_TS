@@ -70,7 +70,14 @@ export class CentralController {
 
         new CentralUseCase.DeleteCentral(this.centralRepository)
             .execute(centralid)
-            .then(central => res.json(central))
-            .catch(error => res.status(400).json({ error }))
+            .then(central => res.json({
+                status: 'success',
+                msg: 'The Central has been deleted successfully',
+                payload: central
+            }))
+            .catch(error => res.status(400).json({
+                status: 'error',
+                msg: error.message
+            }))
     }
 }

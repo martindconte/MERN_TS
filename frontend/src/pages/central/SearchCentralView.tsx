@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
 import { BtnNavCentral, FormCentral, HiddenComponent, Spinner, Table } from '../../components'
-import { useCentrals } from '../../hook'
+// import { useCentrals, useTable } from '../../hook'
 import { CentralFormData } from '../../types';
 import { cleanFormData } from '../../helpers';
+import { useCentralMutation, useCentrals } from '../../hook';
 
 export const SearchCentralView = () => {
 
   const [search, setSearch] = useState({})
 
-  const handleForm = async (formData: CentralFormData) => {
-    const cleanedData = cleanFormData(formData);
-    setSearch(cleanedData)
-  }
-
   const { queryCentrals, limit, setLimit, page, setPage } = useCentrals({
     enabled: true,
     search
   })
+
+  const { mutationDeleteCentral } = useCentralMutation()
+
+  const handleForm = async (formData: CentralFormData) => {
+    const cleanedData = cleanFormData(formData);
+    setSearch(cleanedData)
+  }
 
   useEffect(() => {
     setPage(1)
@@ -52,6 +55,7 @@ export const SearchCentralView = () => {
               setPage={setPage}
               limit={limit}
               setLimit={setLimit}
+              fnDelete={ mutationDeleteCentral }
             />
           )
       }

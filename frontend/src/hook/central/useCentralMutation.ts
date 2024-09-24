@@ -1,9 +1,11 @@
 import { toast } from 'react-toastify'
-import { useMutation } from '@tanstack/react-query'
-import { createCentral, updateCentral } from '../../api'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createCentral, deleteCentral, updateCentral } from '../../api'
 import { CentralFormData } from '../../types';
 
 export const useCentralMutation = () => {
+
+    const queryClient = useQueryClient()
   
     const mutationCreateCentral = useMutation({
         mutationFn: createCentral,
@@ -35,9 +37,32 @@ export const useCentralMutation = () => {
         }
     });
 
+    const mutationDeleteCentral = useMutation({
+      mutationFn: async ({ centralId }: { centralId: string }) => {
+        const response = await deleteCentral( centralId )
+        if (!response) {
+          throw new Error('Delete operation failed');
+        }
+        return response;
+      },
+      onError: (error) => toast.error(error.message, { theme: 'colored' }),
+        onSuccess: ( response ) => {
+          if( response ) {
+            queryClient.invalidateQueries({
+              queryKey: ['centrals']
+            })
+            const { msg, payload } = response
+            toast.success(`${msg} // ${payload.codeName.toUpperCase()} - ${payload.centralName.toUpperCase()} - ${payload.siteCode.toUpperCase()}`, {
+              theme: 'colored'
+            })
+          }
+        }
+    })
+
       return {
         mutationCreateCentral,
         mutationUpdateCentral,
+        mutationDeleteCentral
       }
 }
 // import { toast } from 'react-toastify'
