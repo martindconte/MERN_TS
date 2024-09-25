@@ -1,7 +1,7 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { BtnNavCentral, FormCentral, Spinner } from "../../components"
-import { useCentral, useCentralMutation } from "../../hook";
-import { CentralFormData } from "../../types";
+import { useNavigate, useParams } from 'react-router-dom';
+import { BtnNavCentral, FormCentral, Spinner } from '../../components'
+import { useCentral, useCentralMutation } from '../../hook';
+import { CentralFormData } from '../../types';
 
 export const EditCentralView = () => {
 
@@ -13,8 +13,7 @@ export const EditCentralView = () => {
   const { mutationUpdateCentral } = useCentralMutation();
 
   const handleForm = async (formData: CentralFormData) => {
-    console.log(formData);
-    const data = await mutationUpdateCentral.mutateAsync({ centralId: centralId!, formData })
+    const data = await mutationUpdateCentral.mutateAsync({ id: centralId!, formData })
     if (data) navigate(-1)
   };
 

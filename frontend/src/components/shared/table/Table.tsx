@@ -1,17 +1,9 @@
 import { useState, Dispatch, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { UseMutationResult } from '@tanstack/react-query';
-import {
-  useReactTable,
-  createColumnHelper,
-  getCoreRowModel,
-  flexRender,
-  ColumnDef,
-  getSortedRowModel,
-  getPaginationRowModel,
-} from '@tanstack/react-table';
+import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, ColumnDef, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
 
-import { Central, Pagination } from '../../../types';
+import { /* Central, */ Pagination } from '../../../types';
 
 import { ButtonActions } from './ButtonActions';
 import { ColumnSelector } from './ColumnSelector';
@@ -23,30 +15,40 @@ import { formatDate } from '../../../helpers';
 
 import tableStyles from './styles/table.module.css';
 
-export interface DeleteResponse {
-  msg: string;
-  payload: Central;
+export interface DeleteResponse<T>{
+  msg?: string;
+  payload: T;
 }
 
 interface Identifiable {
   id: string;
 }
 
-interface Props<T extends Identifiable> {
+type Props<T extends Identifiable> = {
   data: T[];
-  pagination: Pagination;
   info: string;
-  page: number;
-  setPage: Dispatch<React.SetStateAction<number>>;
-  limit: number;
-  setLimit: Dispatch<React.SetStateAction<number>>;
   fnDelete?: UseMutationResult<
-    DeleteResponse,
+    DeleteResponse<T>,
     Error,
-    { centralId: string },
+    { id: string },
     unknown
   >;
-}
+} & (
+  | {
+      pagination: Pagination;
+      page: number;
+      setPage: Dispatch<React.SetStateAction<number>>;
+      limit: number;
+      setLimit: Dispatch<React.SetStateAction<number>>;
+    }
+  | {
+      pagination?: undefined;
+      page?: never;
+      setPage?: never;
+      limit?: never;
+      setLimit?: never;
+    }
+);
 
 export const Table = <T extends Identifiable>({
   data,
@@ -70,7 +72,7 @@ export const Table = <T extends Identifiable>({
 
   const handleDelete = async () => {
     if (IdSelected) {
-      const response = await fnDelete?.mutateAsync({ centralId: IdSelected });
+      const response = await fnDelete?.mutateAsync({ id: IdSelected });
       if (response) setModalView(false);
     }
   };
@@ -89,7 +91,7 @@ export const Table = <T extends Identifiable>({
               id={ row.original.id }
               setModalView={ setModalView }
               setIdSelected={ setIdSelected }
-              fnDelete={ fnDelete }
+              btnDelete={ fnDelete ? true : false}
             />
           </div>
         ),
@@ -120,24 +122,25 @@ export const Table = <T extends Identifiable>({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    columnResizeMode: "onChange",
-    pageCount: pagination.totalPages,
-    manualPagination: true,
-    state: {
-      pagination: {
-        pageIndex: page - 1,
-        pageSize: limit,
+    ...(pagination && {
+      getPaginationRowModel: getPaginationRowModel(),
+      pageCount: pagination.totalPages,
+      manualPagination: true,
+      state: {
+        pagination: {
+          pageIndex: (page ?? 1) - 1,
+          pageSize: limit ?? 10,
+        },
       },
-    },
-    onPaginationChange: (updater) => {
-      const newPageIndex =
-        typeof updater === "function"
-          ? updater(table.getState().pagination).pageIndex
-          : updater.pageIndex;
-      setPage(newPageIndex + 1);
-    },
+      onPaginationChange: (updater) => {
+        const newPageIndex =
+          typeof updater === "function"
+            ? updater(table.getState().pagination).pageIndex
+            : updater.pageIndex;
+        setPage?.(newPageIndex + 1);
+      },
+    }),
   });
 
   return (
@@ -210,13 +213,15 @@ export const Table = <T extends Identifiable>({
             ))}
           </tbody>
         </table>
-        <PaginationComponent
-          table={table}
-          limit={limit}
-          setLimit={setLimit}
-          totalDocs={pagination.totalDocs}
-          totalResults={pagination.totalResults}
-        />
+        {pagination && (
+          <PaginationComponent
+            table={table}
+            limit={limit}
+            setLimit={setLimit}
+            totalDocs={pagination.totalDocs}
+            totalResults={pagination.totalResults}
+          />
+        )}
       </div>
     </>
   );

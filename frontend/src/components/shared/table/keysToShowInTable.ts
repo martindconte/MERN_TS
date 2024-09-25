@@ -61,6 +61,12 @@ interface KeyLabel<T> {
       { key: 'subtype', label: 'SubTipo' },
       { key: 'description', label: 'Descripcion' },
       { key: 'observations', label: 'Observaciones' }
-    ]
+    ], 
+    catalogVendor: [
+      { key: 'vendorName', label: 'Vendor' },
+      { key: 'country', label: 'Pais' },
+      { key: 'observation', label: 'Observaciones' },
+      { key: 'createdAt', label: 'Creado' },
+      { key: 'updatedAt', label: 'Modificado' },
+    ],
   };
-  

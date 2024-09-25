@@ -1,4 +1,11 @@
+//* INDEX COMPONENTS
+
 //* Catalog
+/* vendor */
+export * from './catalog/vendor/BtnFormVendor'
+export * from './catalog/vendor/BtnNavVendor'
+export * from './catalog/vendor/FormBodyVendor'
+export * from './catalog/vendor/FormVendor'
 
 //* Central
 export * from './central/BtnNavCentral'

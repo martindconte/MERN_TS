@@ -7,7 +7,7 @@ interface Props {
 
 export const ModalDelete = ({ handleDelete, setModalView }: Props) => {
     return (
-        <div className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black'>
+        <div className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black z-50'>
             <div className='bg-white p-5 rounded-lg flex flex-col justify-center items-center gap-5'>
                 <h3 className='text-lg border-b-4 border-gray-500 pb-2 uppercase w-full text-center'>Confirmar Eliminar</h3>
                 <div className='flex gap-4'>

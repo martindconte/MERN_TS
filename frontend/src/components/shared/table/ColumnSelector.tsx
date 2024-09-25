@@ -30,7 +30,7 @@ export const ColumnSelector = ({ columns, selectedColumns, setSelectedColumns }:
               columns.map(({ key, label }) => (
                 <div key={key} className={styles.check}>
                   <input
-                    className={ styles.checkbox }
+                    className={styles.checkbox}
                     type="checkbox"
                     id={key}
                     checked={selectedColumns.includes(key)}

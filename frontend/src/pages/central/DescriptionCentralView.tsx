@@ -35,9 +35,9 @@ export const DescriptionCentralView = () => {
                     <Link
                         to={`/central/edit/${centralId}`}
                         className="bg-blue-600 text-center px-2 py-1 w-48 rounded-lg font-roboto_condensed font-bold uppercase hover:bg-blue-800 hover:text-white">Editar</Link>
-                    <Link
+                    {/* <Link
                         to={`/central/edit/${centralId}`}
-                        className="bg-red-600 text-center px-2 py-1 w-48 rounded-lg font-roboto_condensed font-bold uppercase hover:bg-red-800 hover:text-white">Eliminar</Link>
+                        className="bg-red-600 text-center px-2 py-1 w-48 rounded-lg font-roboto_condensed font-bold uppercase hover:bg-red-800 hover:text-white">Eliminar</Link> */}
                 </div>
             </div>
             <div className='w-1/4 mx-auto'>

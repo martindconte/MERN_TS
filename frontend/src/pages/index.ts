@@ -1,5 +1,8 @@
 //* Catalog
-
+export * from './catalog/CatalogIndexView'
+/* catalog/vendor */
+export * from './catalog/vendor/EditVendorView'
+export * from './catalog/vendor/VendorView'
 
 //* Central
 export * from './central/CentralIndexView'

@@ -22,6 +22,8 @@
   border-radius: 50%;
   border-right-color: #25b09b;
   animation: l15 1s infinite linear;
+  margin: auto;
+  background-color: transparent;
 }
 
 .loader::before,

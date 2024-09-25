@@ -1,13 +1,12 @@
-import { BtnNavCentral, FormCentral } from "../../components";
-import { useCentralMutation } from "../../hook";
-import { CentralFormData } from "../../types";
+import { BtnNavCentral, FormCentral } from '../../components';
+import { useCentralMutation } from '../../hook';
+import { CentralFormData } from '../../types';
 
 export const NewCentralView = () => {
 
   const { mutationCreateCentral } = useCentralMutation()
 
   const handleForm = (data: CentralFormData) => {
-      console.log(data);
       mutationCreateCentral.mutateAsync( data );
   };
 

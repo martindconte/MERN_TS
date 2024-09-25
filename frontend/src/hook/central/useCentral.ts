@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import { getCentral } from "../../api";
+import { Central } from "../../types";
 
 interface Props {
-    id: string;
+    id: Central['id'];
 }
 
 export const useCentral = ({ id }: Props) => {

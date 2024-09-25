@@ -3,8 +3,8 @@ export class UpdateVendorDTO {
     private constructor(
         public readonly id: string,
         public readonly vendorName: string,
-        public readonly observation?: number,
-        public readonly country?: number,
+        public readonly observation?: string,
+        public readonly country?: string,
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
     ) {}

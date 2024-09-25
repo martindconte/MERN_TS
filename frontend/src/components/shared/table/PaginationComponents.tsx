@@ -4,10 +4,10 @@ import styles from './styles/pagination.module.css';
 
 interface Props<T> {
   table: Table<T>;
-  limit: number;
-  setLimit: Dispatch<React.SetStateAction<number>>;
-  totalDocs: number;
-  totalResults: number;
+  limit?: number;
+  setLimit?: Dispatch<React.SetStateAction<number>>;
+  totalDocs?: number;
+  totalResults?: number;
 }
 
 export const PaginationComponent = <T,>({ table, limit, setLimit, totalDocs, totalResults }: Props<T>) => {
@@ -37,7 +37,7 @@ export const PaginationComponent = <T,>({ table, limit, setLimit, totalDocs, tot
       </div>
       <div className={styles.selectLimit}>
         <p>Limite: </p>
-        <select onChange={(e) => setLimit(Number(e.target.value))} value={limit}>
+        <select onChange={(e) => setLimit?.(Number(e.target.value))} value={limit}>
           <option value={5}>5</option>
           <option value={10}>10</option>
           <option value={20}>20</option>

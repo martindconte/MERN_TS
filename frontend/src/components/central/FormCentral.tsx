@@ -4,15 +4,15 @@ import { CentralFormData } from "../../types";
 import { MutationStatus } from "@tanstack/react-query";
 import { BtnForm } from "./BtnForm";
 
-interface FormCentralProps {
+interface Props {
     onSubmit: (data: CentralFormData) => void;
-    status?: MutationStatus;
     requiredFields: boolean;
     buttonLabel: string;
+    status?: MutationStatus;
     defaultValues?: CentralFormData;
 }
 
-export const FormCentral = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: FormCentralProps) => {
+export const FormCentral = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props) => {
 
     const {
         register,
@@ -20,27 +20,6 @@ export const FormCentral = ({ onSubmit, status, requiredFields, buttonLabel, def
         reset,
         formState: { errors },
     } = useForm({ defaultValues });
-    // const {
-    //     register,
-    //     handleSubmit,
-    //     formState: { errors },
-    // } = useForm({
-    //     defaultValues: {
-    //         centralName: '',
-    //         codeName: '',
-    //         siteCode: '',
-    //         owner: '',
-    //         status: true,
-    //         provinceName: '',
-    //         districtName: '',
-    //         localityName: '',
-    //         address: '',
-    //         latitude: 0,
-    //         longitude: 0,
-    //         description: '',
-    //         observations: '',
-    //     } as CentralFormData,
-    // });
 
     return (
         <form
@@ -59,17 +38,6 @@ export const FormCentral = ({ onSubmit, status, requiredFields, buttonLabel, def
                 status={ status }
                 reset={ reset }
             />
-
-            {/* <button
-                type='submit'
-                className='text-sm font-bold bg-emerald-700 text-white py-2 w-full my-2 rounded-lg uppercase hover:bg-emerald-400 hover:text-black hover:border hover:border-black'
-                disabled={ status === 'pending' }
-            >{ status === 'pending' ? 'Buscando...' : 'Buscar Central' }</button>
-            <button
-                type='reset'
-                className={`text-sm font-bold bg-blue-700 text-white py-2 w-full my-2 rounded-lg uppercase hover:bg-blue-400 hover:text-black hover:border hover:border-black`}
-                disabled={ status === 'pending' }
-            >Limpiar</button> */}
         </form>
     );
 };

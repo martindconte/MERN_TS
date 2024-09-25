@@ -30,7 +30,7 @@ export const createCentral = async (formData: CentralFormData) => {
         const { data: { msg, payload } } = await api.post('/central', formData);
         return {
             msg,
-            data: centralMapped(payload)
+            payload: centralMapped(payload)
         };
     } catch (error) {
         console.log(error);
@@ -57,7 +57,7 @@ export const getCentrals = async ( query = {} ) => {
         
         if( response.success ) return response.data
 
-    } catch (error) { 
+    } catch (error) {
         console.log(error);
         if (isAxiosError(error) && error.response) {
             throw new Error(error.response.data.msg)
@@ -65,7 +65,7 @@ export const getCentrals = async ( query = {} ) => {
     }
 };
 
-export const getCentral = async ( id: string ) => {
+export const getCentral = async ( id: Central['id'] ) => {
     try {
         const { data } = await api( `/central/${ id }` )
         const response = centralSchema.safeParse( centralMapped( data ) )
@@ -78,7 +78,7 @@ export const getCentral = async ( id: string ) => {
     }
 };
 
-export const updateCentral = async ({ id, formData }: { id: string; formData: CentralFormData }) => {
+export const updateCentral = async ({ id, formData }: { id: Central['id']; formData: CentralFormData }) => {
     try {
         const { data } = await api.put( `/central/${id}`, formData );
         const { msg, payload } = data
@@ -90,7 +90,6 @@ export const updateCentral = async ({ id, formData }: { id: string; formData: Ce
             payload: mappedPayload
         });
 
-        console.log(response);
         if (response.success) return {
             msg: response.data.msg,
             payload: centralMapped(response.data.payload)
@@ -105,7 +104,7 @@ export const updateCentral = async ({ id, formData }: { id: string; formData: Ce
     }
 };
 
-export const deleteCentral = async ( id: string ) => {
+export const deleteCentral = async ( id: Central['id'] ) => {
 
     try {
         const { data } = await api.delete(`/central/${ id }`)
