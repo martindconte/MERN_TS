@@ -1,4 +1,4 @@
-import { CustomError } from "../../../domain"
+import { CustomError } from '../../errors/custom.errors'
 
 export class VendorEntity {
     constructor(

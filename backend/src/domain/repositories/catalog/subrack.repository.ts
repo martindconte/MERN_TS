@@ -1,6 +1,6 @@
-import { SubrackEntityWithPagination } from "../../datasources/catalog/subrack.datasource";
-import { CreateSubrackDTO, QueriesDTO, UpdateSubrackDTO } from "../../dtos";
-import { SubrackEntity } from "../../entities/catalog/subrack.entity";
+import { SubrackEntity } from '../../entities';
+import { SubrackEntityWithPagination } from '../../../interface';
+import { CreateSubrackDTO, QueriesDTO, UpdateSubrackDTO } from '../../dtos';
 
 export abstract class SubrackRepository {
     abstract create( createSubrackDTO: CreateSubrackDTO ): Promise<SubrackEntity>

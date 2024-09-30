@@ -8,7 +8,7 @@ export const EditVendorView = () => {
     const navigate = useNavigate()
     const { vendorId } = useParams<{ vendorId: string }>();
 
-    const { queryVendor } = useVendor({ vendorId: vendorId! });
+    const { queryVendor } = useVendor({ id: vendorId! });
     const { mutationUpdateVendor } = useVendorMutation()
 
     const handleForm = async ( formData: VendorFormData ) => {
@@ -22,7 +22,7 @@ export const EditVendorView = () => {
 
     return (
         <main className="flex-1 bg-gray-50 px-2 py-4 text-black font-roboto">
-            <h2 className="uppercase text-2xl font-extrabold text-center"><span className="text-red-500">Modifica / Actualiza</span> los datos de la Central:</h2>
+            <h2 className="uppercase text-2xl font-extrabold text-center"><span className="text-red-500">Modifica / Actualiza</span> los datos del Proveedor:</h2>
             <h3 className="text-center py-3 text-lg font-bold">
                 <strong className="text-blue-800 uppercase">Vendor: </strong><span>{queryVendor.data?.vendorName}</span>{' '}
                 <strong className="text-blue-800 uppercase">Origen: </strong><span>{queryVendor.data?.country}</span>{' '}

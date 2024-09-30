@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { SubrackDatasourceImpl, SubrackRepositoryImpl } from "../../../infrastructure";
-import { SubrackController } from "../../controllers/catalog/subrack.controller";
+import { Router } from 'express';
+import { SubrackDatasourceImpl, SubrackRepositoryImpl } from '../../../infrastructure';
+import { SubrackController } from '../../controllers';
 
 export class SubrackRoutes {
 
@@ -9,9 +9,7 @@ export class SubrackRoutes {
         const router = Router()
 
         const datasource = new SubrackDatasourceImpl()
-        // const datasource = new VendorDatasourceImpl()
         const vendorRepository = new SubrackRepositoryImpl( datasource )
-        // const vendorRepository = new VendorRepositoryImpl( datasource )
 
         const controller = new SubrackController( vendorRepository )
 

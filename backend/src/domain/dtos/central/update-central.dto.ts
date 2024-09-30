@@ -1,4 +1,4 @@
-import { CentralOwner } from '../../entities/central/central.entity'
+import { CentralOwner } from "../../../interface"
 
 export class UpdateCentralDTO {
 

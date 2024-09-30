@@ -1,7 +1,7 @@
-import { CentralEntityWithPagination } from "../../datasources/central/central.datasource";
-import { QueriesDTO } from "../../dtos/shared/queries.dto";
-import { CentralEntity } from "../../entities/central/central.entity";
-import { CentralRepository } from "../../repositories/central/central.repository";
+import { CentralEntityWithPagination } from '../../../interface';
+import { QueriesDTO } from '../../dtos';
+import { CentralEntity } from '../../entities';
+import { CentralRepository } from '../../repositories';
 
 export interface GetCentralsUseCase {
     execute( queries?: QueriesDTO ): Promise<CentralEntity[] | CentralEntityWithPagination>

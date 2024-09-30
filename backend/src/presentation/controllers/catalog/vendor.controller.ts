@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CreateVendorDTO, UpdateVendorDTO, VendorRepository, VendorUseCase } from "../../../domain";
+import { Request, Response } from 'express';
+import { CreateVendorDTO, UpdateVendorDTO, VendorRepository, VendorUseCase } from '../../../domain';
 
 export class VendorController {
 

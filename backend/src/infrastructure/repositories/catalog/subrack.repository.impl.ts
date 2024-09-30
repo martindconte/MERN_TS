@@ -1,4 +1,5 @@
-import { QueriesDTO, SubrackEntityWithPagination, SubrackRepository, CreateSubrackDTO, UpdateSubrackDTO, SubrackEntity, SubrackDatasource } from "../../../domain";
+import { SubrackRepository, SubrackDatasource, CreateSubrackDTO, SubrackEntity, QueriesDTO, UpdateSubrackDTO } from '../../../domain'
+import { SubrackEntityWithPagination } from '../../../interface'
 
 export class SubrackRepositoryImpl implements SubrackRepository {
 

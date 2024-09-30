@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CentralRepository, CentralUseCase, CreateCentralDTO, UpdateCentralDTO } from "../../../domain";
+import { Request, Response } from 'express';
+import { CreateCentralDTO, CentralUseCase, UpdateCentralDTO, CentralRepository } from '../../../domain'
 
 export class CentralController {
 

@@ -1,13 +1,7 @@
-import { CentralModel } from "../../../data";
-import {
-    CentralDatasource,
-    CentralEntity,
-    CentralEntityWithPagination,
-    CreateCentralDTO,
-    QueriesDTO,
-    UpdateCentralDTO,
-} from "../../../domain";
-import { sortBy } from "../../../helpers";
+import { CentralModel } from '../../../data';
+import { CentralDatasource, CreateCentralDTO, CentralEntity, QueriesDTO, UpdateCentralDTO } from '../../../domain';
+import { sortBy } from '../../../helpers';
+import { CentralEntityWithPagination } from '../../../interface';
 
 export class CentralDatasourceImpl implements CentralDatasource {
 

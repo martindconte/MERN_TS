@@ -1,28 +1,6 @@
-import { CreateSubrackDTO, QueriesDTO, UpdateSubrackDTO } from "../../dtos";
-import { SubrackEntity } from "../../entities/catalog/subrack.entity";
-
-export interface SubrackEntityWithPagination {
-    payload: SubrackEntity[]
-    pagination: {
-        totalDocs: number
-        totalPages: number
-        prevPage: string | null
-        nextPage: string | null
-        page: number
-        hasPrevPage: boolean
-        hasNextPage: boolean
-    }
-}
-// export interface SubrackEntityWithPagination {
-//     payload: SubrackEntity[]
-//     totalDocs: number
-//     totalPages: number
-//     prevPage: string | null
-//     nextPage: string | null
-//     page: number
-//     hasPrevPage: boolean
-//     hasNextPage: boolean
-// }
+import { SubrackEntityWithPagination } from '../../../interface'
+import { CreateSubrackDTO, QueriesDTO, UpdateSubrackDTO } from '../../dtos'
+import { SubrackEntity } from '../../entities'
 
 export abstract class SubrackDatasource {
     abstract create( createSubrackDTO: CreateSubrackDTO ): Promise<SubrackEntity>

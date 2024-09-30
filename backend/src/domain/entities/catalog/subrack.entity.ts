@@ -1,32 +1,5 @@
-import { CustomError } from "../../errors/custom.errors"
-
-export enum TechnologySubrack {
-    dwdm = 'DWDM',
-    sdh = 'SDH',
-    rx = 'RX',
-    cwdm = 'CWDM',
-    ip = 'IP',
-    generic = 'GENERICO'
-}
-
-export enum SubrackOwner {
-    tasa = 'TASA',
-    mvs = 'MVS',
-    other = 'OTHER',
-}
-
-export enum SubrackStatus {
-    inService = 'InService',
-    endOfSupport = 'EndOfSupport',
-    endOfMarketing = 'EndOfMarketing'
-}
-
-export interface ISlots {
-    number: number,
-    physical: number | string,
-    logical: number | string
-    boardId?: string[]
-}
+import { ISlots, SubrackOwner, SubrackStatus, TechnologySubrack } from '../../../interface';
+import { CustomError } from '../../errors/custom.errors'
 
 export class SubrackEntity {
 

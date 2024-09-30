@@ -1,4 +1,5 @@
-import { CentralDatasource, CentralEntity, CentralEntityWithPagination, CentralRepository, CreateCentralDTO, QueriesDTO, UpdateCentralDTO } from "../../../domain";
+import { CentralDatasource, CentralEntity, CentralRepository, CreateCentralDTO, QueriesDTO, UpdateCentralDTO } from "../../../domain";
+import { CentralEntityWithPagination } from "../../../interface";
 
 export class CentralRepositoryImpl implements CentralRepository {
 

@@ -1,4 +1,4 @@
-import { CentralOwner } from "../../../domain"
+import { CentralOwner } from "../../../interface";
 
 export class CreateCentralDTO {
 

@@ -1,8 +1,12 @@
+//* FOLDER --> DTOs
+
 //* Central
 export * from './central/create-central.dto';
 export * from './central/update-central.dto';
 
 //* Catalog
+export * from './catalog/signal/create-signal.dto';
+export * from './catalog/signal/update-signal.dto';
 export * from './catalog/subrack/create-subrack.dto';
 export * from './catalog/subrack/update-subrack.dto';
 export * from './catalog/vendor/create-vendor.dto';

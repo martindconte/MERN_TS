@@ -1,7 +1,6 @@
-import { Router } from "express";
-import { VendorDatasourceImpl, VendorRepositoryImpl } from "../../../infrastructure";
-import { VendorController } from "../../controllers/catalog/vendor.controller";
-
+import { Router } from 'express';
+import { VendorDatasourceImpl, VendorRepositoryImpl } from '../../../infrastructure';
+import { VendorController } from '../../controllers';
 
 export class VendorRoutes {
 

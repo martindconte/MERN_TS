@@ -15,7 +15,7 @@ interface Props {
 
 export const FormVendor = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props) => {
 
-  const { register, handleSubmit, reset, formState: { errors }, } = useForm({ defaultValues })
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues })
 
   return (
     <form

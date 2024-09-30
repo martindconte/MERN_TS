@@ -1,6 +1,7 @@
-import { SubrackModel } from "../../../data";
-import { CreateSubrackDTO, QueriesDTO, SubrackDatasource, SubrackEntity, SubrackEntityWithPagination, UpdateSubrackDTO } from "../../../domain";
-import { sortBy } from "../../../helpers";
+import { SubrackModel } from '../../../data';
+import { CreateSubrackDTO, QueriesDTO, SubrackDatasource, SubrackEntity, UpdateSubrackDTO } from '../../../domain';
+import { sortBy } from '../../../helpers';
+import { SubrackEntityWithPagination } from '../../../interface';
 
 export class SubrackDatasourceImpl implements SubrackDatasource {
 

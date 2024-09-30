@@ -1,5 +1,5 @@
-import { CentralEntity } from "../../entities/central/central.entity";
-import { CentralRepository } from "../../repositories/central/central.repository";
+import { CentralEntity } from '../../entities';
+import { CentralRepository } from '../../repositories';
 
 export interface GetCentralUseCase {
     execute( id: string ): Promise<CentralEntity>

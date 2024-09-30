@@ -1,6 +1,5 @@
-import { CreateVendorDTO, UpdateVendorDTO } from "../../dtos"
-import { VendorEntity } from "../../entities/catalog/vendor.entity"
-
+import { CreateVendorDTO, UpdateVendorDTO } from '../../dtos'
+import { VendorEntity } from '../../entities';
 
 export abstract class VendorRepository {
     abstract create( createVendorDTO: CreateVendorDTO ): Promise<VendorEntity>
@@ -8,5 +7,4 @@ export abstract class VendorRepository {
     abstract getById( id: string ): Promise<VendorEntity>
     abstract updateById( updateVendorDTO: UpdateVendorDTO ): Promise<VendorEntity>
     abstract deleteById( id: string ): Promise<VendorEntity>
-
 }

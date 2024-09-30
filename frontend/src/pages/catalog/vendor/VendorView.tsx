@@ -1,4 +1,4 @@
-import { FormVendor, Spinner, Table } from "../../../components"
+import { BtnNavVendor, FormVendor, Spinner, Table } from "../../../components"
 import { useVendorMutation, useVendors } from "../../../hook";
 import { VendorFormData } from "../../../types";
 
@@ -36,6 +36,9 @@ export const VendorView = () => {
                             )
                     }
                 </div>
+            </div>
+            <div className="w-1/2 mx-auto">
+                <BtnNavVendor />
             </div>
         </main>
     )

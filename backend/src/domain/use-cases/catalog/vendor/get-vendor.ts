@@ -1,5 +1,5 @@
-import { VendorEntity } from "../../../entities/catalog/vendor.entity";
-import { VendorRepository } from "../../../repositories/catalog/vendor.repository";
+import { VendorEntity } from '../../../entities';
+import { VendorRepository } from '../../../repositories';
 
 export interface GetVendorUseCase {
     execute( id: string ): Promise<VendorEntity>

@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { VendorRoutes } from "./vendor.routes";
-import { SubrackRoutes } from "./subrack.routes";
-
+import { Router } from 'express';
+import { VendorRoutes } from './vendor.routes';
+import { SubrackRoutes } from './subrack.routes';
+import { SignalRoutes } from './signal.routes';
 
 export class CatalogRoutes {
 
@@ -12,7 +12,7 @@ export class CatalogRoutes {
         //* route: /api/catalog
         router.use('/vendor', VendorRoutes.routes)
         router.use('/subrack', SubrackRoutes.routes)
-        // router.use('/signal', /* Ruta*/)
+        router.use('/signal', SignalRoutes.routes)
 
         return router
     }

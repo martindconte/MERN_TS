@@ -1,6 +1,6 @@
-import { UpdateCentralDTO } from "../../dtos/central/update-central.dto";
-import { CentralEntity } from "../../entities/central/central.entity";
-import { CentralRepository } from "../../repositories/central/central.repository";
+import { UpdateCentralDTO } from '../../dtos';
+import { CentralEntity } from '../../entities';
+import { CentralRepository } from '../../repositories';
 
 export interface UpdateCentralUseCase {
     execute( dto: UpdateCentralDTO ): Promise<CentralEntity>

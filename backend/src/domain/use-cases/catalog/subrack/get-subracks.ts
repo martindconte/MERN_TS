@@ -1,7 +1,7 @@
-import { SubrackEntityWithPagination } from "../../../datasources/catalog/subrack.datasource";
-import { QueriesDTO } from "../../../dtos";
-import { SubrackEntity } from "../../../entities/catalog/subrack.entity";
-import { SubrackRepository } from "../../../repositories/catalog/subrack.repository";
+import { SubrackEntityWithPagination } from '../../../../interface';
+import { QueriesDTO } from '../../../dtos';
+import { SubrackEntity } from '../../../entities';
+import { SubrackRepository } from '../../../repositories';
 
 
 export interface GetSubracksUseCase {

@@ -1,6 +1,6 @@
-import { CentralEntityWithPagination } from "../../datasources/central/central.datasource";
-import { CreateCentralDTO, QueriesDTO, UpdateCentralDTO } from "../../dtos";
-import { CentralEntity } from "../../entities/central/central.entity";
+import { CentralEntity } from '../../entities';
+import { CreateCentralDTO, QueriesDTO, UpdateCentralDTO } from '../../dtos';
+import { CentralEntityWithPagination } from '../../../interface';
 
 export abstract class CentralRepository {
     abstract create( centralDTO: CreateCentralDTO ): Promise<CentralEntity>

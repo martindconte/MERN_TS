@@ -1,6 +1,6 @@
-import { UpdateVendorDTO } from "../../../dtos";
-import { VendorEntity } from "../../../entities/catalog/vendor.entity";
-import { VendorRepository } from "../../../repositories/catalog/vendor.repository";
+import { UpdateVendorDTO } from '../../../dtos';
+import { VendorEntity } from '../../../entities';
+import { VendorRepository } from '../../../repositories';
 
 export interface UpdateCentralUseCase {
     execute( dto: UpdateVendorDTO ): Promise<VendorEntity>

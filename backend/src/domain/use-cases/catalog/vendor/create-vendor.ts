@@ -1,6 +1,6 @@
-import { CreateVendorDTO } from "../../../dtos";
-import { VendorEntity } from "../../../entities/catalog/vendor.entity";
-import { VendorRepository } from "../../../repositories/catalog/vendor.repository";
+import { CreateVendorDTO } from '../../../dtos';
+import { VendorEntity } from '../../../entities';
+import { VendorRepository } from '../../../repositories';
 
 export interface CreateVendorUseCase {
     execute( dto: CreateVendorDTO ): Promise<VendorEntity>

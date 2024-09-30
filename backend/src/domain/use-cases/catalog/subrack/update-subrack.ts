@@ -1,8 +1,6 @@
-import { UpdateSubrackDTO, UpdateVendorDTO } from "../../../dtos";
-import { SubrackEntity } from "../../../entities/catalog/subrack.entity";
-import { VendorEntity } from "../../../entities/catalog/vendor.entity";
-import { SubrackRepository } from "../../../repositories/catalog/subrack.repository";
-import { VendorRepository } from "../../../repositories/catalog/vendor.repository";
+import { UpdateSubrackDTO } from '../../../dtos';
+import { SubrackEntity } from '../../../entities';
+import { SubrackRepository } from '../../../repositories';
 
 export interface UpdateSubrackUseCase {
     execute( dto: UpdateSubrackDTO ): Promise<SubrackEntity>

@@ -1,5 +1,5 @@
 import { findDuplicateByKeys } from "../../../../helpers";
-import { ISlots, SubrackOwner, SubrackStatus, TechnologySubrack } from "../../../entities/catalog/subrack.entity";
+import { ISlots, SubrackOwner, SubrackStatus, TechnologySubrack } from "../../../../interface";
 
 export class UpdateSubrackDTO {
 

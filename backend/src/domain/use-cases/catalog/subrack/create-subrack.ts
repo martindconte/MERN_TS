@@ -1,6 +1,6 @@
-import { CreateSubrackDTO, CreateVendorDTO } from '../../../dtos';
-import { SubrackEntity } from '../../../entities/catalog/subrack.entity';
-import { SubrackRepository } from '../../../repositories/catalog/subrack.repository';
+import { CreateSubrackDTO } from '../../../dtos'
+import { SubrackEntity } from '../../../entities'
+import { SubrackRepository } from '../../../repositories'
 
 export interface CreateSubrackUseCase {
     execute( dto: CreateSubrackDTO ): Promise<SubrackEntity>

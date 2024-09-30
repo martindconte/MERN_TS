@@ -58,9 +58,11 @@ interface KeyLabel<T> {
     ],
     catalogSignal: [
       { key: 'type', label: 'Tipo' },
-      { key: 'subtype', label: 'SubTipo' },
-      { key: 'description', label: 'Descripcion' },
-      { key: 'observations', label: 'Observaciones' }
+      { key: 'subType', label: 'SubTipo' },
+      // { key: 'description', label: 'Descripcion' },
+      { key: 'observation', label: 'Observaciones' },
+      { key: 'createdAt', label: 'Creado' },
+      { key: 'updatedAt', label: 'Modificado' },
     ], 
     catalogVendor: [
       { key: 'vendorName', label: 'Vendor' },

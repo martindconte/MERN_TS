@@ -1,10 +1,5 @@
-import { CustomError } from "../../../domain"
-
-export enum CentralOwner {
-        tasa = 'TASA',
-        mvs = 'MVS',
-        other = 'OTHER',
-}
+import { CentralOwner } from '../../../interface'
+import { CustomError } from '../../errors/custom.errors'
 
 export class CentralEntity {
         constructor(

@@ -1,5 +1,5 @@
-import { SubrackEntity } from '../../../entities/catalog/subrack.entity';
-import { SubrackRepository } from '../../../repositories/catalog/subrack.repository';
+import { SubrackEntity } from '../../../entities';
+import { SubrackRepository } from '../../../repositories';
 
 export interface DeleteSubrackUseCase {
     execute( id: string ): Promise<SubrackEntity>
