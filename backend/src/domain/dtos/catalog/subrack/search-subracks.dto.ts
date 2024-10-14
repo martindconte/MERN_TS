@@ -18,7 +18,7 @@ export class SearchSubrackDTO {
         public readonly technology?: TechnologySubrack,
         public readonly limit?: number,
         public readonly page?: number,
-    ) { }
+    ) {}
 
     static create(queries: { [key: string]: any }): Partial<SearchSubrackDTO> {
         // Crea un objeto con las propiedades que están presentes en el query

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { SubrackRepository, CreateSubrackDTO, UpdateSubrackDTO, SubrackUseCase } from "../../../domain";
-import { SearchSubrackDTO } from "../../../domain/dtos/catalog/subrack/search-subracks.dto";
+import { SubrackRepository, CreateSubrackDTO, UpdateSubrackDTO, SubrackUseCase, SearchSubrackDTO } from "../../../domain";
+// import { SearchSubrackDTO } from "../../../domain/dtos/catalog/subrack/search-subracks.dto";
 // import { CreateSubrackDTO, SearchSubrackDTO, SubrackRepository, SubrackUseCase, UpdateSubrackDTO } from "../../../domain";
 
 export class SubrackController {

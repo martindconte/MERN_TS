@@ -39,4 +39,12 @@ const signalSchema = new mongoose.Schema(
     }
 );
 
-export const SignalkModel = mongoose.model('signal', signalSchema)
+signalSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret, options) {
+        delete ret._id
+    },
+})
+
+export const SignalkModel = mongoose.model('Signal', signalSchema)

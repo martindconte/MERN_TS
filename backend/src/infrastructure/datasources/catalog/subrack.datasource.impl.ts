@@ -33,40 +33,40 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
 
         const [pagination, filters = {}] = QueriesDTO.pagination(queries)
 
-        if( pagination ) {
+        if (pagination) {
             const { page, limit } = pagination;
-        const [totalDocs, subracks] = await Promise.all([
-            SubrackModel.countDocuments(filters || {}),
-            SubrackModel.aggregate([
-                {
-                    $match: filters || {}
-                },
-                {
-                    $lookup: {
-                        from: 'vendors', // Nombre de la colección de vendors
-                        localField: 'vendor',
-                        foreignField: '_id',
-                        as: 'vendor'
+            const [totalDocs, subracks] = await Promise.all([
+                SubrackModel.countDocuments(filters || {}),
+                SubrackModel.aggregate([
+                    {
+                        $match: filters || {}
+                    },
+                    {
+                        $lookup: {
+                            from: 'vendors', // Nombre de la colección de vendors
+                            localField: 'vendor',
+                            foreignField: '_id',
+                            as: 'vendor'
+                        }
+                    },
+                    {
+                        $unwind: '$vendor' // Desanidar el array de vendors
+                    },
+                    {
+                        $sort: {
+                            'vendor.vendorName': 1, // Ordenar por vendorName
+                            subrackFamily: 1,
+                            subrackType: 1
+                        }
+                    },
+                    {
+                        $skip: (page - 1) * limit // Paginación
+                    },
+                    {
+                        $limit: limit // Limitar la cantidad de resultados
                     }
-                },
-                {
-                    $unwind: '$vendor' // Desanidar el array de vendors
-                },
-                {
-                    $sort: {
-                        'vendor.vendorName': 1, // Ordenar por vendorName
-                        subrackFamily: 1,
-                        subrackType: 1
-                    }
-                },
-                {
-                    $skip: (page - 1) * limit // Paginación
-                },
-                {
-                    $limit: limit // Limitar la cantidad de resultados
-                }
-            ]),
-        ]);
+                ]),
+            ]);
 
             const totalPages = Math.ceil(totalDocs / limit);
             const baseUrl = `api/catalog/subrack?limit=${limit}&${new URLSearchParams(filters).toString()}`;
@@ -84,11 +84,11 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
                 }
             };
         }
-        
+
         const subracks = await SubrackModel.find(filters || {})
             .populate('vendor', 'vendorName')
 
-        return sortBy( subracks.map(SubrackEntity.fromObject), [ 'vendor.vendorName', 'subrackFamily', 'subrackType' ] );
+        return sortBy(subracks.map(SubrackEntity.fromObject), ['vendor.vendorName', 'subrackFamily', 'subrackType']);
 
     }
 
@@ -104,31 +104,33 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
 
         const subrackDuplicate = await SubrackModel.findOne({
             $or: [
-              {
-                $and: [
-                  { _id: { $ne: updateSubrackDTO.id } },
-                  { model: updateSubrackDTO.model },
-                  { $or: [
-                    { subrackType: updateSubrackDTO.subrackType, subrackFamily: updateSubrackDTO.subrackFamily },
-                    {
-                      model: { $exists: true },
-                      subrackType: { $ne: updateSubrackDTO.subrackType },
-                      subrackFamily: { $ne: updateSubrackDTO.subrackFamily }
-                    }
-                  ] }
-                ]
-              },
-              {
-                $and: [
-                  { model: { $exists: false } },
-                  { subrackType: updateSubrackDTO.subrackType },
-                  { subrackFamily: updateSubrackDTO.subrackFamily }
-                ]
-              }
+                {
+                    $and: [
+                        { _id: { $ne: updateSubrackDTO.id } },
+                        { model: updateSubrackDTO.model },
+                        {
+                            $or: [
+                                { subrackType: updateSubrackDTO.subrackType, subrackFamily: updateSubrackDTO.subrackFamily },
+                                {
+                                    model: { $exists: true },
+                                    subrackType: { $ne: updateSubrackDTO.subrackType },
+                                    subrackFamily: { $ne: updateSubrackDTO.subrackFamily }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    $and: [
+                        { model: { $exists: false } },
+                        { subrackType: updateSubrackDTO.subrackType },
+                        { subrackFamily: updateSubrackDTO.subrackFamily }
+                    ]
+                }
             ]
-          });
+        });
 
-        if( subrackDuplicate ) throw `Check the information! A subrack is already registered for the TYPE: ${updateSubrackDTO.subrackType} / FAMILY: ${updateSubrackDTO.subrackFamily} or the PN ${updateSubrackDTO.partNumber} / Model are already registered`
+        if (subrackDuplicate) throw `Check the information! A subrack is already registered for the TYPE: ${updateSubrackDTO.subrackType} / FAMILY: ${updateSubrackDTO.subrackFamily} or the PN ${updateSubrackDTO.partNumber} / Model are already registered`
         const SubrackUpdate = await SubrackModel.findByIdAndUpdate(
             updateSubrackDTO.id,
             { ...updateSubrackDTO },
@@ -136,7 +138,7 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
         );
         if (!SubrackUpdate) throw "Error - Update Subrack failed";
         return SubrackEntity.fromObject(SubrackUpdate);
-        
+
     }
 
     async deleteById(id: string): Promise<SubrackEntity> {

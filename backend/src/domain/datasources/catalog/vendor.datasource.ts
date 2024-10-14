@@ -4,7 +4,7 @@ import { VendorEntity } from '../../entities';
 export abstract class VendorDataSource {
     abstract create( createVendorDTO: CreateVendorDTO ): Promise<VendorEntity>
     abstract getAll(): Promise<VendorEntity[]>
-    abstract getById( id: string ): Promise<VendorEntity>
+    abstract getById( id: VendorEntity['id'] ): Promise<VendorEntity>
     abstract updateById( updateVendorDTO: UpdateVendorDTO ): Promise<VendorEntity>
-    abstract deleteById( id: string ): Promise<VendorEntity>
+    abstract deleteById( id: VendorEntity['id'] ): Promise<VendorEntity>
 }

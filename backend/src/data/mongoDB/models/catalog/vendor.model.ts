@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import { validateObjectId } from '../../helpers/pre.helpers';
 
 const vendorSchema = new mongoose.Schema(
     {
@@ -24,6 +23,14 @@ const vendorSchema = new mongoose.Schema(
     {
         timestamps: true
     }
-)
+);
+
+vendorSchema.set('toJSON', {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret, options) {
+        delete ret._id
+    },
+})
 
 export const VendorModel = mongoose.model('Vendor', vendorSchema)
