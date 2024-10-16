@@ -3,7 +3,7 @@ import { useCentral } from '../../hook';
 import { BtnNavCentral, Spinner } from '../../components';
 import { keyToShowInTable } from '../../components/shared/table/keysToShowInTable';
 
-export const DescriptionCentralView = () => {
+export const DetailsCentralView = () => {
 
     const centralKeys = keyToShowInTable["central"];
     const { centralId } = useParams<{ centralId: string }>();

@@ -14,8 +14,6 @@ export class VendorEntity {
 
         const { id, _id, vendorName, country, observation, createdAt, updatedAt } = object
 
-        console.log('object desde Entity --------------------->', object);
-
         if (!id && !_id) throw CustomError.badRequest('Missinbg VENDOR id')
         if (!vendorName) throw CustomError.badRequest('Missinbg Vendor Name')
 

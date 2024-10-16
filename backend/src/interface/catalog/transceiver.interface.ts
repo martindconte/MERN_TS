@@ -24,12 +24,14 @@ export enum StatusEnum {
     InService = 'InService',
     EndOfSupport = 'EndOfSupport',
     EndOfMarketing = 'EndOfMarketing',
+    NA = '',
 }
 
 export interface TransceiverEntityWithPagination {
     payload: TransceiverEntity[];
     pagination: {
         totalDocs: number;
+        totalResults: number;
         totalPages: number;
         prevPage: string | null;
         nextPage: string | null;

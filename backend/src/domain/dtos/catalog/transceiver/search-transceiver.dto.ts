@@ -12,7 +12,7 @@ export class SearchTransceiverDTO {
         public readonly observations?: string,
         public readonly technology?: TechnologyEnum,
         public readonly bitsRates?: BitRatesEnum[],
-        public readonly signals?: string[],
+        // public readonly signals?: string[],
         public readonly status?: StatusEnum,
         public readonly limit?: number,
         public readonly page?: number,
@@ -24,6 +24,7 @@ export class SearchTransceiverDTO {
 
         for( const key in queries ) {
             if( key in new SearchTransceiverDTO() ) {
+                const decodedValue = decodeURIComponent(queries[key]);
                 switch (key) {
                     case 'id':
                     case 'vendor':
@@ -31,21 +32,22 @@ export class SearchTransceiverDTO {
                         break;
                     case 'limit':
                     case 'page':
-                        searchParams[key] = parseInt( queries[key] );
+                        searchParams[key] = parseInt( decodedValue );
                         break;
                     case 'bitsRates':
-                        const bitsRatesArray = Array.isArray(queries[key]) ? queries[key] : [ queries[key] ];
+                        const bitsRatesArray = decodedValue.split(',')
                         searchParams[key] = { $all: bitsRatesArray.filter((rate: any) => Object.values(BitRatesValues).includes(rate))};
                         break;
-                    case 'signals':
-                        break;
+                    // case 'signals':
+                    //     break;
                     default:
-                        const regex = new RegExp(queries[key], 'i');
+                        const regex = new RegExp(decodedValue, 'i');
                         searchParams[key] = { $regex: regex };
                         break;
                 }
             }
         }
+
         return searchParams
     }
 }

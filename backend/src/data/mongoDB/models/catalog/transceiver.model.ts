@@ -47,25 +47,19 @@ const transceiverSchema = new mongoose.Schema(
             trim: true,
             default: 'DWDM',
             uppercase: true,
-            enum: ['DWDM', 'SDH', 'RX', 'CWDM', 'IP', 'GENERICO']
+            enum: ['DWDM', 'SDH', 'RX', 'CWDM', 'IP', 'GENERIC']
         },
         bitsRates: [{
             type: String,
             enum: BitRatesValues,
             default: [],
-            trim: true,
-            uppercase: true,
+            trim: true
         }],
-        signals: {
-            type:[mongoose.Schema.Types.ObjectId],
-            ref: 'Signal',
-            default: []
-        },
         status: {
             type: String,
             trim: true,
-            default: 'InService',
-            enum: ['InService', 'EndOfSupport', 'EndOfMarketing']
+            default: '',
+            enum: ['InService', 'EndOfSupport', 'EndOfMarketing', '']
         },
     },
     {

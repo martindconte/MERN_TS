@@ -1,6 +1,6 @@
-import { BtnNavSignal, FormSignal, Spinner, Table } from "../../../components"
-import { useSignalMutation, useSignals } from "../../../hook";
-import { SignalFormData } from "../../../types";
+import { BtnNavSignal, FormSignal, Spinner, Table } from '../../../components'
+import { useSignalMutation, useSignals } from '../../../hook';
+import { SignalFormData } from '../../../types';
 
 export const SignalView = () => {
 

@@ -13,14 +13,15 @@ export class TransceiverEntity {
     public readonly observations?: string,
     public readonly technology?: TechnologyEnum,
     public readonly bitsRates?: BitRatesEnum[],
-    public readonly signals?: { id: string, type: string, subtype: string }[],
+    // public readonly signals?: { id: string, type: string, subtype: string }[],
     public readonly status?: StatusEnum,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
   ) {}
 
   static fromObject(object: { [key: string]: any }) {
-    const { id, _id, partNumber, model, vendor, type, description, observations, technology, bitsRates, signals, status, createdAt, updatedAt } = object;
+    const { id, _id, partNumber, model, vendor, type, description, observations, technology, bitsRates, status, createdAt, updatedAt } = object;
+    // const { id, _id, partNumber, model, vendor, type, description, observations, technology, bitsRates, signals, status, createdAt, updatedAt } = object;
 
     if (!id && !_id) throw CustomError.badRequest('Missing id');
     if (!partNumber) throw CustomError.badRequest('Missing partNumber Transceiver');
@@ -45,7 +46,7 @@ export class TransceiverEntity {
       observations,
       technology,
       bitsRates,
-      signals,
+      // signals,
       status,
       createdAt,
       updatedAt

@@ -1,18 +1,19 @@
-import { CreateTransceiverDTO, QueriesDTO, UpdateTransceiverDTO } from "../../dtos";
-import { TransceiverEntity } from "../../entities";
+import { TransceiverEntityWithPagination } from '../../../interface';
+import { CreateTransceiverDTO, QueriesDTO, UpdateTransceiverDTO } from '../../dtos';
+import { TransceiverEntity } from '../../entities';
 
-interface TransceiverEntityWithPagination {
-    payload: TransceiverEntity[];
-    pagination: {
-        totalDocs: number;
-        totalPages: number;
-        prevPage: string | null;
-        nextPage: string | null;
-        page: number;
-        hasPrevPage: boolean;
-        hasNextPage: boolean;
-    };
-};
+// interface TransceiverEntityWithPagination {
+//     payload: TransceiverEntity[];
+//     pagination: {
+//         totalDocs: number;
+//         totalPages: number;
+//         prevPage: string | null;
+//         nextPage: string | null;
+//         page: number;
+//         hasPrevPage: boolean;
+//         hasNextPage: boolean;
+//     };
+// };
 
 export abstract class TransceiverRepository {
     abstract create( createTransceiverDTO: CreateTransceiverDTO ): Promise<TransceiverEntity>;

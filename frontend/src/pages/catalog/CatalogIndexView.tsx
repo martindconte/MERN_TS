@@ -17,8 +17,8 @@ export const CatalogIndexView = () => {
             <Link to='board' className='w-1/5 text-center justify-center bg-gray-100 mx-2 my-5 inline-flex flex-col px-3 py-4 gap-2 font-semibold rounded-md transition hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/95 hover:text-white'>
               <p className='uppercase text-lg'>Placas</p>
             </Link>
-            <Link to='transceivers' className='w-1/5 text-center justify-center bg-gray-100 mx-2 my-5 inline-flex flex-col px-3 py-4 gap-2 font-semibold rounded-md transition hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/95 hover:text-white'>
-              <p className='uppercase text-lg'>Transceivers</p>
+            <Link to='transceiver' className='w-1/5 text-center justify-center bg-gray-100 mx-2 my-5 inline-flex flex-col px-3 py-4 gap-2 font-semibold rounded-md transition hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/95 hover:text-white'>
+              <p className='uppercase text-lg'>Transceiver</p>
             </Link>
             <Link to='bitrate' className='w-1/5 text-center justify-center bg-gray-100 mx-2 my-5 inline-flex flex-col px-3 py-4 gap-2 font-semibold rounded-md transition hover:bg-purple-700 hover:shadow-lg hover:shadow-red-500/95 hover:text-white'>
               <p className='uppercase text-lg'>Velocidades</p>

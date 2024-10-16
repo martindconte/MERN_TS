@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
-import { getCentrals } from "../../api";
+import { useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { getCentrals } from '../../api';
 
 interface Props {
     enabled: boolean;

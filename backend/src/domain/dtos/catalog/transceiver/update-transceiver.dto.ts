@@ -12,12 +12,13 @@ export class UpdateTransceiverDTO {
         public readonly observations?: string,
         public readonly technology?: TechnologyEnum,
         public readonly bitsRates?: BitRatesEnum[],
-        public readonly signals?: { id: string, type: string, subtype: string }[],
+        // public readonly signals?: { id: string, type: string, subtype: string }[],
         public readonly status?: StatusEnum,
       ) {}
 
     static update(transceiver: { [key: string]: any }): [string?, UpdateTransceiverDTO?] {
-        const { id, _id, partNumber, vendor, type, model, description, observations, technology, bitsRates, signals, status } = transceiver
+        const { id, _id, partNumber, vendor, type, model, description, observations, technology, bitsRates, status } = transceiver
+        // const { id, _id, partNumber, vendor, type, model, description, observations, technology, bitsRates, signals, status } = transceiver
 
         if( !id || _id ) throw ['Missinbg ID Transceiver'];
         if( !partNumber ) throw ['Missinbg Part Number Transceiver'];
@@ -40,7 +41,7 @@ export class UpdateTransceiverDTO {
                 observations,
                 technology,
                 bitsRates,
-                signals,
+                // signals,
                 status,
             )
         ]

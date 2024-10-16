@@ -1,6 +1,7 @@
-import { QueriesDTO, TransceiverRepository } from '../../..';
-import { TransceiverEntityWithPagination } from '../../../../interface';
 import { TransceiverEntity } from '../../../entities';
+import { TransceiverRepository } from '../../../repositories';
+import { QueriesDTO } from '../../../dtos';
+import { TransceiverEntityWithPagination } from '../../../../interface';
 
 
 export interface GetTransceiversUseCase {

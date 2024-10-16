@@ -46,15 +46,17 @@ interface KeyLabel<T> {
       { key: 'status', label: 'Estado' }
     ],
     catalogTransceiver: [
-      { key: 'partNumber', label: 'Numero de Parte' },
-      { key: 'model', label: 'Model' },
-      { key: 'description', label: 'Descripcion' },
       { key: 'vendor', label: 'Vendor' },
-      { key: 'observations', label: 'Obs.' },
+      { key: 'partNumber', label: 'No. Parte' },
+      { key: 'model', label: 'Model' },
+      { key: 'type', label: 'Tipo' },
       { key: 'technology', label: 'Tecnologia' },
-      { key: 'bitsRate', label: 'Velocidades' },
-      { key: 'signals', label: 'Señales' },
-      { key: 'status', label: 'Estado' }
+      { key: 'description', label: 'Descripcion' },
+      { key: 'observations', label: 'Obs.' },
+      // { key: 'bitsRate', label: 'Velocidades' },
+      { key: 'status', label: 'Estado' },
+      { key: 'createdAt', label: 'Creado' },
+      { key: 'updatedAt', label: 'Modificado' },
     ],
     catalogSignal: [
       { key: 'type', label: 'Tipo' },

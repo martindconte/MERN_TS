@@ -10,16 +10,12 @@ export class CreateTransceiverDTO {
         public readonly observations?: string,
         public readonly technology?: TechnologyEnum,
         public readonly bitsRates?: BitRatesEnum[],
-        public readonly signals?: string[],
         public readonly status?: StatusEnum,
     ) { }
 
     static create(transceiver: { [key: string]: any }): [string?, CreateTransceiverDTO?] {
-        const { partNumber, vendor, type, model, description, observations, technology, bitsRates, signals, status } = transceiver
-
-        console.log( bitsRates);
-        console.log( Array.isArray(bitsRates));
-
+        const { partNumber, vendor, type, model, description, observations, technology, bitsRates, status } = transceiver
+        
         if( !partNumber ) throw ['Missing Part Number'];
         if( !vendor ) throw ['Missinbg Vendor'];
         if( technology && !Object.values(TechnologyEnum ).includes( technology.toUpperCase()) ) throw ['Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO'];
@@ -38,7 +34,6 @@ export class CreateTransceiverDTO {
                 observations,
                 technology,
                 bitsRates,
-                signals,
                 status,
             )
         ]

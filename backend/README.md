@@ -143,20 +143,23 @@ _________________________
 
 **Parametros de Consulta**
 
-| Parámetro      | Tipo de Dato | Descripción                                 | Ejemplo                                     | Obligatorio |
-|----------------|--------------|---------------------------------------------|---------------------------------------------|-------------|
-| `limit`        | `number`     | Cantidad de registros a devolver por página | `10`                                        | No          |
-| `page`         | `number`     | Número de la página a consultar             | `2`                                         | No          |
-| `partNumber`   | `string`     | Número de parte del transceptor             | `03032BXT`                                  | No          |
-| `type`         | `string`     | Tipo de transceptor                         | `Optical`                                   | No          |
-| `model`        | `string`     | Modelo del transceptor                      | `TNF1C1CFPT65`                              | No          |
-| `description`  | `string`     | Descripción del transceptor                 | `OptiX WDM, TNF1C1CFPT65, 100G CFPT65`      | No          |
-| `vendor`       | `string`     | Proveedor del transceptor                   | `HUAWEI`                                    | No          |
-| `observations` | `string`     | Observaciones adicionales                   | `Funciona adecuadamente en ambientes fríos` | No          |
-| `technology`   | `string`     | Tecnología utilizada                        | `DWDM`                                      | No          |
-| `bitsRates`    | `array`      | Tasa de bits soportada                      | `["OCH", "OTU4"]`                           | No          |
-| `signals`      | `array`      | Señales soportadas                          | `["66f77287f9585c7719531a9d"]`              | No          |
-| `status`       | `string`     | Estado del transceptor                      | `InService`                                 | No          |
+| Parámetro      | Tipo de Dato | Descripción                                     | Ejemplo                                     | Obligatorio |
+|----------------|--------------|-------------------------------------------------|---------------------------------------------|-------------|
+| `limit`        | `int`        | Cantidad de registros a devolver por página     | `10`                                        | No          |
+| `page`         | `int`        | Número de la página a consultar                 | `2`                                         | No          |
+| `partNumber`   | `string`     | Número de parte del transceptor                 | `03032BXT`                                  | No          |
+| `type`         | `string`     | Tipo de transceptor                             | `Optical`                                   | No          |
+| `model`        | `string`     | Modelo del transceptor                          | `TNF1C1CFPT65`                              | No          |
+| `description`  | `string`     | Descripción del transceptor                     | `OptiX WDM, TNF1C1CFPT65, 100G CFPT65`      | No          |
+| `vendor`       | `string`     | Proveedor del transceptor                       | `HUAWEI`                                    | No          |
+| `observations` | `string`     | Observaciones adicionales                       | `Funciona adecuadamente en ambientes fríos` | No          |
+| `technology`   | `string`     | Tecnología utilizada (**_Puede ser Multiple_**) | `DWDM`                                      | No          |
+| `bitsRates`    | `string      | Tasa de bits soportada                          | `["OCH", "OTU4"]`                           | No          |
+| `status`       | `string`     | Estado del transceptor                          | `InService`                                 | No          |
+
+### URL Ejemplo:
+
+`/api/catalog/transceiver?vendor=66de80278a5c70b21b9a5663&bitsRates=STM-1&bitsRates=STM-4&bitsRates=STM-16&limit=5&page=1`
 
 ### Example Response SIN Pagination (sin `limit` ni `page`)
 ```json
@@ -204,36 +207,6 @@ _________________________
     }
 ]
 ```
-### Descripción de la respuesta
-
-- **payload**: Array de objetos, donde cada objeto representa un transceiver.
-  
-  **Estructura de cada objeto:**
-  - **id**: `string` - ID único del transceptor.
-  - **partNumber**: `string` - Número de parte del transceptor.
-  - **vendor**: `object` - Información del proveedor del transceptor.
-    - **id**: `string` - ID del proveedor.
-    - **vendorName**: `string` - Nombre del proveedor.
-  - **model**: `string` - Modelo del transceptor.
-  - **description**: `string` - Descripción del transceptor.
-  - **observations**: `string` - Observaciones adicionales sobre el transceptor.
-  - **technology**: `string` - Tecnología utilizada por el transceptor.
-  - **bitsRates**: `array` - Array de tasas de bits soportadas.
-  - **signals**: `array` - Array de señales soportadas.
-  - **status**: `string` - Estado del transceptor.
-  - **createdAt**: `string` - Fecha de creación del transceptor.
-  - **updatedAt**: `string` - Fecha de actualización del transceptor.
-
-- **pagination**: Objeto que incluye información sobre la paginación de los resultados.
-  - **totalDocs**: `number` - Total de documentos disponibles.
-  - **totalPages**: `number` - Total de páginas.
-  - **prevPage**: `string` - URL de la página anterior (si existe).
-  - **nextPage**: `string` - URL de la siguiente página (si existe).
-  - **page**: `number` - Número de la página actual.
-  - **hasPrevPage**: `boolean` - Indica si hay una página anterior.
-  - **hasNextPage**: `boolean` - Indica si hay una página siguiente.
-
-
 ### Example Response CON Pagination (se envia valores para `limit` y `page`)
 ```json
 {
@@ -261,6 +234,7 @@ _________________________
     ],
     "pagination": {
         "totalDocs": 6,
+        "totalResult": 6,
         "totalPages": 2,
         "prevPage": null,
         "nextPage": "api/catalog/transceiver?limit=3&page=2",
@@ -270,6 +244,35 @@ _________________________
     }
 }
 ```
+### Descripción de la respuesta
+
+- **payload**: Array de objetos, donde cada objeto representa un transceiver.
+  
+  **Estructura de cada objeto:**
+  - **id**: `string` - ID único del transceptor.
+  - **partNumber**: `string` - Número de parte del transceptor.
+  - **vendor**: `object` - Información del proveedor del transceptor.
+    - **id**: `string` - ID del proveedor.
+    - **vendorName**: `string` - Nombre del proveedor.
+  - **model**: `string` - Modelo del transceptor.
+  - **description**: `string` - Descripción del transceptor.
+  - **observations**: `string` - Observaciones adicionales sobre el transceptor.
+  - **technology**: `string` - Tecnología utilizada por el transceptor.
+  - **bitsRates**: `array` - Array de tasas de bits soportadas.
+  - **signals**: `array` - Array de señales soportadas.
+  - **status**: `string` - Estado del transceptor.
+  - **createdAt**: `string` - Fecha de creación del transceptor.
+  - **updatedAt**: `string` - Fecha de actualización del transceptor.
+
+- **pagination**: Objeto que incluye información sobre la paginación de los resultados.
+  - **totalDocs**: `number` - Total de documentos disponibles.
+  - **totalResults**: `number` Total de resultados para el filtro aplicado.
+  - **totalPages**: `number` - Total de páginas.
+  - **prevPage**: `string` - URL de la página anterior (si existe).
+  - **nextPage**: `string` - URL de la siguiente página (si existe).
+  - **page**: `number` - Número de la página actual.
+  - **hasPrevPage**: `boolean` - Indica si hay una página anterior.
+  - **hasNextPage**: `boolean` - Indica si hay una página siguiente.
 ________
 
 ### Buscar Transceiver por ID
@@ -394,7 +397,8 @@ _______
         "id": "670009bb0c1387078ae40df0",
         "partNumber": "03032BXT",
         "vendor": {
-            "id": "66dbaf195a040c6dc6868f8c"
+            "id": "66dbaf195a040c6dc6868f8c",
+            "vendorName": "CIENA"
         },
         "model": "TNF1C1CFPT65",
         "description": "OptiX WDM,TNF1C1CFPT65,100G CFPT65(Metro,SDFEC2,Coherent wDCM,Tunable,expanded C Band,-3dBm-2dBm,-18dBm,50GHz,LC)",

@@ -25,7 +25,7 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
         const newTransceiver = await TransceiverModel.create(createTransceiverDTO)
         await newTransceiver.populate([
             { path: 'vendor', select: 'vendorName' },
-            { path: 'signals', select: 'type subType' }
+            // { path: 'signals', select: 'type subType' }
         ]);
         return TransceiverEntity.fromObject(newTransceiver);
     }
@@ -69,11 +69,11 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
 
             const totalPages = Math.ceil(totalDocs / limit);
             const baseUrl = `api/catalog/transceiver?limit=${limit}&${new URLSearchParams(filters).toString()}`;
-
             return {
                 payload: transceivers.map(TransceiverEntity.fromObject),
                 pagination: {
                     totalDocs,
+                    totalResults: transceivers.length,
                     totalPages,
                     prevPage: page > 1 ? `${baseUrl}&page=${page - 1}` : null,
                     nextPage: page < totalPages ? `${baseUrl}&page=${page + 1}` : null,
@@ -93,7 +93,7 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
         if (!transceiver) throw new Error(`The Transceiver whit this Part Number or Model is already registered`);
         await transceiver.populate([
             { path: 'vendor', select: 'vendorName' },
-            { path: 'signals', select: 'type subType' }
+            // { path: 'signals', select: 'type subType' }
         ]);
         return TransceiverEntity.fromObject(transceiver);
     }
@@ -125,9 +125,10 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
     async deleteById(id: TransceiverEntity["id"]): Promise<TransceiverEntity> {
         const transceiver = await TransceiverModel.findOne({ _id: id })
         if (!transceiver) throw new Error('Transceiver Not Found!')
-        const transceiverkDelete = await TransceiverModel.findByIdAndDelete(id);
-        if (!transceiverkDelete) throw new Error('Subrack not deleted');
-        return TransceiverEntity.fromObject(transceiverkDelete);
+        const transceiverDelete = await TransceiverModel.findByIdAndDelete(id).populate({ path: 'vendor', select: 'vendorName' });
+        console.log(transceiverDelete);
+        if (!transceiverDelete) throw new Error('Subrack not deleted');
+        return TransceiverEntity.fromObject(transceiverDelete);
     }
 
 }

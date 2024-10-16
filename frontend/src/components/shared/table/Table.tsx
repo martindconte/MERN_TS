@@ -104,11 +104,17 @@ export const Table = <T extends Identifiable>({
             header: () => label,
             cell: (info) => {
               const value = info.getValue();
-              if (value instanceof Date) {
-                return formatDate(value);
-              } else if (typeof value === "boolean") {
-                return value ? "Activo" : "Desafectado";
+              if ( value instanceof Date ) return formatDate( value );
+              if ( typeof value === 'boolean' ) return value ? "Activo" : "Desafectado";
+              if ( typeof value === 'object' && value !== null ) {
+                if( 'vendorName' in value ) return value.vendorName;
               }
+              // const value = info.getValue();
+              // if (value instanceof Date) {
+              //   return formatDate(value);
+              // } else if (typeof value === "boolean") {
+              //   return value ? "Activo" : "Desafectado";
+              // }
               return value;
             },
             enableResizing: true,

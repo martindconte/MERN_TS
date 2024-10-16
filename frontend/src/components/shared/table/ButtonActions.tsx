@@ -26,7 +26,7 @@ export const ButtonActions = ({ path, id, btnDelete, setModalView, setIdSelected
 
   return (
     <div className={tableStyles.actions}>
-        <Link to={`${basePath}/description/${id}`}><span className={`material-symbols-outlined ${tableStyles.descriptionIcon}`}>description</span></Link>
+        <Link to={`${basePath}/details/${id}`}><span className={`material-symbols-outlined ${tableStyles.descriptionIcon}`}>description</span></Link>
         <Link to={ `${basePath}/edit/${id}` }><span className={`material-symbols-outlined ${tableStyles.editIcon}`}>edit</span></Link>
         {
           btnDelete && <button onClick={ () => handleSelected( id ) } ><span className={`material-symbols-outlined ${tableStyles.deleteIcon}`}>delete</span></button>
