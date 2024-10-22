@@ -26,7 +26,7 @@ export class TransceiverEntity {
     if (!id && !_id) throw CustomError.badRequest('Missing id');
     if (!partNumber) throw CustomError.badRequest('Missing partNumber Transceiver');
     if (!vendor) throw CustomError.badRequest('Missing vendor');
-    if( bitsRates === '' && !Array.isArray(bitsRates) ) throw ['Bits Rates must be Array'];
+    if( bitsRates === '' && !Array.isArray(bitsRates) ) throw CustomError.badRequest('Bits Rates must be Array');
     if( technology && !Object.values( TechnologyEnum ).includes( technology.toUpperCase() ) ) throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
     if (bitsRates && !Array.isArray(bitsRates) && bitsRates.length > 0 && !bitsRates.every((rate: any) => BitRatesValues.includes(rate))) throw CustomError.badRequest('Invalid bitsRate');
     if (status && !Object.values(StatusEnum).includes(status)) throw CustomError.badRequest('Invalid Status');

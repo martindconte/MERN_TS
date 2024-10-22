@@ -1,5 +1,30 @@
 import mongoose from 'mongoose';
 
+const bandwidthSchema = new mongoose.Schema({
+    amount: {
+      type: Number,
+      trim: true,
+      validate: {
+        validator: function (value) {
+          return this.bandwidth && this.bandwidth.unit !== undefined ? value !== null : true;
+        },
+        message: 'Amount is required if bandwidth is provided!',
+      },
+    },
+    unit: {
+      type: String,
+      enum: ['MB', 'GB', 'TB'],
+      trim: true,
+      uppercase: true,
+      validate: {
+        validator: function (value) {
+          return this.bandwidth && this.bandwidth.amount !== undefined ? value !== null : true;
+        },
+        message: 'Unit is required if bandwidth is provided!',
+      },
+    },
+  }, { _id: false });
+
 const signalSchema = new mongoose.Schema(
     {
         type: {
@@ -14,20 +39,9 @@ const signalSchema = new mongoose.Schema(
             trim: true,
             uppercase: true,
         },
-        bandwidth: [{
-            amount: {
-                type: Number,
-                required: [true, 'Amount is required!'],
-                trim: true,
-            },
-            unit: {
-                type: String,
-                required: [true, 'Unit is required!'],
-                enum: ['MB', 'GB', 'TB'],
-                trim: true,
-                uppercase: true
-            }
-    }],
+        bandwidth: {
+            type: bandwidthSchema,
+        },
         observation: {
             type: String,
             trim: true,
@@ -43,8 +57,11 @@ signalSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
     transform: function (doc, ret, options) {
-        delete ret._id
+        if (!ret.bandwidth || Object.keys(ret.bandwidth).length === 0) {
+            ret.bandwidth = {};
+        }
+        delete ret._id;
     },
-})
+});
 
-export const SignalkModel = mongoose.model('Signal', signalSchema)
+export const SignalModel = mongoose.model('Signal', signalSchema);

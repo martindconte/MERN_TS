@@ -61,6 +61,7 @@ export const Table = <T extends Identifiable>({
   fnDelete,
 }: Props<T>) => {
 
+  console.log(data);
   const { pathname } = useLocation();
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>(
@@ -99,7 +100,16 @@ export const Table = <T extends Identifiable>({
       ...keyToShowInTable[info]
         .filter(({ key }) => selectedColumns.includes(key))
         .map(({ key, label }) =>
-          columnHelper.accessor((row: T) => row[key as keyof T], {
+          columnHelper.accessor((row: T) => {
+            if (key === 'amount' || key === 'unit') {
+              // Verifica si row tiene la propiedad bandwidth antes de acceder
+              if ('bandwidth' in row && row.bandwidth) {
+                return row.bandwidth[key as keyof typeof row.bandwidth];
+              }
+              return undefined;
+            }
+            return row[key as keyof T];
+          }, {
             id: key,
             header: () => label,
             cell: (info) => {
@@ -107,7 +117,9 @@ export const Table = <T extends Identifiable>({
               if ( value instanceof Date ) return formatDate( value );
               if ( typeof value === 'boolean' ) return value ? "Activo" : "Desafectado";
               if ( typeof value === 'object' && value !== null ) {
-                if( 'vendorName' in value ) return value.vendorName;
+                if ( 'vendorName' in value ) return value.vendorName;
+                // if ( 'amount' in value ) return value.amount;
+                // if ( 'unit' in value ) return value.unit;
               }
               // const value = info.getValue();
               // if (value instanceof Date) {
@@ -123,6 +135,52 @@ export const Table = <T extends Identifiable>({
     ],
     [info, selectedColumns, columnHelper]
   );
+  // const columns = useMemo<ColumnDef<T, any>[]>(
+  //   () => [
+  //     columnHelper.display({
+  //       id: "actions",
+  //       header: () => "Acciones",
+  //       cell: ({ row }) => (
+  //         <div className={tableStyles.actions}>
+  //           <ButtonActions
+  //             path={ pathname }
+  //             id={ row.original.id }
+  //             setModalView={ setModalView }
+  //             setIdSelected={ setIdSelected }
+  //             btnDelete={ fnDelete ? true : false}
+  //           />
+  //         </div>
+  //       ),
+  //     }),
+  //     ...keyToShowInTable[info]
+  //       .filter(({ key }) => selectedColumns.includes(key))
+  //       .map(({ key, label }) =>
+  //         columnHelper.accessor((row: T) => row[key as keyof T], {
+  //           id: key,
+  //           header: () => label,
+  //           cell: (info) => {
+  //             const value = info.getValue();
+  //             if ( value instanceof Date ) return formatDate( value );
+  //             if ( typeof value === 'boolean' ) return value ? "Activo" : "Desafectado";
+  //             if ( typeof value === 'object' && value !== null ) {
+  //               if ( 'vendorName' in value ) return value.vendorName;
+  //               // if ( 'amount' in value ) return value.amount;
+  //               // if ( 'unit' in value ) return value.unit;
+  //             }
+  //             // const value = info.getValue();
+  //             // if (value instanceof Date) {
+  //             //   return formatDate(value);
+  //             // } else if (typeof value === "boolean") {
+  //             //   return value ? "Activo" : "Desafectado";
+  //             // }
+  //             return value;
+  //           },
+  //           enableResizing: true,
+  //         })
+  //       ),
+  //   ],
+  //   [info, selectedColumns, columnHelper]
+  // );
 
   const table = useReactTable({
     data,

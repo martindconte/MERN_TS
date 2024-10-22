@@ -1,6 +1,7 @@
 //* FOLDER --> Entities
 
 //* Catalog
+export * from './catalog/board.entity';
 export * from './catalog/signal.entity';
 export * from './catalog/subrack.entity';
 export * from './catalog/transceiver.entity';

@@ -3,6 +3,7 @@ import { VendorRoutes } from './vendor.routes';
 import { SubrackRoutes } from './subrack.routes';
 import { SignalRoutes } from './signal.routes';
 import { TransceiverRoutes } from './transceiver.routes';
+import { BoardRoutes } from './board.routes';
 
 export class CatalogRoutes {
 
@@ -11,6 +12,7 @@ export class CatalogRoutes {
         const router = Router()
 
         //* route: /api/catalog
+        router.use('/board', BoardRoutes.routes)
         router.use('/vendor', VendorRoutes.routes)
         router.use('/subrack', SubrackRoutes.routes)
         router.use('/signal', SignalRoutes.routes)

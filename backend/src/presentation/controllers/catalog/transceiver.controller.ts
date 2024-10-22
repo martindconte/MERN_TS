@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateTransceiverDTO, TransceiverRepository, TransceiverUseCase, UpdateTransceiverDTO } from '../../../domain';
-import { SearchTransceiverDTO } from '../../../domain/dtos/catalog/transceiver/search-transceiver.dto';
+import { CreateTransceiverDTO, SearchTransceiverDTO, TransceiverRepository, TransceiverUseCase, UpdateTransceiverDTO } from '../../../domain';
 
 export class TransceiverController {
     

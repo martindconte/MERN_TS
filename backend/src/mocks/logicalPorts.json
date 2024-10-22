@@ -1,0 +1,61 @@
+{
+    "boardName": "TNG1M520SM06",
+    "partNumber": "03033YQD",
+    "signals": [ "670ff5523f6752ba955cfdf2", "670ff5243f6752ba955cfdda" ],
+    "vendor": "66dbaf195a040c6dc6868f8c",
+    "description": "20*10GE or 2*100GE Service Multiplexing Into 1*200G/100G Programable Wavelength Conversion Board(CFP2)(100G Line Capacity Included, RTU Extension Supported)",
+    "observations": "HW OT",
+    "ports": [
+      {
+        "port": 1,
+        "type": "LINE",
+        "physical": "IN1/OUT1",
+        "NMS": "1",
+        "equipment": [
+          "670009ae0c1387078ae40deb",
+          "670d22ad926b58ef2b84a3f6"
+        ],
+        "logicalFacilities": {
+          "OCH": [ "1(IN1/OUT1)-OCh:1" ],
+          "ODU4": [ "1(IN1/OUT1)-OCh:1-ODU4:1" ],
+          "ODU3": [ "1(IN1/OUT1)-OCh:1-ODU4:1-ODU3:1", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU3:2" ],
+          "ODU2": [ "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:1", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:2", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:3", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:4", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:5",
+              "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:6", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:7", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:8", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:9", "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:10" ]
+        },
+        "fullName": "1(IN1/OUT1)"
+      },
+      {
+        "port": 2,
+        "type": "CLIENT",
+        "physical": "TX1/RX1",
+        "NMS": "3",
+        "equipment": [
+          "670df4159e3131b32ce0e6c8",
+          "6700098e0c1387078ae40de6"
+        ],
+        "logicalFacilities": {
+          "ODU2": [ "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:1" ]
+          },
+        "fullName": "3(TX1/RX1)"
+      },
+      {
+        "port": 3,
+        "type": "CLIENT",
+        "physical": "TX2/RX2",
+        "NMS": "4",
+        "equipment": [
+          "670df4159e3131b32ce0e6c8",
+          "6700098e0c1387078ae40de6"
+        ],
+        "logicalFacilities": {
+          "ODU2": [ "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:1" ]
+          },
+        "fullName": "4(TX2/RX2)"
+      }
+    ],
+    "slotSize": 1,
+    "technology": "DWDM",
+    "status": "InService",
+    "createdAt": "2024-10-15T20:54:09.787Z",
+    "updatedAt": "2024-10-16T15:16:13.454Z"
+  }

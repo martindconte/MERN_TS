@@ -4,7 +4,7 @@ export class CreateSignalDTO {
   private constructor(
     public readonly type: string,
     public readonly subType: string,
-    public readonly bandwidth?: IBandwidth[],
+    public readonly bandwidth?: IBandwidth,
     public readonly observation?: string
   ) {}
 
@@ -13,12 +13,23 @@ export class CreateSignalDTO {
 
     if (!type) throw ["Missinbg Type"];
     if (!subType) throw ["Missinbg SubType"];
+    if( bandwidth ) {
+      if (typeof bandwidth.amount !== "number") throw ["Invalid amount in Bandwidth"];
+      if (!Object.values(UnitProps).includes(bandwidth.unit)) throw [`Invalid unit in Bandwidth: ${bandwidth.unit}`];
+    }
     // if (bandwidth.length < 1) throw ["Missinbg Bandwidth Data"];
-    bandwidth.forEach((bw: any) => {
-      if (typeof bw.amount !== "number") throw ["Invalid amount in Bandwidth"];
-      if (!Object.values(UnitProps).includes(bw.unit)) throw [`Invalid unit in Bandwidth: ${bw.unit}`];
-    });
+    // bandwidth.forEach((bw: any) => {
+    //   if (typeof bw.amount !== "number") throw ["Invalid amount in Bandwidth"];
+    //   if (!Object.values(UnitProps).includes(bw.unit)) throw [`Invalid unit in Bandwidth: ${bw.unit}`];
+    // });
 
-    return [ undefined, new CreateSignalDTO(type, subType, bandwidth, observation) ];
+    return [ undefined,
+      new CreateSignalDTO(
+        type,
+        subType,
+        // bandwidth,
+        bandwidth,
+        observation)
+      ];
   }
 }

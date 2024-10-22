@@ -1,6 +1,6 @@
-import { TransceiverEntityWithPagination } from "../../../interface";
-import { CreateTransceiverDTO, QueriesDTO, UpdateTransceiverDTO } from "../../dtos";
-import { TransceiverEntity } from "../../entities";
+import { TransceiverEntityWithPagination } from '../../../interface';
+import { CreateTransceiverDTO, QueriesDTO, UpdateTransceiverDTO } from '../../dtos';
+import { TransceiverEntity } from '../../entities';
 
 export abstract class TransceiverDatasource {
     abstract create( createTransceiverDTO: CreateTransceiverDTO ): Promise<TransceiverEntity>;

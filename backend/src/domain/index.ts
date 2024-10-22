@@ -46,8 +46,9 @@ export * from './repositories'
 // export * from './repositories/catalog/vendor.repository'
 
 //* Use Cases
-export * as CentralUseCase from './use-cases/central'
+export * as BoardUseCase from './use-cases/catalog/board'
 export * as SignalUseCase from './use-cases/catalog/signal'
 export * as SubrackUseCase from './use-cases/catalog/subrack'
 export * as TransceiverUseCase from './use-cases/catalog/transceiver'
 export * as VendorUseCase from './use-cases/catalog/vendor'
+export * as CentralUseCase from './use-cases/central'

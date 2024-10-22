@@ -1,6 +1,7 @@
 //* FOLDER --> REPOSITORY
 
 //* Catalog --> domain/repository/catalog
+export * from './catalog/board.repository'
 export * from './catalog/signal.repository'
 export * from './catalog/subrack.repository'
 export * from './catalog/transceiver.repository'

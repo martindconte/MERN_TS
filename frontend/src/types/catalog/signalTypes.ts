@@ -2,7 +2,6 @@ import { z } from "zod";
 
 // esquemas
 export const bandwidthSchema = z.object({
-    id: z.string().optional(),
     amount: z.number({
         required_error: 'Amount is required!',
     }).nonnegative(),
@@ -15,7 +14,7 @@ export const signalSchema = z.object({
     id: z.string(),
     type: z.string({ required_error: 'Type is required!' }).trim().transform((val) => val.toUpperCase()),
     subType: z.string({ required_error: 'SubType is required!' }).trim().transform((val) => val.toUpperCase()),
-    bandwidth: z.array(bandwidthSchema),
+    bandwidth: bandwidthSchema.optional(),
     observation: z.string().trim().optional().default(''),
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -32,10 +31,8 @@ export type BandwidthFormData = Pick<
 
 export type SignalFormData = Pick<
     SignalType,
-  'type' | 'subType' | 'observation'
-> & {
-    bandwidth: BandwidthFormData[]
-};
+  'type' | 'subType' | 'observation' | 'bandwidth'
+>
 
 // response APIs
 export const responseAPISignal = z.object({

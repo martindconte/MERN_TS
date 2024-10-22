@@ -6,7 +6,7 @@ export class SignalEntity {
     public readonly id: string,
     public readonly type: string,
     public readonly subType: string,
-    public readonly bandwidth?: IBandwidth[],
+    public readonly bandwidth?: IBandwidth,
     public readonly observation?: string,
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
@@ -18,19 +18,11 @@ export class SignalEntity {
     if (!id && !_id) throw CustomError.badRequest("Missinbg id");
     if (!type) throw CustomError.badRequest("Missinbg Type");
     if (!subType) throw CustomError.badRequest("Missinbg SubType");
-    // if (bandwidth.length < 1)
-    //   throw CustomError.badRequest("Missinbg Bandwidth Data");
-    bandwidth.forEach((bw: any) => {
-      if (typeof bw.amount !== "number") throw CustomError.badRequest("Invalid amount in Bandwidth");
-      if (!Object.values(UnitProps).includes(bw.unit)) throw CustomError.badRequest(`Invalid unit in Bandwidth: ${bw.unit}`);
-    });
+    if( bandwidth && Object.keys(bandwidth).length > 0 ) {
+      if (typeof bandwidth.amount !== "number") throw ["Invalid amount in Bandwidth"];
+      if (!Object.values(UnitProps).includes(bandwidth.unit)) throw [`Invalid unit in Bandwidth: ${bandwidth.unit}`];
+    }
 
-    const bandwidthMapped = bandwidth.map((bw: IBandwidth ) => ({
-      id: 'id' in bw ? bw.id : bw._id,
-      amount: bw.amount,
-      unit: bw.unit
-    }))
-
-    return new SignalEntity(id || _id, type, subType, bandwidthMapped, observation, createdAt, updatedAt);
+    return new SignalEntity(id || _id, type, subType, bandwidth, observation, createdAt, updatedAt);
   }
 }

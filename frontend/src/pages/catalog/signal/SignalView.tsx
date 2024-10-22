@@ -8,8 +8,13 @@ export const SignalView = () => {
   const { mutationCreateSignal } = useSignalMutation()
 
   const handleSubmit = async (formData: SignalFormData) => {
+    console.log(formData);
     mutationCreateSignal.mutateAsync(formData)
   }
+  
+  if (querySignals.isLoading) return <Spinner />;
+  if (!querySignals.data) return <div className="flex-1 bg-stone-900 text-4xl text-white font-oswald uppercase font-bold text-center px-3 py-4">No se Encontraron datos</div>;
+
 
   return (
     <main className="flex-1 bg-neutral-800 text-white font-roboto_condensed">
@@ -20,6 +25,7 @@ export const SignalView = () => {
           <FormSignal
             onSubmit={handleSubmit}
             buttonLabel='Crear Señal'
+            // setShowBandwidth={ setShowBandwidth }
           />
         </div>
         <div className="basis-2/3 mx-4">

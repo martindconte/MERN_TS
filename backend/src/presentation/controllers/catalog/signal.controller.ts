@@ -28,7 +28,10 @@ export class SignalController {
         new SignalUseCase.GetSignals( this.signalRepository )
             .execute()
             .then( signals => res.json( signals ) )
-            .catch( error => res.status(400).json({ error }) )
+            .catch( error => res.status(400).json({
+                status: 'error',
+                msg: error.message
+            }) )
     }
 
     getSignalById = ( req: Request, res: Response ) => {

@@ -17,8 +17,6 @@ interface Props {
 
 export const FormTransceiver = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props) => {
 
-    console.log(defaultValues);
-
     const { queryVendors } = useVendors({ enabled: true })
     const { register, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues })
 

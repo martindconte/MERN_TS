@@ -1,79 +1,66 @@
-import { SignalkModel } from '../../../data';
-
+import util from 'util';
+import { SignalModel } from '../../../data';
 import { SignalDataSource, CreateSignalDTO, SignalEntity, UpdateSignalDTO } from '../../../domain';
 import { sortBy } from '../../../helpers';
 
 export class SignalDatasourceImpl implements SignalDataSource {
 
     async create(createSignalDTO: CreateSignalDTO): Promise<SignalEntity> {
-        const typeAndSubTypeExist = await SignalkModel.findOne({
-            type: createSignalDTO.type,
-            subType: createSignalDTO.subType
-        })
-        if( typeAndSubTypeExist ) throw new Error(`Signal ${createSignalDTO.type} ${createSignalDTO.subType} is already registered`)
-        const newSignal = await SignalkModel.create( createSignalDTO )
-        return SignalEntity.fromObject( newSignal )
 
-        // if( !typeAndSubTypeExist ) {
-        //     const newSignal = await SignalkModel.create( createSignalDTO )
-        //     return SignalEntity.fromObject( newSignal )
-        // }
+        const { type, subType, bandwidth } = createSignalDTO
 
-        // const conditions = createSignalDTO.bandwidth?.map(( bw ) => ({
-        //     type: createSignalDTO.type,
-        //     subType: createSignalDTO.subType,
-        //     bandwidth: {
-        //         $elemMatch: {
-        //             amount: Number(bw.amount),
-        //             unit: bw.unit.toUpperCase()
-        //         }
-        //     }
-        // }))
+        // Inicializamos la consulta con type y subType
+    const query: Record<string, any> = {
+        type: type.toUpperCase(),
+        subType: subType.toUpperCase(),
+    };
 
-        // console.log({conditions});
-
-        // const signalDuplicate = await SignalkModel.findOne({
-        //     $or: conditions
-        // }).lean()
-        
-        // console.log('aqui................');
-
-        // console.log('signalDuplicate', signalDuplicate);
-
-        // if (signalDuplicate) {
-        //     const bwRepeat = createSignalDTO.bandwidth?.filter(bw => 
-        //         signalDuplicate.bandwidth.some(bwRepeat => 
-        //             bwRepeat.amount === bw.amount && 
-        //             bwRepeat.unit.toUpperCase() === bw.unit.toUpperCase()
-        //         )
-        //     );
-    
-        //     throw new Error(`Signal ${createSignalDTO.type} ${createSignalDTO.subType} is already registered with the following bandwidths: ${JSON.stringify(bwRepeat)}`);
-        // }
-
-        // const newSignal = await SignalkModel.create( createSignalDTO )
-        //     return SignalEntity.fromObject( newSignal )
+    // Si se proporciona bandwidth, agregamos dos posibilidades:
+    // 1. Que haya coincidencia exacta en amount y unit de bandwidth.
+    // 2. Que el documento almacenado no tenga bandwidth (es decir, no exista el campo).
+    if (bandwidth && bandwidth.amount && bandwidth.unit) {
+        query.$or = [
+            { 'bandwidth': { $exists: false } },  // Coincidir con documentos sin bandwidth
+            {
+                $and: [                          // Coincidir con documentos con bandwidth
+                    { 'bandwidth.amount': bandwidth.amount },
+                    { 'bandwidth.unit': bandwidth.unit.toUpperCase() }
+                ]
+            }
+        ];
+    } else {
+        // Si no se proporciona bandwidth, buscamos documentos que tampoco lo tengan
+        query.bandwidth = { $exists: false };
     }
+        
+        const duplicateSignal = await SignalModel.findOne(query);
+        console.log(util.inspect(query, { showHidden: false, depth: null, colors: true }));
+        console.log(util.inspect(duplicateSignal, { showHidden: false, depth: null, colors: true }));
+
+        if (duplicateSignal) throw new Error(`Signal ${createSignalDTO.type} ${createSignalDTO.subType} is already registered`);
+        const newSignal = await SignalModel.create(createSignalDTO);
+        return SignalEntity.fromObject(newSignal);
+    };
 
     async getAll(): Promise<SignalEntity[]> {
-        const signals = await SignalkModel.find()
-        return sortBy( signals.map( SignalEntity.fromObject ) , ['type', 'subType'] )
+        const signals = await SignalModel.find()
+        return sortBy(signals.map(SignalEntity.fromObject), ['type', 'subType', 'bandwidth.unit', 'bandwidth.amount'])
     }
 
     async getById(id: string): Promise<SignalEntity> {
-        const signal = await SignalkModel.findOne({ _id: id })
-        if( !signal ) throw 'Signal not Found'
-        return SignalEntity.fromObject( signal )
+        const signal = await SignalModel.findOne({ _id: id })
+        if (!signal) throw 'Signal not Found'
+        return SignalEntity.fromObject(signal)
     }
 
     async updateById(updateSignalDTO: UpdateSignalDTO): Promise<SignalEntity> {
         throw new Error('Method not implemented.');
         // primero verifico si esta creado el Tipo y SubTipo
-        // const typeAndSubTypeExist = await SignalkModel.findOne({
+        // const typeAndSubTypeExist = await SignalModel.findOne({
         //     type: createSignalDTO.type,
         //     subType: createSignalDTO.subType
         // })
-        
+
         // if( typeAndSubTypeExist && createSignalDTO.bandwidth?.length === 0 ) throw new Error(`Signal ${createSignalDTO.type} ${createSignalDTO.subType} is already registered`)
 
         // if( !typeAndSubTypeExist ) {
@@ -97,7 +84,7 @@ export class SignalDatasourceImpl implements SignalDataSource {
         // const signalDuplicate = await SignalkModel.findOne({
         //     $or: conditions
         // }).lean()
-        
+
         // console.log('aqui................');
 
         // console.log('signalDuplicate', signalDuplicate);
@@ -109,7 +96,7 @@ export class SignalDatasourceImpl implements SignalDataSource {
         //             bwRepeat.unit.toUpperCase() === bw.unit.toUpperCase()
         //         )
         //     );
-    
+
         //     throw new Error(`Signal ${createSignalDTO.type} ${createSignalDTO.subType} is already registered with the following bandwidths: ${JSON.stringify(bwRepeat)}`);
         // }
 
@@ -158,7 +145,7 @@ export class SignalDatasourceImpl implements SignalDataSource {
     //     if (!vendorUpdate) throw "Error - Update failed";
     //     return VendorEntity.fromObject(vendorUpdate);
     // }
-    
+
     // async deleteById(id: string): Promise<VendorEntity> {
     //     await this.getById(id);
     //     const vendorDelete = await VendorModel.findByIdAndDelete(id);

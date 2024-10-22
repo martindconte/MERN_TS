@@ -61,6 +61,8 @@ interface KeyLabel<T> {
     catalogSignal: [
       { key: 'type', label: 'Tipo' },
       { key: 'subType', label: 'SubTipo' },
+      { key: 'amount', label: 'BW' },
+      { key: 'unit', label: 'Unidad' },
       // { key: 'description', label: 'Descripcion' },
       { key: 'observation', label: 'Observaciones' },
       { key: 'createdAt', label: 'Creado' },
