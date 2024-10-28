@@ -16,6 +16,7 @@ export const SearchTransceiverView = () => {
   }, [limit]);
   
   const handleForm = ( formData: TransceiverFormData ) => {
+    console.log(formData);
     if( !formData.bitsRates ) formData.bitsRates = [];
     const cleanedData = cleanFormData(formData);
     setSearch(cleanedData);

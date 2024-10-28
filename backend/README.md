@@ -10,12 +10,19 @@ Esta API permite gestionar un catálogo de transceptores, permitiendo crear, lis
 - [Configuración](#configuración)
 - [Endpoints](#endpoints)
   - [Catalogo](#catalog)
+    - [Placas](#placas)
+        - [Crear Catalogo de una Placa](#crear-un-catalogo-de-una-placa)
+        - [Buscar Transceivers](#buscar-transceivers)
+        - [Buscar Transceivers por ID](#buscar-transceiver-por-id)
+        - [Modificar Datos de Transceivers](#modificar-datos-de-un-transceiver)
+        - [Eliminar un Transceivers](#eliminar-un-transceiver)
     - [Transdceivers](#transceivers)
         - [Crear un Transceiver](#crear-un-transceiver)
         - [Buscar Transceivers](#buscar-transceivers)
         - [Buscar Transceivers por ID](#buscar-transceiver-por-id)
         - [Modificar Datos de Transceivers](#modificar-datos-de-un-transceiver)
         - [Eliminar un Transceivers](#eliminar-un-transceiver)
+
 - [Documentación de la API](#documentación-de-la-api) <!-- TODO: Crear utilizando Swagger -->
 - [Licencia](#licencia)
 
@@ -69,10 +76,75 @@ Sigue estos pasos para instalar y ejecutar el proyecto en tu máquina local:
 
 Las variables de entorno necesarias para el funcionamiento de la aplicación se encuentran en el archivo `.env`. Un ejemplo de estas variables está en el archivo `.env.example`.
 
+<hr style="border: 3px solid red; margin-bottom: 20px;">
+
+
 # <p style="color: red;">Endpoints</p>
 
 ## <p style="color: blue">Catalog</p>
 
+### <p style="color: yellow">Placas</p>
+
+### Crear un Catalogo de una Placa
+
+**URL:** `/api/catalog/board`  
+**Método:** `POST`
+
+<h1 style="color:red; font-size: 50px" >TODO: TERMINAR!!!!</h1>
+
+**Cuerpo del request:**
+
+| Campo | Tipo | Descripción | Obligatorio | Validaciones | Ejemplo |
+|-------|------|-------------|-------------|--------------|---------|
+| `boardName` | `string` | Número de parte del Transceiver | Sí | Valor Unico | "TNG1M520SM06" |
+| `partNumber` | `string` | Modelo del Transceiver | No | Ninguna | "03033YQD" |
+| `signals` | `ObjectId[]` | Array con IDs de las señales que puede brindar señales. Debe referenciar a un catalogo de señal existente | No | Debe ser un ObjectId válido de MongoDB | [ "6716eb2514ccfa43c448ecf9", "67170b2695ba1f3f74cb48b2" ] |
+| `vendor` | `ObjectId`| ID Vendor al que pertenece el transceiver. Debe referenciar un vendor  existente. | Sí | Debe ser un ObjectId válido de MongoDB | "66dbaf195a040c6dc6868f8c" |
+| `description` | `string` | Descripción detallada del Transceiver | No |  Ninguna | "20*10GE or 2*100GE Service Multiplexing Into 1*200G/100G Programable Wavelength Conversion Board(CFP2)(100G Line Capacity Included, RTU Extension Supported)" 
+| `observations`| `string` | Observaciones adicionales sobre la placa | No |  Ninguna | "Usada en OT" |
+| `technology`  | `string` | Tecnología del Transceiver. Valores permitidos: `['DWDM', 'SDH', 'RX', 'CWDM', 'IP', 'GENERICO']`. | Sí | Debe ser uno de los valores permitidos |
+| `bitsRates`   | `array`  | Array de bitrates soportados por el Transceiver. Valores permitidos: `['STM-1', 'STM-4', 'STM-16', 'STM-64', 'OC-3', 'OC-12', 'OC-48', 'OC-192','FE', 'GE', '10GE WAN', '10GE LAN', '25GE', '40GE', '50GE', '100GE', '200GE', '400GE', 'FlexE 100G unaware', 'FlexE 200G unaware', 'FDDI', 'ESCON', 'FC100/FICON', 'FC200/FICON Express', 'FC400/FICON4G', 'FC800/FICON8G', 'FC1200/FICON10G', 'FC1600', 'FC3200', 'OTU1', 'OTU2', 'OTU2e', 'OTU4', 'OCH', 'DVB-ASI', 'SD-SDI', 'HD-SDI', 'HD-SDIRBR', '3G-SDI', '3G-SDIRBR']` | No | Debe ser un `Array` de `String` con valores válidos de `BitRatesValues[]` |
+| `status`      | `enum`   | Estado del Transceiver. Valores permitidos: `['InService', 'EndOfSupport', 'EndOfMarketing']`.| Sí | Debe ser uno de los valores permitidos.      |
+
+
+### Example Request
+```json
+{
+"partNumber": "34060613",
+"type": "SFP+",
+"model": "OSX010N01",
+"description": "Optical transceiver,SFP+,1310nm,8.5Gb/s-11.1Gb/s with CDR,-6.0~-1.0dBm,-14.4dBm,LC,SM,10km",
+"vendor": "66dbaf195a040c6dc6868f8c",
+"observations": "SFP+ Multirate 10GE",
+"technology": "DWDM",
+"bitsRates": ["10GE WAN", "10GE LAN", "STM-64", "OC-192", "FC800/FICON8G", "OTU2"],
+"status": "InService"
+}
+```
+
+### Example Response
+```json
+{
+    "status": "success",
+    "msg": "The Tranceiver has been successfully created",
+    "payload": {
+        "id": "670d2bb7926b58ef2b84a3fb",
+        "partNumber": "34060613",
+        "vendor": {
+            "id": "66dbaf195a040c6dc6868f8c",
+            "vendorName": "HUAWEI"
+        },
+        "model": "OSX010N01",
+        "description": "Optical transceiver,SFP+,1310nm,8.5Gb/s-11.1Gb/s with CDR,-6.0~-1.0dBm,-14.4dBm,LC,SM,10km",
+        "observations": "SFP+ Multirate 10GE",
+        "technology": "DWDM",
+        "bitsRates": ["10GE WAN", "10GE LAN", "STM-64", "OC-192", "FC800/FICON8G", "OTU2"],
+        "status": "InService",
+        "createdAt": "2024-10-14T14:33:27.955Z",
+        "updatedAt": "2024-10-14T14:33:27.955Z"
+    }
+}
+```
 ### <p style="color: orange">Transceivers</p>
 
 ### Crear un Transceiver

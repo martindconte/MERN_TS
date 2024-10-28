@@ -6,7 +6,7 @@ export enum BoardTechnologyEnum {
     rx = 'RX',
     cwdm = 'CWDM',
     ip = 'IP',
-    generic = 'GENERICO'
+    generic = 'GENERIC'
 };
 
 export enum BoardStatusEnum {

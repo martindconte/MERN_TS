@@ -1,5 +1,5 @@
 import { helpersDB } from '../../../../data';
-import { BoardPortType, BoardStatusEnum, BoardTechnologyEnum, Port } from '../../../../interface';
+import { BitsRatesEnum, BoardPortType, BoardStatusEnum, BoardTechnologyEnum, Port } from '../../../../interface';
 
 export class CreateBoardDTO {
     constructor(
@@ -63,7 +63,8 @@ export class CreateBoardDTO {
         if ( !partNumber ) throw ['Missing partNumber Board'];
         if ( !vendor ) throw ['Missing vendor'];
         if ( vendor && !helpersDB.isMongoID( vendor ) ) throw ['Invalid Vendor value!'];
-        if ( signals && signals.lenght > 0 && !signals.some(( signal: string ) => helpersDB.isMongoID( signal ) ) ) throw ['Invalid Signal value!'];
+        if ( signals && signals.lenght > 0 && !Object.values( BitsRatesEnum ).includes( signals ) ) throw ['Invalid Signal value!'];
+        // if ( signals && signals.lenght > 0 && !signals.some(( signal: string ) => helpersDB.isMongoID( signal ) ) ) throw ['Invalid Signal value!'];
         if ( technology && !Object.values( BoardTechnologyEnum ).includes( technology.toUpperCase() ) ) throw ['Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO'];
         if ( status && !Object.values( BoardStatusEnum ).includes( status )) throw ['Invalid Status'];
         if ( typeof slotSize !== 'number' && slotSize < 0 ) throw ['Invalid Status'];

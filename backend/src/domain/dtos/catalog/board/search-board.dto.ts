@@ -1,5 +1,5 @@
 import { helpersDB } from '../../../../data';
-import { BoardStatusEnum, BoardTechnologyEnum, Port } from '../../../../interface';
+import { BitsRatesEnum, BoardStatusEnum, BoardTechnologyEnum, Port } from '../../../../interface';
 
 interface SearchPortQuery {
     port?: number;
@@ -82,6 +82,8 @@ export class SearchBoardDTO {
                         searchParams[key] = helpersDB.isMongoID(queries[key]) ? helpersDB.toObjectId(queries[key]) : queries[key];
                         break;
                     case 'signals':
+                        const bitsRatesArray = decodedValue.split(',')
+                        searchParams[key] = { $all: bitsRatesArray.filter((rate: any) => Object.values(BitsRatesEnum).includes(rate))};
                         break;
                     case 'limit':
                     case 'page':

@@ -26,7 +26,6 @@ export const createTransceiver = async ( formData: TransceiverFormData ) => {
             payload: transceiverMapped( payload )
         };
         const response = responseAPITransceiverSchema.safeParse( dataMapped );
-        console.log(response);
         if( response.success ) return response.data;
     } catch (error) {
         console.log(error);

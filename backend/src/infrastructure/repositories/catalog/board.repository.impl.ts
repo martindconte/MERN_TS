@@ -11,16 +11,16 @@ export class BoardRepositoyImpl implements BoardRepository {
         return this.datasource.create( createBoardDTO )
     }
     getAll(queries?: QueriesDTO): Promise<BoardEntity[] | BoardEntityWithPagination> {
-        throw new Error('Method not implemented.');
+        return this.datasource.getAll( queries )
     }
     getById(id: BoardEntity['id']): Promise<BoardEntity> {
-        throw new Error('Method not implemented.');
+        return this.datasource.getById( id )
     }
     updateById(updateTransceiverDTO: UpdateBoardDTO): Promise<BoardEntity> {
-        throw new Error('Method not implemented.');
+        return this.datasource.updateById( updateTransceiverDTO )
     }
     deleteById(id: BoardEntity['id']): Promise<BoardEntity> {
-        throw new Error('Method not implemented.');
+        return this.datasource.deleteById( id )
     }
 
 }

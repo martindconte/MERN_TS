@@ -31,6 +31,9 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
     }
 
     async getAll(queries?: QueriesDTO): Promise<TransceiverEntity[] | TransceiverEntityWithPagination> {
+
+        console.log('desde impl transceiver getAll --------->', queries);
+
         const [pagination, filters = {}] = QueriesDTO.pagination(queries)
         if (pagination) {
             const { page, limit } = pagination

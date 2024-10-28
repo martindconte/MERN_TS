@@ -5,7 +5,6 @@ import { useTransceiver } from '../../../hook';
 import { useMemo } from 'react';
 
 interface Categories {
-  DWDM: string[];
   SDH: string[];
   SONNET: string[];
   ETHERNET: string[];
@@ -41,16 +40,17 @@ const colors = [
 ];
 
 const categories: Categories = {
-  DWDM: ['OTU4', 'ODU4', 'OCH'],
+  OTN: [
+    'OTS', 'OMS', 'OSC', 'OCH', 'OTU1', 'OTU2', 'OTU3', 'OTU4', 'OTUCn', 'OTU25', 'OTU50', 'ODU0', 'ODU1', 'ODU2',
+    'ODU2e', 'ODU3', 'ODU4', 'ODUflex', 'ODUCn', 'OPU0','OPU1', 'OPU2', 'OPU2e', 'OPU3', 'OPU4', 'OPUflex', 'OPUCn'
+  ],
   SDH: ["STM-1", "STM-4", "STM-16", "STM-64"],
   SONNET: ["OC-3", "OC-12", "OC-48", "OC-192"],
   ETHERNET: ["FE", "GE", "10GE WAN", "10GE LAN", "25GE", "40GE", "50GE", "100GE", "200GE", "400GE"],
   FLEXE: ["FlexE 100G unaware", "FlexE 200G unaware"],
   SAN: ["FDDI", "ESCON", "FC100/FICON", "FC200/FICON Express", "FC400/FICON4G", "FC800/FICON8G", "FC1200/FICON10G", "FC1600", "FC3200"],
-  OTN: ["OTU1", "OTU2", "OTU2e", "OTU4", "OCH"],
   VIDEO: ["DVB-ASI", "SD-SDI", "HD-SDI", "HD-SDIRBR", "3G-SDI", "3G-SDIRBR"]
 };
-
 
 const groupBitRates = (data: string[]): { [key in keyof Categories]: string[] } => {
   return Object.keys(categories).reduce((acc, category) => {
@@ -59,6 +59,7 @@ const groupBitRates = (data: string[]): { [key in keyof Categories]: string[] } 
   }, {} as { [key in keyof Categories]: string[] });
 };
 
+//TODO: REVOLVER PROBLEMA CON VENDOR SALE [object Object]
 export const DetailsTransceiverView = () => {
 
   const transceiverKeys = keyToShowInTable['catalogTransceiver']
@@ -100,7 +101,7 @@ export const DetailsTransceiverView = () => {
                 <p className="font-bold w-20">{category}</p>
                 <ul className="grid grid-cols-3 gap-1 content-start">
                   {
-                    groupedBitRates[category as keyof Categories].sort((a: string, b: string) => a.localeCompare(b)).map(( bitRate: string ) => (
+                    groupedBitRates[category as keyof Categories].sort((a: string, b: string) => a.localeCompare(b)).map((bitRate: string) => (
                       <li
                         key={bitRate}
                         className={`px-2 py-2 mx-1 text-center rounded-md cursor-auto ${colors[Math.floor(Math.random() * colors.length)]}`}

@@ -19,6 +19,7 @@ export class SearchTransceiverDTO {
     ) {}
 
     static createQueries( queries: { [key: string]: any } ): Partial<SearchTransceiverDTO> {
+        console.log('queries', queries);
 
         const searchParams: { [key: string]: any } = {}
 

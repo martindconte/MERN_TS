@@ -25,6 +25,18 @@ export class BoardController {
 
     }
     getById = ( req: Request, res: Response ) => {
+        const { boardid } = req.params;
+        new BoardUseCase.GetBoard( this.boardRepository )
+            .execute( boardid )
+            .then( board => res.json({
+                status: 'success',
+                msg: 'The Board has been registred successfully',
+                payload: board
+            }))
+            .catch( error => res.status(400).json({
+                status: 'error',
+                msg: error.message
+            }));
 
     }
     updateById = ( req: Request, res: Response ) => {

@@ -1,0 +1,110 @@
+{
+    "status": "success",
+    "msg": "The Board has been registred successfully",
+    "payload": {
+        "id": "671c69f1219090c2d843ba80",
+        "boardName": "TNG1M520SM06",
+        "partNumber": "03033YQD",
+        "vendor": {
+            "vendorName": "HUAWEI",
+            "id": "66dbaf195a040c6dc6868f8c"
+        },
+        "signals": [
+            "STM-1",
+            "STM-16"
+        ],
+        "description": "20*10GE or 2*100GE Service Multiplexing Into 1*200G/100G Programable Wavelength Conversion Board(CFP2)(100G Line Capacity Included, RTU Extension Supported)",
+        "observations": "HW OT",
+        "ports": [
+            {
+                "port": 1,
+                "type": "LINE",
+                "physical": "IN1/OUT1",
+                "NMS": "1",
+                "equipment": [],
+                "logicalFacilities": {
+                    "OCH": [
+                        "1(IN1/OUT1)-OCh:1"
+                    ],
+                    "ODU4": [
+                        "1(IN1/OUT1)-OCh:1-ODU4:1"
+                    ],
+                    "ODU3": [
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU3:1",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU3:2"
+                    ],
+                    "ODU2": [
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:1",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:2",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:3",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:4",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:5",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:6",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:7",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:8",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:9",
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:10"
+                    ]
+                },
+                "fullName": "1(IN1/OUT1)"
+            },
+            {
+                "port": 2,
+                "type": "CLIENT",
+                "physical": "TX1/RX1",
+                "NMS": "3",
+                "equipment": [
+                    {
+                        "partNumber": "S",
+                        "model": "TNFB8CASE",
+                        "description": "f34rfr4",
+                        "id": "670df4159e3131b32ce0e6c8"
+                    },
+                    {
+                        "partNumber": "34060613",
+                        "model": "OSX010N01",
+                        "description": "Optical transceiver,SFP+,1310nm,8.5Gb/s-11.1Gb/s with CDR,-6.0~-1.0dBm,-14.4dBm,LC,SM,10km",
+                        "id": "6700098e0c1387078ae40de6"
+                    }
+                ],
+                "logicalFacilities": {
+                    "ODU2": [
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:1"
+                    ]
+                },
+                "fullName": "3(TX1/RX1)"
+            },
+            {
+                "port": 3,
+                "type": "CLIENT",
+                "physical": "TX2/RX2",
+                "NMS": "4",
+                "equipment": [
+                    {
+                        "partNumber": "S",
+                        "model": "TNFB8CASE",
+                        "description": "f34rfr4",
+                        "id": "670df4159e3131b32ce0e6c8"
+                    },
+                    {
+                        "partNumber": "34060613",
+                        "model": "OSX010N01",
+                        "description": "Optical transceiver,SFP+,1310nm,8.5Gb/s-11.1Gb/s with CDR,-6.0~-1.0dBm,-14.4dBm,LC,SM,10km",
+                        "id": "6700098e0c1387078ae40de6"
+                    }
+                ],
+                "logicalFacilities": {
+                    "ODU2": [
+                        "1(IN1/OUT1)-OCh:1-ODU4:1-ODU2:1"
+                    ]
+                },
+                "fullName": "4(TX2/RX2)"
+            }
+        ],
+        "slotSize": 1,
+        "technology": "DWDM",
+        "status": "InService",
+        "createdAt": "2024-10-26T04:02:57.834Z",
+        "updatedAt": "2024-10-26T04:02:57.834Z"
+    }
+}

@@ -10,6 +10,8 @@ export const NewTransceiverView = () => {
     const handleForm = async (data: TransceiverFormData) => {
         if( !data.bitsRates ) data.bitsRates = []
         const response = await mutationCreateTransceiver.mutateAsync(data);
+
+        // todo: revisar response
         console.log(response);
     };
 

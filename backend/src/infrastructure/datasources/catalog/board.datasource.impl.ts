@@ -18,19 +18,30 @@ export class BoardDatasourceImpl implements BoardDatasource {
         // console.log(util.inspect(newBoard, { showHidden: false, depth: null, colors: true }));
         await newBoard.populate([
             { path: 'vendor', select: 'vendorName' },
-            { path: 'ports.equipment', select: 'partNumber model vendorName' },
-            { path: 'signals', select: 'bandwidth' }
+            { path: 'ports.equipment', select: 'partNumber model vendorName description' },
+            { path: 'signals', select: 'type subType bandwidth' }
         ]);
 
             return BoardEntity.fromObject( newBoard )
 
     }
+
     getAll(queries?: QueriesDTO): Promise<BoardEntity[] | BoardEntityWithPagination> {
         throw new Error("Method not implemented.");
     }
-    getById(id: BoardEntity["id"]): Promise<BoardEntity> {
-        throw new Error("Method not implemented.");
+    async getById(id: BoardEntity["id"]): Promise<BoardEntity> {
+        const board = await BoardModel.findOne({ _id: id })
+        if( !board ) throw new Error('Board not Found!')
+        await board.populate([
+            { path: 'vendor', select: 'vendorName' },
+            { path: 'ports.equipment', select: 'partNumber model vendorName description' },
+            { path: 'signals', select: 'type subType bandwidth' }
+        ])
+        return BoardEntity.fromObject( board )
+
     }
+
+    
     updateById(updateTransceiverDTO: UpdateBoardDTO): Promise<BoardEntity> {
         throw new Error("Method not implemented.");
     }

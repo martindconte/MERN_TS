@@ -1,5 +1,5 @@
 import { FieldErrors, UseFormRegister } from 'react-hook-form'
-import { TransceiverBitsRatesEnum, TransceiverFormData, TransceiverTechnologyEnum, VendorType } from '../../../types'
+import {  /*TransceiverBitsRatesEnum, */ BitsRatesEnum, TransceiverFormData, TransceiverTechnologyEnum, VendorType } from '../../../types'
 import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm'
 
 interface Props {
@@ -35,7 +35,7 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
                     <select
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
                         id="vendor"
-                        {...register('vendor.id', {
+                        {...register('vendor', {
                             required: requiredFields && 'Debe Seleccionar un Proveedor',
                         })}
                     >
@@ -126,7 +126,8 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
             <div className="flex justify-between my-2 items-center space-x-3">
                 <label className="w-1/3 text-right" htmlFor="bitsRates">Bit Rates</label>
                 <div className="w-2/3 h-44 overflow-y-auto border border-gray-300 p-2 outline-none rounded shadow-md bg-white">
-                    {Object.values(TransceiverBitsRatesEnum).map((bitRate) => (
+                    {/* {Object.values(TransceiverBitsRatesEnum).map((bitRate) => ( */}
+                    {Object.values(BitsRatesEnum).map((bitRate) => (
                         <div key={bitRate} className="flex items-center space-x-2">
                             <input
                                 type="checkbox"

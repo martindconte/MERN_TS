@@ -17,8 +17,8 @@ export class BoardRoutes {
             .post(controller.create)
             // .get(controller.getAllSignals)
 
-        // router.route('/:vendorid')
-        //     .get(controller.getSignalById)
+        router.route('/:boardid')
+            .get(controller.getById)
         //     .put(controller.updateSignal)
         //     .delete(controller.deleteSignal)
 
