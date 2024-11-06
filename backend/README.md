@@ -226,7 +226,7 @@ _________________________
 | `vendor`       | `string`     | Proveedor del transceptor                       | `HUAWEI`                                    | No          |
 | `observations` | `string`     | Observaciones adicionales                       | `Funciona adecuadamente en ambientes fríos` | No          |
 | `technology`   | `string`     | Tecnología utilizada (**_Puede ser Multiple_**) | `DWDM`                                      | No          |
-| `bitsRates`    | `string      | Tasa de bits soportada                          | `["OCH", "OTU4"]`                           | No          |
+| `bitsRates`    | `string[]`      | Tasa de bits soportada                          | `["OCH", "OTU4"]`                           | No          |
 | `status`       | `string`     | Estado del transceptor                          | `InService`                                 | No          |
 
 ### URL Ejemplo:

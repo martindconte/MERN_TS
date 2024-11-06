@@ -6,7 +6,7 @@ export const useBoardMutation = () => {
 
     const mutationCreateBoard = useMutation({
         mutationFn: createBoard,
-        onError: (error) => toast.error(error.message, { theme: 'colored' }),
+        onError: (error) => { toast.error(error.message, { theme: 'colored' }) },
         onSuccess: (response) => {
             if (response) {
                 const { msg, payload } = response

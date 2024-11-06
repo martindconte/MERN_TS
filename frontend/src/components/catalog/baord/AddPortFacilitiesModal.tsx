@@ -1,224 +1,178 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Control, FieldArrayWithId } from 'react-hook-form';
-import { BoardFormData, LogicalSignal } from '../../../types';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { BoardFormData, BoardPortsType, LogicalSignal } from '../../../types';
+import { TablePortFacilities } from './logicalPorts/TablePortFacilities';
+import { BtnLogicalPortsModal } from './logicalPorts/BtnLogicalPortsModal';
 
 interface Props {
-    control: Control<BoardFormData>;
+    index: number;
     close: Dispatch<SetStateAction<boolean>>;
-    field: FieldArrayWithId<BoardFormData, "ports", "id">;
 }
 
-interface ComponentData {
-    id: number;
-    selectedSignal: LogicalSignal | "";
-    inputValue: string;
+export interface ILogicalPort {
+    id: string;
+    signal: LogicalSignal | "";
+    name: string;
     from: number;
     to: number;
 }
 
-export const AddPortFacilitiesModal = ({ close, field }: Props) => {
+const parseString = (key: string, input: string[]): ILogicalPort[] | [] => {
+    const parseData: ILogicalPort[] = [];
+    const auxData: { [key: string]: Set<number> } = {};
+    const sortedAuxData: { [key: string]: number[] } = {};
 
-    const [components, setComponents] = useState<ComponentData[]>([]);
-    const [nextId, setNextId] = useState(1);
-    const [logicalFacilities, setLogicalFacilities] = useState<{ [key: string]: string[] }>({});
+    input.forEach(value => {
+        const lastColonIndex: number = value.lastIndexOf(':');
+        const name: string = value.substring(0, lastColonIndex).trim();
+        const number: number = parseInt(value.substring(lastColonIndex + 1).trim());
+
+        if (!auxData[name]) {
+            auxData[name] = new Set([number]);
+        } else {
+            auxData[name].add(number);
+        }
+    });
+
+    // Sort auxData
+    Object.keys(auxData).forEach(key => {
+        sortedAuxData[key] = Array.from(auxData[key]).sort((a, b) => a - b);
+    });
+
+    for (const data in sortedAuxData) {
+        const auxNumber: { from: number, to: number } = { from: 1, to: 1 };
+        for (let i = 0; i < sortedAuxData[data].length; i++) {
+            if (i === 0) {
+                auxNumber.from = sortedAuxData[data][i];
+                auxNumber.to = sortedAuxData[data][i];
+            } else if (sortedAuxData[data][i] - sortedAuxData[data][i - 1] === 1) {
+                auxNumber.to = sortedAuxData[data][i];
+            } else {
+                parseData.push({
+                    id: generateId(),
+                    signal: key as LogicalSignal,
+                    name: data,
+                    from: auxNumber.from,
+                    to: auxNumber.to,
+                });
+                auxNumber.from = sortedAuxData[data][i];
+                auxNumber.to = sortedAuxData[data][i];
+            }
+        }
+        // Agregar el último rango
+        parseData.push({
+            id: generateId(),
+            signal: key as LogicalSignal,
+            name: data,
+            from: auxNumber.from,
+            to: auxNumber.to,
+        });
+    }
+
+    return parseData;
+};
+
+const generateId = (): string => {
+    return 'id' + '-' + Math.random().toString(36).substring(2, 9);
+};
+
+export const AddPortFacilitiesModal = ({ close, index }: Props) => {
+    const [logicalPorts, setLogicalPorts] = useState<ILogicalPort[]>([]);
+    const [lp, setLp] = useState<BoardFormData["ports"][number]["logicalFacilities"]>({});
+    const [error, setError] = useState<string | null>(null);
+
+    const { control, setValue } = useFormContext();
+    const { port, physical, NMS, fullName, logicalFacilities }: Partial<BoardPortsType> = useWatch({
+        control,
+        name: `ports.${index}`,
+    });
 
     useEffect(() => {
-        if (field.fullName) {
-            setComponents([{ id: 0, selectedSignal: "", inputValue: field.fullName + '-', from: 1, to: 1 }]);
+        if (logicalFacilities) {
+            setLp(logicalFacilities || {});
+            const data: ILogicalPort[] = Object.entries(logicalFacilities)
+                .filter(([key]) => Object.values(LogicalSignal).includes(key as LogicalSignal))
+                .reduce((acc, [signal, values]) => {
+                    acc.push(...parseString(signal, values));
+                    return acc;
+                }, [] as ILogicalPort[]);
+            setLogicalPorts(data);
         }
-    }, [field]);
+    }, [logicalFacilities]);
 
-    const addComponent = () => {
-        setComponents(prev => [...prev, { id: nextId, selectedSignal: "", inputValue: field.fullName + '-', from: 1, to: 1 }]);
-        setNextId(prev => prev + 1);
+    const addLogicalPort = () => {
+        setLogicalPorts((prev) => [...prev, { id: generateId(), signal: "", name: fullName + "-", from: 1, to: 1 }]);
     };
 
-    const handleInputChange = (id: number, key: keyof ComponentData, value: any) => {
-        setComponents(prev =>
-            prev.map(component =>
-                component.id === id ? { ...component, [key]: value } : component
-            )
-        );
+    const handleInputChange = (id: ILogicalPort["id"], key: keyof ILogicalPort, value: string | number) => {
+        setLogicalPorts((prev) => prev.map((logicalPort) => logicalPort.id === id ? { ...logicalPort, [key]: value } : logicalPort));
     };
 
-    const handleInputNumber = (data: string): number => {
-        const isNumber = !isNaN(parseInt(data)) && parseInt(data) > 0;
-        return isNumber ? Number(data) : 1;
+    const handleDeleteLP = (id: string) => {
+        setLogicalPorts(prev => prev.filter(logicalPort => logicalPort.id !== id));
+        setLp((prevLp) => {
+            const updatedLp = { ...prevLp };
+            const deletedLogicalPort = logicalPorts.find(port => port.id === id);
+
+            if (deletedLogicalPort && deletedLogicalPort.signal !== '') {
+                updatedLp[deletedLogicalPort.signal] = updatedLp[deletedLogicalPort.signal]?.filter(
+                    item => !item.startsWith(deletedLogicalPort.name)
+                );
+
+                if (updatedLp[deletedLogicalPort.signal]?.length === 0) {
+                    delete updatedLp[deletedLogicalPort.signal];
+                }
+            }
+            return updatedLp;
+        });
     };
 
     const handleAddFacility = () => {
-        const newFacilities = { ...logicalFacilities };
-        components.forEach(component => {
-            const { selectedSignal, inputValue, from, to } = component;
-            if (selectedSignal && from > 0 && to >= from) {
-                const values = [];
+        const currentFacilities = { ...lp };
+
+        for (const logicalPort of logicalPorts) {
+            const { signal, name, from, to } = logicalPort;
+            if (signal && from > 0 && to >= from) {
+                if (logicalPorts.some(port => port.name.toLocaleLowerCase() === name.toLowerCase() && port.id !== logicalPort.id)) {
+                    setError(`El nombre "${name}" ya está en uso. Name debe ser Unico`);
+                    return;
+                }
+                const values: string[] = [];
                 for (let i = from; i <= to; i++) {
-                    values.push(`${inputValue}:${i}`);
+                    values.push(`${name}:${i}`);
                 }
-                if (!newFacilities[selectedSignal]) {
-                    newFacilities[selectedSignal] = [];
+                if (!currentFacilities[signal]) {
+                    currentFacilities[signal] = values;
+                } else {
+                    const uniqueValues = new Set([...currentFacilities[signal], ...values]);
+                    currentFacilities[signal] = Array.from(uniqueValues);
                 }
-                newFacilities[selectedSignal] = [...newFacilities[selectedSignal], ...values];
             }
-        });
-        setLogicalFacilities(newFacilities);
+        }
+        setLp(currentFacilities);
+        setValue(`ports.${index}.logicalFacilities`, currentFacilities);
+        close(false);
     };
 
-    console.log(logicalFacilities);
-
-    if (!field) return <p>Sin Datos</p>;
-
     return (
-        <div className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black z-50 font-roboto_condensed'>
-            <div className='bg-white p-5 rounded-lg flex flex-col justify-center items-center gap-5'>
-                <p className='text-lg border-b-4 border-gray-500 pb-2 uppercase w-full text-center'>
-                    <strong>Port:</strong> {field.port} / <strong>NMS:</strong> {field.NMS} / <strong>Name:</strong> {field.fullName}
+        <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black z-50 font-roboto_condensed">
+            <div className="bg-white p-5 rounded-lg flex flex-col justify-center items-center gap-5">
+                <p className="text-base border-b-4 border-gray-500 pb-2 uppercase w-full text-center">
+                    <strong>Port:</strong> {port} / <strong>Fisico:</strong> {physical} /{" "}
+                    <strong>NMS:</strong> {NMS} / <strong>Name:</strong> {fullName}
                 </p>
-                {components.map(component => (
-                    <div key={component.id} className='flex gap-2'>
-                        <select
-                            className='border border-gray-500 outline-none px-2 py-1'
-                            value={component.selectedSignal}
-                            onChange={(e) => handleInputChange(component.id, 'selectedSignal', e.target.value as LogicalSignal)}
-                        >
-                            <option value="" disabled>Señal</option>
-                            {Object.values(LogicalSignal).map(signal => (
-                                <option key={signal} value={signal}>{signal}</option>
-                            ))}
-                        </select>
-                        <input
-                            className='border border-gray-500 outline-none px-2 py-1'
-                            type="text"
-                            value={component.inputValue}
-                            onChange={(e) => handleInputChange(component.id, 'inputValue', e.target.value)}
-                        />
-                        <input
-                            className='border border-gray-500 outline-none px-2 py-1 w-16'
-                            type="number"
-                            value={component.from}
-                            onChange={(e) => handleInputChange(component.id, 'from', handleInputNumber(e.target.value))}
-                        />
-                        <input
-                            className='border border-gray-500 outline-none px-2 py-1 w-16'
-                            type="number"
-                            value={component.to}
-                            onChange={(e) => handleInputChange(component.id, 'to', handleInputNumber(e.target.value))}
-                        />
-                    </div>
-                ))}
-                <button
-                    className='text-white bg-blue-500 font-semibold px-3 py-2 rounded-md ring-offset-2 flex items-center gap-2 hover:bg-blue-800 hover:ring-blue-800 hover:ring-2'
-                    type="button"
-                    onClick={addComponent}
-                >
-                    Agregar Componente <span className="material-symbols-outlined">add</span>
-                </button>
-                <div className='flex gap-4'>
-                    <button
-                        className='text-white bg-green-500 font-semibold px-3 py-2 rounded-md ring-offset-2 flex items-center gap-2 hover:bg-green-800 hover:ring-green-800 hover:ring-2'
-                        type="button"
-                        onClick={handleAddFacility}
-                    >
-                        ACEPTAR <span className="material-symbols-outlined">check_circle</span>
-                    </button>
-                    <button
-                        className='text-white bg-red-500 font-semibold px-3 py-2 rounded-md ring-offset-2 flex items-center gap-2 hover:bg-red-800 hover:ring-red-800 hover:ring-2'
-                        type="button"
-                        onClick={() => close(false)}
-                    >
-                        CANCELAR <span className="material-symbols-outlined">close</span>
-                    </button>
-                </div>
+                {error && <div className="bg-red-600 text-white uppercase px-3 py-1 rounded-md text-base">{error}</div>}
+                <TablePortFacilities
+                    handleDeleteLP={handleDeleteLP}
+                    handleInputChange={handleInputChange}
+                    logicalPorts={logicalPorts}
+                />
+                <BtnLogicalPortsModal
+                    addLogicalPort={addLogicalPort}
+                    close={close}
+                    handleAddFacility={handleAddFacility}
+                />
             </div>
         </div>
     );
 };
-
-
-// import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-// import { FieldArrayWithId } from 'react-hook-form';
-// import { BoardFormData, LogicalSignal } from '../../../types';
-
-// interface Props {
-//     close: Dispatch<SetStateAction<boolean>>;
-//     field: FieldArrayWithId<BoardFormData, "ports", "id">;
-// }
-
-// export const AddPortFacilitiesModal = ({ close, field }: Props) => {
-
-//     const [selectedSignal, setSelectedSignal] = useState<LogicalSignal | "">("");
-//     const [inputValue, setInputValue] = useState<string>('');
-//     const [from, setFrom] = useState<number>(1)
-//     const [to, setTto] = useState( 1 )
-//     const [facilities, setFacilities] = useState<{ [key in LogicalSignal]?: string[] }>({});
-
-//     useEffect(() => {
-//         if (field.fullName) {
-//             setInputValue(field.fullName + '-');
-//         }
-//     }, [ field ])
-
-//     const handleInputNumber = ( data: string ): number => {
-//         const isNumber = !isNaN( parseInt(data) ) && parseInt(data) > 0;
-//         return isNumber ? Number(data) : 1
-//     }
-
-//     if (!field) return <p>Sin Datos</p>
-
-//     return (
-//         <div className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black z-50 font-roboto_condensed'>
-//             <div className='bg-white p-5 rounded-lg flex flex-col justify-center items-center gap-5'>
-//                 <p className='text-lg border-b-4 border-gray-500 pb-2 uppercase w-full text-center'><strong>Port:</strong> {field.port} / <strong>NMS:</strong> {field.NMS} / <strong>Name:</strong> {field.fullName}   </p>
-//                 <div className='flex gap-2'>
-//                     <select
-//                         className='border border-gray-500 outline-none px-2 py-1'
-//                         name="key"
-//                         id="key"
-//                         value={selectedSignal}
-//                         onChange={(e) => setSelectedSignal(e.target.value as LogicalSignal)}
-//                     >
-//                         <option value="" disabled>Señal</option>
-//                         {
-//                             Object.values(LogicalSignal).map(signal => (
-//                                 <option
-//                                     key={signal}
-//                                     value={signal}
-//                                 >{signal}</option>
-//                             ))
-//                         }
-//                     </select>
-//                     <input
-//                         className='border border-gray-500 outline-none px-2 py-1'
-//                         type="text"
-//                         value={ inputValue }
-//                         onChange={(e) => setInputValue( e.target.value )}
-//                     />
-//                     <input
-//                         className='border border-gray-500 outline-none px-2 py-1 w-16'
-//                         type="number"
-//                         value={ from }
-//                         onChange={(e) => setFrom( handleInputNumber( e.target.value ))}
-//                     />
-//                     <input
-//                         className='border border-gray-500 outline-none px-2 py-1 w-16'
-//                         type="number"
-//                         value={ to }
-//                         onChange={(e) => setTto( handleInputNumber( e.target.value ))}
-//                     />
-//                 </div>
-
-//                 <div className='flex gap-4'>
-//                     <button
-//                         className='text-white bg-green-500 font-semibold px-3 py-2 rounded-md ring-offset-2 flex items-center gap-2 hover:bg-green-800 hover:ring-green-800 hover:ring-2'
-//                         type="button"
-//                     >CANCELAR <span className="material-symbols-outlined">check_circle</span></button>
-//                     <button
-//                         className='text-white bg-red-500 font-semibold px-3 py-2 rounded-md ring-offset-2 flex items-center gap-2 hover:bg-red-800 hover:ring-red-800 hover:ring-2'
-//                         type="button"
-//                         onClick={() => close(false)}
-//                     >ACEPTAR <span className="material-symbols-outlined">close</span></button>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// }

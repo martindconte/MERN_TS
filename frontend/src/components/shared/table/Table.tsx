@@ -26,13 +26,10 @@ interface Identifiable {
 
 type Props<T extends Identifiable> = {
   data: T[];
+  selectedData?: T[];
   info: string;
-  fnDelete?: UseMutationResult<
-    DeleteResponse<T>,
-    Error,
-    { id: string },
-    unknown
-  >;
+  fnDelete?: UseMutationResult<DeleteResponse<T>, Error, { id: string }, unknown>;
+  fnSelected?: (selectedRows: T[]) => void;
 } & (
   | {
       pagination: Pagination;
@@ -50,31 +47,28 @@ type Props<T extends Identifiable> = {
     }
 );
 
-export const Table = <T extends Identifiable>({
-  data,
-  pagination,
-  info,
-  page,
-  setPage,
-  limit,
-  setLimit,
-  fnDelete,
-}: Props<T>) => {
+export const Table = <T extends Identifiable>({ data, pagination, info, page, setPage, limit, setLimit, fnDelete, fnSelected, selectedData }: Props<T>) => {
 
-  console.log(data);
   const { pathname } = useLocation();
 
-  const [selectedColumns, setSelectedColumns] = useState<string[]>(
-    keyToShowInTable[info].map(({ key }) => key)
-  );
-
-  const [modalView, setModalView] = useState(false)
-  const [IdSelected, setIdSelected] = useState('')
+  const [selectedColumns, setSelectedColumns] = useState<string[]>( keyToShowInTable[info].map(({ key }) => key) );
+  const [modalView, setModalView] = useState(false);
+  const [IdSelected, setIdSelected] = useState('');
 
   const handleDelete = async () => {
     if (IdSelected) {
       const response = await fnDelete?.mutateAsync({ id: IdSelected });
       if (response) setModalView(false);
+    }
+  };
+
+  const handleRowSelect = (rowData: T) => {
+    if (fnSelected) {
+      const isAlreadySelected = selectedData?.some(row => row.id === rowData.id);
+      const newSelectedRows = isAlreadySelected
+        ? selectedData?.filter(row => row.id !== rowData.id) || []
+        : [...(selectedData || []), rowData];
+      fnSelected(newSelectedRows);
     }
   };
 
@@ -90,13 +84,17 @@ export const Table = <T extends Identifiable>({
             <ButtonActions
               path={ pathname }
               id={ row.original.id }
+              btnDelete={ fnDelete ? true : false}
               setModalView={ setModalView }
               setIdSelected={ setIdSelected }
-              btnDelete={ fnDelete ? true : false}
+              fnSelected={() => handleRowSelect(row.original)}
+              selectedData={selectedData}
             />
           </div>
         ),
       }),
+
+      //todo: bandwidth no tendra mas amount y unit... revisar y corregir esto...
       ...keyToShowInTable[info]
         .filter(({ key }) => selectedColumns.includes(key))
         .map(({ key, label }) =>
@@ -135,52 +133,6 @@ export const Table = <T extends Identifiable>({
     ],
     [info, selectedColumns, columnHelper]
   );
-  // const columns = useMemo<ColumnDef<T, any>[]>(
-  //   () => [
-  //     columnHelper.display({
-  //       id: "actions",
-  //       header: () => "Acciones",
-  //       cell: ({ row }) => (
-  //         <div className={tableStyles.actions}>
-  //           <ButtonActions
-  //             path={ pathname }
-  //             id={ row.original.id }
-  //             setModalView={ setModalView }
-  //             setIdSelected={ setIdSelected }
-  //             btnDelete={ fnDelete ? true : false}
-  //           />
-  //         </div>
-  //       ),
-  //     }),
-  //     ...keyToShowInTable[info]
-  //       .filter(({ key }) => selectedColumns.includes(key))
-  //       .map(({ key, label }) =>
-  //         columnHelper.accessor((row: T) => row[key as keyof T], {
-  //           id: key,
-  //           header: () => label,
-  //           cell: (info) => {
-  //             const value = info.getValue();
-  //             if ( value instanceof Date ) return formatDate( value );
-  //             if ( typeof value === 'boolean' ) return value ? "Activo" : "Desafectado";
-  //             if ( typeof value === 'object' && value !== null ) {
-  //               if ( 'vendorName' in value ) return value.vendorName;
-  //               // if ( 'amount' in value ) return value.amount;
-  //               // if ( 'unit' in value ) return value.unit;
-  //             }
-  //             // const value = info.getValue();
-  //             // if (value instanceof Date) {
-  //             //   return formatDate(value);
-  //             // } else if (typeof value === "boolean") {
-  //             //   return value ? "Activo" : "Desafectado";
-  //             // }
-  //             return value;
-  //           },
-  //           enableResizing: true,
-  //         })
-  //       ),
-  //   ],
-  //   [info, selectedColumns, columnHelper]
-  // );
 
   const table = useReactTable({
     data,
@@ -262,8 +214,14 @@ export const Table = <T extends Identifiable>({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
+            {table.getRowModel().rows.map((row) => {
+              // console.log( selectedData && selectedData.some( data => data.id === row.original.id ));
+              // console.log( row.original ) 
+            return (
+              <tr 
+                key={row.id}
+                className={`${ selectedData && selectedData?.length > 0 && selectedData.some( data => data.id === row.original.id ) ? 'bg-fuchsia-300 border-2 border-black' : '' }`}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
@@ -274,7 +232,7 @@ export const Table = <T extends Identifiable>({
                   </td>
                 ))}
               </tr>
-            ))}
+            )})}
           </tbody>
         </table>
         {pagination && (

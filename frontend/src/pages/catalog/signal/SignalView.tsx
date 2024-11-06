@@ -8,7 +8,6 @@ export const SignalView = () => {
   const { mutationCreateSignal } = useSignalMutation()
 
   const handleSubmit = async (formData: SignalFormData) => {
-    console.log(formData);
     mutationCreateSignal.mutateAsync(formData)
   }
   
@@ -25,6 +24,7 @@ export const SignalView = () => {
           <FormSignal
             onSubmit={handleSubmit}
             buttonLabel='Crear Señal'
+            status={mutationCreateSignal.status}
             // setShowBandwidth={ setShowBandwidth }
           />
         </div>

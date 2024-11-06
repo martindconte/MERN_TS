@@ -25,6 +25,8 @@ export class SearchBoardDTO {
         public readonly status?: BoardStatusEnum,
         public readonly createdAt?: string,
         public readonly updatedAt?: string,
+        public readonly limit?: number,
+        public readonly page?: number,
     ) {}
 
     private static buildPortQuery(portsQuery: SearchPortQuery) {

@@ -18,7 +18,8 @@ export const BtnAddPort = ({ append, fields, index, move, ports,remove }: Props 
             ...portToClone,
             port: portToClone.port + 1,
             physical: portToClone.physical.replace(/\d+/g, (match) => (parseInt(match) + 1).toString()),
-            NMS: portToClone.NMS.replace(/\d+/g, (match) => (parseInt(match) + 1).toString())
+            NMS: portToClone.NMS.replace(/\d+/g, (match) => (parseInt(match) + 1).toString()),
+            logicalFacilities: { ...portToClone.logicalFacilities }
         })
     }
 

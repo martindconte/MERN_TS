@@ -10,6 +10,7 @@ export class CreateBoardDTO {
         public readonly description?: string,
         public readonly observations?: string,
         public readonly ports?: Port[],
+        public readonly bandwidthMax?: number,
         public readonly slotSize?: number,
         public readonly technology?: BoardTechnologyEnum,
         public readonly status?: BoardStatusEnum,
@@ -27,7 +28,7 @@ export class CreateBoardDTO {
                 if( !port.physical && typeof port.physical !== 'string' ) return ['PortPhysical is Required and must be a String'];
                 if( !port.NMS && typeof port.NMS !== 'string' ) return ['PortNMS is Required and must be a String'];
                 if( !port.equipment ) port.equipment = [];
-                if( port.equipment.length > 0 && !port.equipment.some(( equipment: string ) => helpersDB.isMongoID( equipment ) ) ) return ['Invalid Equipment value!'];
+                if( port.equipment.length > 0 && !port.equipment.some(( equipment: string ) => typeof equipment === 'string' && helpersDB.isMongoID( equipment )) ) return ['Invalid Equipment value!'];
 
                 if( !port.logicalFacilities ) {
                     port.logicalFacilities = {}
@@ -57,7 +58,7 @@ export class CreateBoardDTO {
 
     static create( board: { [ key: string ]: any } ): [ string?, CreateBoardDTO? ] {
 
-        const { boardName, partNumber, vendor, signals, description, observations, ports, slotSize, technology, status } = board
+        const { boardName, partNumber, vendor, signals, description, observations, ports, bandwidthMax, slotSize, technology, status } = board
 
         if ( !boardName ) throw ['Missing BoardName Board'];
         if ( !partNumber ) throw ['Missing partNumber Board'];
@@ -67,6 +68,7 @@ export class CreateBoardDTO {
         // if ( signals && signals.lenght > 0 && !signals.some(( signal: string ) => helpersDB.isMongoID( signal ) ) ) throw ['Invalid Signal value!'];
         if ( technology && !Object.values( BoardTechnologyEnum ).includes( technology.toUpperCase() ) ) throw ['Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO'];
         if ( status && !Object.values( BoardStatusEnum ).includes( status )) throw ['Invalid Status'];
+        if ( typeof bandwidthMax !== 'number' && bandwidthMax <= 0 ) throw ['Invalid Slot Size. Must be bigger than 0'];
         if ( typeof slotSize !== 'number' && slotSize < 0 ) throw ['Invalid Status'];
         const [ error, portsCheck ] = this.checkDataPorts( ports )
         if ( error ) throw [ error ]
@@ -81,6 +83,7 @@ export class CreateBoardDTO {
                 description,
                 observations,
                 portsCheck,
+                bandwidthMax,
                 slotSize,
                 technology,
                 status,

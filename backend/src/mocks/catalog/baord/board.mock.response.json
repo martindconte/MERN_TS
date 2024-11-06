@@ -2,7 +2,7 @@
     "status": "success",
     "msg": "The Board has been registred successfully",
     "payload": {
-        "id": "671c69f1219090c2d843ba80",
+        "id": "6722b4b72b0e0e27408e2393",
         "boardName": "TNG1M520SM06",
         "partNumber": "03033YQD",
         "vendor": {
@@ -104,7 +104,7 @@
         "slotSize": 1,
         "technology": "DWDM",
         "status": "InService",
-        "createdAt": "2024-10-26T04:02:57.834Z",
-        "updatedAt": "2024-10-26T04:02:57.834Z"
+        "createdAt": "2024-10-30T22:35:35.399Z",
+        "updatedAt": "2024-10-30T22:35:35.399Z"
     }
 }

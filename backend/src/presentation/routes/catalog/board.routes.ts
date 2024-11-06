@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { BoardDatasourceImpl, BoardRepositoyImpl } from '../../../infrastructure'
 import { BoardController } from '../../controllers'
 
+//* ROUTE --> api/catalog/board
 export class BoardRoutes {
 
     static get routes(): Router {
@@ -15,7 +16,7 @@ export class BoardRoutes {
 
         router.route('/')
             .post(controller.create)
-            // .get(controller.getAllSignals)
+            .get(controller.getAll)
 
         router.route('/:boardid')
             .get(controller.getById)

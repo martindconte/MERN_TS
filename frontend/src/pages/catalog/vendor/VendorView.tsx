@@ -21,6 +21,7 @@ export const VendorView = () => {
                         onSubmit={handleForm}
                         buttonLabel='Registrar Vendor'
                         requiredFields
+                        status={mutationCreateVendor.status}
                     />
                 </div>
                 <div  className="basis-1/2 mx-4">

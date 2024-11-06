@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { BitsRatesEnum } from "./bitsRatesTypes";
+import { BitsRatesEnum, LogicalSignal } from "./bitsRatesTypes";
+import { transceiverSchema } from "./transceiverTypes";
 
 //* enum
 export enum BoardTechnologyEnum {
@@ -44,10 +45,16 @@ export enum boardUnitType {
 // });
 
 const equipmentsPortsSchema = z.object({
+    id: z.string(),
+    vendor: z.object({
+        id: z.string(),
+        vendorName: z.string(),
+    }),
     partNumber: z.string(),
     model: z.string(),
     description: z.string(),
-    id: z.string(),
+    status: z.string(),
+    techonology: z.string(),
 })
 
 const portsInBoardSchema = z.object({
@@ -55,8 +62,11 @@ const portsInBoardSchema = z.object({
     type: z.nativeEnum(BoardPortType).default(BoardPortType.any),
     physical: z.string(),
     NMS: z.string(),
-    equipment: z.array( equipmentsPortsSchema ).optional(),
-    logicalFacilities: z.record(z.string(), z.array(z.string())),
+    equipment: z.union([
+        z.array( transceiverSchema ).optional().default([]),
+        z.array( equipmentsPortsSchema ).optional().default([])
+    ]),
+    logicalFacilities: z.record(z.nativeEnum( LogicalSignal ), z.array(z.string())),
     fullName: z.string()
 })
 
@@ -80,14 +90,32 @@ export const boardSchema = z.object({
     updatedAt: z.date(),
 })
 
+const paginationSchema = z.object({
+    totalDocs: z.number().nonnegative(),
+    totalResults: z.number().nonnegative(),
+    totalPages: z.number().nonnegative(),
+    prevPage: z.string().nullable().optional(), // Acepta string o null
+    nextPage: z.string().nullable().optional(), // Acepta string o null
+    page: z.number().positive(),
+    hasPrevPage: z.boolean(),
+    hasNextPage: z.boolean(),
+});
+
 // response APIs
 export const respAPIBoardSchema = z.object({
     msg: z.string().optional(),
     payload: boardSchema
 })
 
+export const respAPIBoardsSchema = z.object({
+    payload: z.array( boardSchema ),
+    pagination: paginationSchema,
+});
+
 //* types
 export type BoardType = z.infer< typeof boardSchema >
+export type BoardPaginationType = z.infer<typeof paginationSchema>
+export type BoardPortsType = z.infer< typeof portsInBoardSchema>
 export type BoardFormData = Pick<
   BoardType,
   'id' |

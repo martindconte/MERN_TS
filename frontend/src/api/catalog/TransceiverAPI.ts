@@ -39,7 +39,6 @@ export const getTransceivers = async ( query = {} ) => {
     const URL = buildURL( baseURL, query )
     try {
         const { data: { payload, pagination } } = await api(URL);
-        console.log({ payload, pagination });
         const mappedData: { payload: TransceiverType[], pagination: TransceiverPaginationType  } = {
             payload: payload.map( ( transceiver: TransceiverType ) => transceiverMapped( transceiver ) ),
             pagination

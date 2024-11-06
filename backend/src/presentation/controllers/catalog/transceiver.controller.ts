@@ -24,7 +24,6 @@ export class TransceiverController {
     };
 
     getAll = ( req: Request, res: Response ) => {
-        console.log('req.query', req.query);
         const search = SearchTransceiverDTO.createQueries( req.query );
         new TransceiverUseCase.GetTransceivers( this.transceiverRepository )
             .execute( search )

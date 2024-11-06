@@ -21,8 +21,6 @@ export class CentralDatasourceImpl implements CentralDatasource {
 
     async getAll(queries?: QueriesDTO): Promise<CentralEntity[] | CentralEntityWithPagination> {
 
-        console.log(queries);
-
         const [pagination, filters = {}] = QueriesDTO.pagination(queries);
 
         const query: { [key: string]: any } = {}

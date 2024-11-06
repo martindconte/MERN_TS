@@ -1,5 +1,6 @@
 import { model, Schema, Document, Types } from 'mongoose';
 import { BitsRatesEnum, BoardPortType, BoardStatusEnum, BoardTechnologyEnum } from '../../../../interface';
+import { Query } from 'mongoose';
 
 export interface Port {
   port: number;
@@ -20,6 +21,7 @@ export interface BoardDocument extends Document {
   description?: string;
   observations?: string;
   ports?: Port[];
+  bandwidthMax?: number;
   slotSize?: number;
   technology?: BoardTechnologyEnum;
   status?: BoardStatusEnum;
@@ -95,12 +97,6 @@ const boardSchema = new Schema<BoardDocument>(
       ref: 'Vendor',
       default: '',
     },
-    // signals: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Signal',
-    //   },
-    // ],
     signals: [
       {
         type: String,
@@ -120,6 +116,10 @@ const boardSchema = new Schema<BoardDocument>(
       type: Number,
       trim: true,
       default: 1,
+    },
+    bandwidthMax: {
+      type: Number,
+      trim: true,
     },
     technology: {
       type: String,
@@ -144,6 +144,17 @@ boardSchema.pre('validate', function (next) {
   this.ports?.forEach((port) => {
     if (!port.fullName) {
       port.fullName = `${port.NMS}(${port.physical})`;
+    }
+  });
+  next();
+});
+
+boardSchema.pre<Query<BoardDocument, BoardDocument>>(/^find/, function (next) {
+  this.populate({
+    path: 'ports.equipment',
+    populate: {
+      path: 'vendor',
+      select: 'vendorName' // Selecciona solo el campo vendorName
     }
   });
   next();

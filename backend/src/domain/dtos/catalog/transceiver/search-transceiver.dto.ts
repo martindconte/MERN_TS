@@ -1,4 +1,4 @@
-import { BitRatesEnum, BitRatesValues, StatusEnum, TechnologyEnum } from '../../../../interface';
+import { BitsRatesEnum, StatusEnum, TechnologyEnum } from '../../../../interface';
 import { helpersDB } from '../../../../data';
 
 export class SearchTransceiverDTO {
@@ -11,7 +11,7 @@ export class SearchTransceiverDTO {
         public readonly description?: string,
         public readonly observations?: string,
         public readonly technology?: TechnologyEnum,
-        public readonly bitsRates?: BitRatesEnum[],
+        public readonly bitsRates?: BitsRatesEnum[],
         // public readonly signals?: string[],
         public readonly status?: StatusEnum,
         public readonly limit?: number,
@@ -19,7 +19,6 @@ export class SearchTransceiverDTO {
     ) {}
 
     static createQueries( queries: { [key: string]: any } ): Partial<SearchTransceiverDTO> {
-        console.log('queries', queries);
 
         const searchParams: { [key: string]: any } = {}
 
@@ -37,7 +36,7 @@ export class SearchTransceiverDTO {
                         break;
                     case 'bitsRates':
                         const bitsRatesArray = decodedValue.split(',')
-                        searchParams[key] = { $all: bitsRatesArray.filter((rate: any) => Object.values(BitRatesValues).includes(rate))};
+                        searchParams[key] = { $all: bitsRatesArray.filter((rate: any) => Object.values(BitsRatesEnum).includes(rate))};
                         break;
                     // case 'signals':
                     //     break;

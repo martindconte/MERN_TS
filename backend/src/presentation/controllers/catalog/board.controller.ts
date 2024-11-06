@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { BoardRepository, BoardUseCase, CreateBoardDTO } from '../../../domain';
+import { BoardRepository, BoardUseCase, CreateBoardDTO, SearchBoardDTO } from '../../../domain';
 
 export class BoardController {
     constructor(
@@ -22,7 +22,14 @@ export class BoardController {
             }) )
     }
     getAll = ( req: Request, res: Response ) => {
-
+        const search = SearchBoardDTO.createQueries( req.query )
+        new BoardUseCase.GetBoards( this.boardRepository )
+        .execute( search )
+        .then( boards => res.json( boards ))
+        .catch(error => res.status(400).json({
+            status: 'error',
+            msg: error.message
+        }));
     }
     getById = ( req: Request, res: Response ) => {
         const { boardid } = req.params;

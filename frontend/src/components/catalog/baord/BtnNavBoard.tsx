@@ -18,7 +18,7 @@ export const BtnNavBoard = () => {
           to="../new"
           className="basis-1/2 uppercase flex justify-center items-center gap-3 bg-amber-400 py-2 px-3 text-white rounded-lg font-semibold hover:bg-amber-600 hover:text-black"
         >
-          <span>Crear Transceiver</span>
+          <span>Crear Placa</span>
           <span className="material-symbols-outlined mr-2">add_circle</span>
         </Link>
       ) : (
@@ -26,7 +26,7 @@ export const BtnNavBoard = () => {
           to="../search"
           className="basis-1/2 uppercase flex justify-center items-center gap-3 bg-amber-400 py-2 px-3 rounded-lg font-semibold hover:bg-amber-600"
         >
-          Ver Transceivers
+          Ver PLacas
           <span className="material-symbols-outlined">search</span>
         </Link>
       )}

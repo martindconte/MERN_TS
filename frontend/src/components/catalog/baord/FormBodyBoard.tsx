@@ -1,23 +1,26 @@
-import { UseFormRegister, FieldErrors } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
+// import { UseFormRegister, FieldErrors, useFormContext } from 'react-hook-form'
 import { BitsRatesEnum, BoardFormData, BoardStatusEnum, BoardTechnologyEnum } from '../../../types'
 import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm'
 import { useVendors } from '../../../hook'
 import { Spinner } from '../../shared/spinners/Spinner'
 
 interface Props {
-  register: UseFormRegister<BoardFormData>
-  errors: FieldErrors<BoardFormData>
+  // register: UseFormRegister<BoardFormData>
+  // errors: FieldErrors<BoardFormData>
   requiredFields?: boolean
 }
 
-export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
+// export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
+export const FormBodyBoard = ({ requiredFields }: Props) => {
 
   const { queryVendors } = useVendors({ enabled: true })
+  const { register, formState: { errors } } = useFormContext<BoardFormData>()
 
   if (queryVendors.isLoading) return <Spinner />
-
+  
   return (
-    <div className='flex flex-col text-black text-sm'>
+    <div className='flex flex-col text-black text-sm max-w-[400px] grow'>
       <div className='flex flex-col-reverse'>
         <div className="flex justify-between my-2 items-center space-x-3">
           <label className="w-1/3 text-right" htmlFor="boardName">Nombre Placa:</label>
@@ -51,7 +54,7 @@ export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
         {errors.partNumber && <ErrorMsgForm>{errors.partNumber.message}</ErrorMsgForm>}
       </div>
       <div className="flex justify-between my-2 items-center space-x-3">
-        <label className="w-1/3 text-right" htmlFor="signals">Seañales</label>
+        <label className="w-1/3 text-right">Sañales</label>
         <div className="w-2/3 h-44 overflow-y-auto border border-gray-300 p-2 outline-none rounded shadow-md bg-white">
           {
             Object.values(BitsRatesEnum).map((bitRate) => (
@@ -91,20 +94,25 @@ export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
         </div>
         {errors.vendor?.id && <ErrorMsgForm>{errors.vendor.id.message}</ErrorMsgForm>}
       </div>
-      <div className="flex justify-between my-2 items-center space-x-3">
-        <label className="w-1/3 text-right" htmlFor="bandwidthMax">BW Maximo [Gb]</label>
-        <input
-          className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
-          type="number"
-          id="bandwidthMax"
-          placeholder="BW Maximo de la Placa"
-          {...register('bandwidthMax', {
-            setValueAs: value => value.trim(),
-            valueAsNumber: true,
-            validate: value => value && value > 1 || 'Debe ser un número válido',
-            min: 1
-          })}
-        />
+      <div className='flex flex-col-reverse'>
+        <div className="flex justify-between my-2 items-center space-x-3">
+          <label className="w-1/3 text-right" htmlFor="bandwidthMax">BW Maximo [Gb]</label>
+          <input
+            className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
+            type="number"
+            id="bandwidthMax"
+            placeholder="BW Maximo de la Placa"
+            {...register('bandwidthMax', {
+              required: requiredFields && 'BW debe ser Mayor a 0',
+              min: 1,
+              setValueAs: value => parseInt(value),
+              valueAsNumber: true,
+              // validate: value => value && value <= 1 || 'Debe ser un número válido',
+              onChange: e => e.target.value < 1 ? '' : e.target.value
+            })}
+          />
+        </div>
+        {errors.bandwidthMax && <ErrorMsgForm>{errors.bandwidthMax.message}</ErrorMsgForm>}
       </div>
       <div className="flex justify-between my-2 items-center space-x-3">
         <label className="w-1/3 text-right" htmlFor="description">Descripcion</label>
@@ -139,10 +147,11 @@ export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
             id="slotSize"
             placeholder="Descripcion del Modulo"
             {...register('slotSize', {
+              required: requiredFields && 'El Tamaño debe ser Mayor a 0',
+              min: 1,
               setValueAs: value => parseInt(value),
               valueAsNumber: true,
-              validate: value => !isNaN(value) || 'Debe ser un número válido',
-              min: 1
+              onChange: e => e.target.value < 1 ? e.target.value = 1 : e.target.value  
             })}
           />
         </div>

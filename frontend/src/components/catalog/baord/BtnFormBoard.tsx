@@ -1,13 +1,18 @@
-import { UseFormReset } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
+// import { useFormContext, UseFormReset } from 'react-hook-form';
 import { MutationStatus } from '@tanstack/react-query';
 import { BoardFormData } from '../../../types';
 
 interface Props {
-    reset: UseFormReset<BoardFormData>;
+    // reset: UseFormReset<BoardFormData>;
     status?: MutationStatus;
     buttonLabel: string;
 }
-export const BtnFormBoard = ({ buttonLabel, reset, status }: Props) => {
+export const BtnFormBoard = ({ buttonLabel, status }: Props) => {
+// export const BtnFormBoard = ({ buttonLabel, reset, status }: Props) => {
+
+    const { reset } = useFormContext<BoardFormData>()
+
     return (
         <div className="flex flex-col gap-1 mt-3">
             <button

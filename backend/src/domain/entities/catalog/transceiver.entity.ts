@@ -1,4 +1,4 @@
-import { BitRatesEnum, BitRatesValues, StatusEnum, TechnologyEnum,  } from '../../../interface';
+import { BitsRatesEnum, StatusEnum, TechnologyEnum,  } from '../../../interface';
 import { CustomError } from '../../errors/custom.errors';
 import { VendorEntity } from './vendor.entity';
 
@@ -12,7 +12,7 @@ export class TransceiverEntity {
     public readonly description?: string,
     public readonly observations?: string,
     public readonly technology?: TechnologyEnum,
-    public readonly bitsRates?: BitRatesEnum[],
+    public readonly bitsRates?: BitsRatesEnum[],
     // public readonly signals?: { id: string, type: string, subtype: string }[],
     public readonly status?: StatusEnum,
     public readonly createdAt?: Date,
@@ -28,7 +28,7 @@ export class TransceiverEntity {
     if (!vendor) throw CustomError.badRequest('Missing vendor');
     if( bitsRates === '' && !Array.isArray(bitsRates) ) throw CustomError.badRequest('Bits Rates must be Array');
     if( technology && !Object.values( TechnologyEnum ).includes( technology.toUpperCase() ) ) throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
-    if (bitsRates && !Array.isArray(bitsRates) && bitsRates.length > 0 && !bitsRates.every((rate: any) => BitRatesValues.includes(rate))) throw CustomError.badRequest('Invalid bitsRate');
+    if( bitsRates && Array.isArray(bitsRates) && bitsRates.length > 0 && !bitsRates.every((rate: any) => Object.values(BitsRatesEnum).includes(rate)) ) CustomError.badRequest('Invalid bitsRate');
     if (status && !Object.values(StatusEnum).includes(status)) throw CustomError.badRequest('Invalid Status');
 
     const vendorMapped = {

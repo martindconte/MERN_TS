@@ -37,13 +37,14 @@ interface KeyLabel<T> {
     ],
     catalogBoard: [
       { key: 'boardName', label: 'Nombre' },
-      { key: 'partNumber', label: 'Numero de Parte' },
-      { key: 'description', label: 'Descripcion' },
+      { key: 'partNumber', label: 'No de Parte' },
       { key: 'vendor', label: 'Vendor' },
-      { key: 'slotSize', label: 'Cant. Slot Ocupa' },
-      { key: 'quantityPorts', label: 'Cant. Ports Serv.' },
+      { key: 'description', label: 'Descripcion' },
       { key: 'observations', label: 'Obs.' },
-      { key: 'status', label: 'Estado' }
+      { key: 'slotSize', label: 'Cant. Slot Ocupa' },
+      { key: 'status', label: 'Estado' },
+      { key: 'createdAt', label: 'Creado' },
+      { key: 'updatedAt', label: 'Modificado' },
     ],
     catalogTransceiver: [
       { key: 'vendor', label: 'Vendor' },

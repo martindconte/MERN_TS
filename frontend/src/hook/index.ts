@@ -2,7 +2,7 @@
 
 //* hook/catalog
 /* board */
-// export * from './catalog/signal/useSignal'
+export * from './catalog/board/useBoards'
 export * from './catalog/board/useBoardMutation'
 // export * from './catalog/signal/useSignals'
 

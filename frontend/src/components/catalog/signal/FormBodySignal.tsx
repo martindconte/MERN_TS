@@ -7,9 +7,6 @@ interface Props {
     register: UseFormRegister<SignalFormData>;
     errors: FieldErrors<SignalFormData>;
     requiredFields?: boolean;
-    // control: Control<SignalFormData>;
-    // setError: UseFormSetError<SignalFormData>;
-    // clearErrors: UseFormClearErrors<SignalFormData>;
     showBandwidth: boolean;
     setShowBandwidth: Dispatch<React.SetStateAction<boolean>>;
 

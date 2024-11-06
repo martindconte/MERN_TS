@@ -34,6 +34,7 @@ export class UpdateBoardDTO {
                 if( !port.port && typeof port.port !== 'number' ) throw ['PortNumber is Required and must be a Number'];
                 if( !port.physical && typeof port.physical !== 'string' ) throw ['PortPhysical is Required and must be a String'];
                 if( !port.NMS && typeof port.NMS !== 'string' ) throw ['PortNMS is Required and must be a String'];
+                if( port.equipment?.some( data => typeof data !== 'string' ) ) throw ['Equipment must be a String'];
                 //todo: REVISAR QUE NO SE REPITAN LAS FACILIDADES LOGICAS Y CANTIDADES
             });
         };

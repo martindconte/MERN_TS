@@ -162,6 +162,19 @@
   color: white;
 }
 
+.selectIcon {
+  color: black;
+  background-color: #ff7af4;
+  border-radius: 100%;
+  font-size: 14px;
+  padding: 5px;
+}
+
+.selectIcon:hover {
+  background-color: #c500b5;
+  color: white;
+}
+
 .sortIcon {
   font-size: 18px;
   padding: 5px;

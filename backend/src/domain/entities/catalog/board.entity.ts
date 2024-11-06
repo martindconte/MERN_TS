@@ -71,7 +71,8 @@ export class BoardEntity {
         if ( technology && !Object.values( BoardTechnologyEnum ).includes( technology.toUpperCase() ) ) throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
         if ( status && !Object.values( BoardStatusEnum ).includes( status )) throw CustomError.badRequest('Invalid Status');
         if ( typeof slotSize !== 'number' && slotSize < 0 ) throw CustomError.badRequest('Invalid Status');
-        const [ error, portsCheck ] = this.checkDataPorts( ports )
+        // const [ error, portsCheck ] = this.checkDataPorts( ports )
+        const [ error, portsCheck ] = BoardEntity.checkDataPorts( ports )
         if ( error ) throw [ error ]
 
         return new BoardEntity(

@@ -32,8 +32,6 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
 
     async getAll(queries?: QueriesDTO): Promise<TransceiverEntity[] | TransceiverEntityWithPagination> {
 
-        console.log('desde impl transceiver getAll --------->', queries);
-
         const [pagination, filters = {}] = QueriesDTO.pagination(queries)
         if (pagination) {
             const { page, limit } = pagination
@@ -68,7 +66,7 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
                     }
                 ])
 
-            ])
+            ]);
 
             const totalPages = Math.ceil(totalDocs / limit);
             const baseUrl = `api/catalog/transceiver?limit=${limit}&${new URLSearchParams(filters).toString()}`;

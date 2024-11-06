@@ -20,6 +20,8 @@ export const FormTransceiver = ({ onSubmit, status, requiredFields, buttonLabel,
     const { queryVendors } = useVendors({ enabled: true })
     const { register, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues })
 
+    console.log(status);
+
     useEffect(() => {
         if (status === 'success') reset();
     }, [status, reset]);

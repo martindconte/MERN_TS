@@ -3,6 +3,8 @@ import { VendorFormData } from '../../../types';
 import { MutationStatus } from '@tanstack/react-query';
 import { FormBodyVendor } from './FormBodyVendor';
 import { BtnFormVendor } from './BtnFormVendor';
+import { useEffect } from 'react';
+import { Spinner } from '../../shared/spinners/Spinner';
 
 
 interface Props {
@@ -17,6 +19,12 @@ export const FormVendor = ({ onSubmit, status, requiredFields, buttonLabel, defa
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues })
 
+  useEffect(() => {
+    if (status === 'success') reset();
+  }, [status, reset]);
+
+  if (status === "pending") return <Spinner />
+
   return (
     <form
       className="mx-5 mb-6 px-3 rounded-lg font-roboto"
@@ -30,16 +38,10 @@ export const FormVendor = ({ onSubmit, status, requiredFields, buttonLabel, defa
       />
 
       <BtnFormVendor
-        reset={ reset }
-        buttonLabel={ buttonLabel }
-        status={ status }
+        reset={reset}
+        buttonLabel={buttonLabel}
+        status={status}
       />
-
-      {/* <BtnForm
-                buttonLabel={ buttonLabel }
-                status={ status }
-                reset={ reset }
-            /> */}
     </form>
   )
 }
