@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateVendorDTO, UpdateVendorDTO, VendorRepository, VendorUseCase } from '../../../domain';
+import { CreateVendorDTO, QueriesVendorDTO, UpdateVendorDTO, VendorRepository, VendorUseCase } from '../../../domain';
 
 export class VendorController {
 
@@ -9,7 +9,7 @@ export class VendorController {
 
     createVendor = ( req: Request, res: Response ) => {
         const [ error, vendorDTO ] = CreateVendorDTO.create( req.body )
-        if( error ) return res.status(400).json({ error })
+        if( error ) return res.status(400).json({ msg: error })
         
         new VendorUseCase.CreateVendor( this.vendorRepository )
             .execute( vendorDTO! )
@@ -18,35 +18,47 @@ export class VendorController {
                 msg: 'The Vendor has been registred successfully',
                 payload: vendor
             }))
-            .catch( error => res.status(400).json({
+            .catch( error => {
+                console.log(error);
+                res.status(400).json({
                 status: 'error',
-                msg: error
-            }) )
-    }
+                msg: error.message || error
+            })} )
+    };
 
-    getAllCentrals = ( req: Request, res: Response ) => {
+    getAllVendors = ( req: Request, res: Response ) => {
         new VendorUseCase.GetVendors( this.vendorRepository )
             .execute()
             .then( vendor => res.json( vendor ) )
             .catch( error => res.status(400).json({ error }) )
+    };
+
+    getAllDeletedVendors = ( req: Request, res: Response ) => {
+        new VendorUseCase.GetDeleteVendors( this.vendorRepository )
+            .execute()
+            .then( vendor => res.json( vendor ) )
+            .catch( error => res.status(400).json({
+                status: 'error',
+                msg: error
+            }))
     }
 
     getVendorById = ( req: Request, res: Response ) => {
         const { vendorid } = req.params
+        const queries = QueriesVendorDTO.create( req.query )
         new VendorUseCase.GetVendor( this.vendorRepository )
-            .execute( vendorid )
+            .execute( vendorid, queries )
             .then( vendor => res.json( vendor ) )
             .catch( error => res.status(400).json({ error }) )
-    }
+    };
 
     updateVendor = ( req: Request, res: Response ) => {
         const { vendorid } = req.params
+        const queries = QueriesVendorDTO.create( req.query )
         const [ error, updateVendorDTO ] = UpdateVendorDTO.create({ id: vendorid, ...req.body })
-        console.log(updateVendorDTO);
         if( error ) return res.status(400).json({ error })
-        
         new VendorUseCase.UpdateCentral( this.vendorRepository )
-            .execute( updateVendorDTO! )
+            .execute( updateVendorDTO!, queries )
             .then( vendor => res.json({
                 msg: 'Vendor Information has been updated successfully',
                 payload: vendor
@@ -55,7 +67,7 @@ export class VendorController {
                 status: 'error',
                 msg: error
             }))
-    }
+    };
 
     deleteVendor = ( req: Request, res: Response ) => {
         const { vendorid } = req.params
@@ -63,12 +75,26 @@ export class VendorController {
         new VendorUseCase.DeleteVendor( this.vendorRepository )
             .execute( vendorid )
             .then( vendor => res.json({
-                msg: 'The Vendor has been deleted successfully',
+                msg: "The vendor has been soft deleted. You can find it in the 'Deleted Vendors' section to restore or permanently delete it",
                 payload: vendor
             }))
             .catch( error => res.status(400).json({
                 status: 'error',
                 msg: error
             }))
-    }
+    };
+
+    cleanVendor = ( req: Request, res: Response ) => {
+        const { vendorid } = req.params
+        new VendorUseCase.CleanVendor( this.vendorRepository )
+            .execute( vendorid )
+            .then( vendor => res.json({
+                msg: 'The vendor has been permanently deleted. This action cannot be undone',
+                payload: vendor
+            }))
+            .catch( error => res.status(400).json({
+                status: 'error',
+                msg: error
+            }))
+    };
 }

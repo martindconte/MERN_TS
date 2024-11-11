@@ -1,12 +1,19 @@
-import mongoose from 'mongoose'
+import { Document, Model, Schema, model } from 'mongoose'
 
-const vendorSchema = new mongoose.Schema(
-    {
+interface VendorDocument extends Document {
+    vendorName: string;
+    country: string; 
+    observation: string;
+    isDeleted: boolean;
+}
+
+const vendorSchema = new Schema<VendorDocument>({
         vendorName: {
             type: String,
             require: [true, 'vendorName is required!'],
             trim: true,
-            uppercase: true
+            uppercase: true,
+            // unique: true,
         },
         country: {
             type: String,
@@ -19,6 +26,10 @@ const vendorSchema = new mongoose.Schema(
             trim: true,
             default: '',
         },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true
@@ -31,6 +42,6 @@ vendorSchema.set('toJSON', {
     transform: function (doc, ret, options) {
         delete ret._id
     },
-})
+});
 
-export const VendorModel = mongoose.model('Vendor', vendorSchema)
+export const VendorModel: Model<VendorDocument> = model('Vendor', vendorSchema)

@@ -12,7 +12,6 @@ export class SearchTransceiverDTO {
         public readonly observations?: string,
         public readonly technology?: TechnologyEnum,
         public readonly bitsRates?: BitsRatesEnum[],
-        // public readonly signals?: string[],
         public readonly status?: StatusEnum,
         public readonly limit?: number,
         public readonly page?: number,

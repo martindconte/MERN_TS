@@ -22,10 +22,12 @@ export * from './catalog/transceiver/update-transceiver.dto';
 
 /* vendor --> dtos/catalog/vendor */
 export * from './catalog/vendor/create-vendor.dto';
+export * from './catalog/vendor/queries-vendor-.dto';
 export * from './catalog/vendor/update-vendor.dto';
 
 //* Central --> dtos/central
 export * from './central/create-central.dto';
+export * from './central/seacrh-central.dto';
 export * from './central/update-central.dto';
 
 //* Shared

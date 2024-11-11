@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import { getVendors } from "../../../api";
+import { getAllDeletedVendors, getVendors } from "../../../api";
 
 interface Props {
-    enabled: boolean;
+    enabled?: boolean;
 }
 
 export const useVendors = ({ enabled = true }: Props) => {
@@ -13,9 +13,18 @@ export const useVendors = ({ enabled = true }: Props) => {
         retry: false,
         refetchOnWindowFocus: false,
         enabled
+    });
+
+    const queryVendorsDeleted = useQuery({
+        queryKey: ['vendorsDeleted'],
+        queryFn: async () => await getAllDeletedVendors(),
+        retry: false,
+        refetchOnWindowFocus: false,
+        enabled
     })
 
     return {
         queryVendors,
+        queryVendorsDeleted
     }
 }

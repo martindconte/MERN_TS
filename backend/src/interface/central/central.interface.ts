@@ -1,6 +1,6 @@
 import { CentralEntity } from "../../domain";
 
-export enum CentralOwner {
+export enum CentralOwnerEnum {
     tasa = 'TASA',
     mvs = 'MVS',
     other = 'OTHER',

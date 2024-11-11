@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { CreateCentralDTO, CentralUseCase, UpdateCentralDTO, CentralRepository } from '../../../domain'
+import { CreateCentralDTO, CentralUseCase, UpdateCentralDTO, CentralRepository, SearchCentralDTO } from '../../../domain'
 
 export class CentralController {
 
@@ -29,9 +29,10 @@ export class CentralController {
     }
 
     getAllCentrals = (req: Request, res: Response) => {
+        const search = SearchCentralDTO.createQueries( req.query )
         new CentralUseCase.GetCentrals(this.centralRepository)
-            .execute(req.query)
-            .then(centrals => res.send(centrals))
+            .execute( search )
+            .then(centrals => res.send( centrals ))
             .catch(error => res.status(400).json({
                 status: 'error',
                 msg: error.message

@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createVendor, deleteVendor, updateVendor } from '../../../api';
+import { cleanVendor, createVendor, deleteVendor, updateVendor } from '../../../api';
 import { VendorFormData, VendorType } from '../../../types';
 
 export const useVendorMutation = () => {
@@ -26,7 +26,7 @@ export const useVendorMutation = () => {
       });
 
       const mutationUpdateVendor = useMutation({
-        mutationFn: async ({ id, formData }: { id: VendorType['id']; formData: VendorFormData }) => await updateVendor({ id, formData }),
+        mutationFn: async ({ id, formData, searchParams }: { id: VendorType['id']; formData: VendorFormData, searchParams?: string }) => await updateVendor({ id, formData, searchParams }),
         onError: (error) => toast.error(error.message, { theme: 'colored' }),
         onSuccess: ( response ) => {
           if( response ) {
@@ -39,7 +39,7 @@ export const useVendorMutation = () => {
     });
 
     const mutationDeleteVendor = useMutation({
-      mutationFn: async ({ id }: { id: VendorType['id'] }) => {
+      mutationFn: async ( id : VendorType['id'] ) => {
         const response = await deleteVendor( id )
         if (!response) {
           throw new Error('Delete operation failed');
@@ -49,9 +49,27 @@ export const useVendorMutation = () => {
       onError: (error) => toast.error(error.message, { theme: 'colored' }),
         onSuccess: ( response ) => {
           if( response ) {
-            queryClient.invalidateQueries({
-              queryKey: ['vendors']
+            queryClient.invalidateQueries({ queryKey: ['vendors'] })
+            const { msg, payload } = response
+            toast.success(`${msg} // ${payload.vendorName.toUpperCase()} - ${payload.country.toUpperCase()} `, {
+              theme: 'colored'
             })
+          }
+        }
+    });
+
+    const mutationPermanentlyDeleteVendor = useMutation({
+      mutationFn: async ( id : VendorType['id'] ) => {
+        const response = await cleanVendor( id )
+        if (!response) {
+          throw new Error('Delete operation failed');
+        }
+        return response;
+      },
+      onError: (error) => toast.error(error.message, { theme: 'colored' }),
+        onSuccess: ( response ) => {
+          if( response ) {
+            queryClient.invalidateQueries({ queryKey: ['vendorsDeleted'] })
             const { msg, payload } = response
             toast.success(`${msg} // ${payload.vendorName.toUpperCase()} - ${payload.country.toUpperCase()} `, {
               theme: 'colored'
@@ -64,5 +82,6 @@ export const useVendorMutation = () => {
         mutationCreateVendor,
         mutationUpdateVendor,
         mutationDeleteVendor,
+        mutationPermanentlyDeleteVendor,
       }
 }

@@ -103,7 +103,7 @@ export class BoardDatasourceImpl implements BoardDatasource {
 
         const boards = await BoardModel.find(filters || {}).populate('vendor', 'vendorName')
         return sortBy( boards.map(BoardEntity.fromObject), [ 'vendor.vendorName', 'type', 'partNumber', 'model' ] );
-    }
+    };
 
     async getById(id: BoardEntity["id"]): Promise<BoardEntity> {
         const board = await BoardModel.findOne({ _id: id })

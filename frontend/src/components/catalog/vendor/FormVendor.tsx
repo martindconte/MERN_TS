@@ -13,11 +13,12 @@ interface Props {
   buttonLabel: string;
   status?: MutationStatus;
   defaultValues?: VendorFormData;
+  isDeleted?: boolean;
 }
 
-export const FormVendor = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props) => {
+export const FormVendor = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues, isDeleted = false }: Props) => {
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm({ defaultValues })
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<VendorFormData>({ defaultValues })
 
   useEffect(() => {
     if (status === 'success') reset();
@@ -35,6 +36,7 @@ export const FormVendor = ({ onSubmit, status, requiredFields, buttonLabel, defa
         register={register}
         errors={errors}
         requiredFields={requiredFields}
+        isDeleted={isDeleted}
       />
 
       <BtnFormVendor

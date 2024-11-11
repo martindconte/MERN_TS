@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { BtnNavTransceiver, FormTransceiver, HiddenComponent, Spinner, Table } from '../../../components'
 import { cleanFormData } from '../../../helpers'
 import { useTransceiverMutation, useTransceivers } from '../../../hook'
-import { TransceiverFormData } from '../../../types'
+import { TransceiverFormData, TransceiverType } from '../../../types'
 
 export const SearchTransceiverView = () => {
 
@@ -20,6 +20,10 @@ export const SearchTransceiverView = () => {
     if( !formData.bitsRates ) formData.bitsRates = [];
     const cleanedData = cleanFormData(formData);
     setSearch(cleanedData);
+  }
+  
+  const handleDelete = async ( id: TransceiverType['id'] ): Promise<{ msg?: string, payload: TransceiverType }>  => {
+    return await mutationDeleteTransceiver.mutateAsync({ id })
   }
 
   return (
@@ -52,7 +56,8 @@ export const SearchTransceiverView = () => {
               setPage={setPage}
               limit={limit}
               setLimit={setLimit}
-              fnDelete={ mutationDeleteTransceiver }
+              fnDelete={ handleDelete }
+              // fnDelete={ mutationDeleteTransceiver }
             />
           )
       }

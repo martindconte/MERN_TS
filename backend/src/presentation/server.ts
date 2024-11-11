@@ -38,7 +38,7 @@ export class Server {
         this.app.use( this.routes )
 
 
-        this.app.listen( this.port , () => console.log(`Listening app port ${ this.port }`));
+        this.app.listen( this.port , () => console.log(`Listening app port ${ this.port } \n***********************************************************************************************************************************************************`));
 
     }
 

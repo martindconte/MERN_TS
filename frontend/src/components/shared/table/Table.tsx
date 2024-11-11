@@ -1,6 +1,5 @@
 import { useState, Dispatch, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-import { UseMutationResult } from '@tanstack/react-query';
+// import { UseMutationResult } from '@tanstack/react-query';
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, ColumnDef, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
 
 import { /* Central, */ Pagination } from '../../../types';
@@ -28,8 +27,11 @@ type Props<T extends Identifiable> = {
   data: T[];
   selectedData?: T[];
   info: string;
-  fnDelete?: UseMutationResult<DeleteResponse<T>, Error, { id: string }, unknown>;
+  fnDelete?: ( id: string ) => Promise<any> | void;
+  // fnDelete?: UseMutationResult<DeleteResponse<T>, Error, { id: string }, unknown>;
+  // fnDelete?: ( id: string ) => DeleteResponse<T>
   fnSelected?: (selectedRows: T[]) => void;
+  path?: string;
 } & (
   | {
       pagination: Pagination;
@@ -47,20 +49,33 @@ type Props<T extends Identifiable> = {
     }
 );
 
-export const Table = <T extends Identifiable>({ data, pagination, info, page, setPage, limit, setLimit, fnDelete, fnSelected, selectedData }: Props<T>) => {
-
-  const { pathname } = useLocation();
+export const Table = <T extends Identifiable>({ data, pagination, info, page, setPage, limit, setLimit, fnDelete, fnSelected, selectedData, path }: Props<T>) => {
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>( keyToShowInTable[info].map(({ key }) => key) );
   const [modalView, setModalView] = useState(false);
-  const [IdSelected, setIdSelected] = useState('');
+  const [idSelected, setIdSelected] = useState('');
 
   const handleDelete = async () => {
-    if (IdSelected) {
-      const response = await fnDelete?.mutateAsync({ id: IdSelected });
-      if (response) setModalView(false);
+    if (idSelected) {
+      const result = fnDelete?.( idSelected );
+      if (result instanceof Promise) {
+        await result; // Si es una promesa, espera a que se resuelva
+      }
+      setModalView(false);
     }
   };
+  // const handleDelete = () => {
+  //   if (idSelected && fnDelete) {
+  //     const response = fnDelete(idSelected);
+  //     if (response) setModalView(false);
+  //   }
+  // };
+  // const handleDelete = async () => {
+  //   if (idSelected) {
+  //     const response = await fnDelete?.mutateAsync({ id: idSelected });
+  //     if (response) setModalView(false);
+  //   }
+  // };
 
   const handleRowSelect = (rowData: T) => {
     if (fnSelected) {
@@ -80,17 +95,19 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
         id: "actions",
         header: () => "Acciones",
         cell: ({ row }) => (
-          <div className={tableStyles.actions}>
-            <ButtonActions
-              path={ pathname }
-              id={ row.original.id }
-              btnDelete={ fnDelete ? true : false}
-              setModalView={ setModalView }
-              setIdSelected={ setIdSelected }
-              fnSelected={() => handleRowSelect(row.original)}
-              selectedData={selectedData}
-            />
-          </div>
+
+            <div className={tableStyles.actions}>
+              <ButtonActions
+                path={ path }
+                // path={ pathname }
+                id={ row.original.id }
+                btnDelete={ fnDelete ? true : false}
+                setModalView={ setModalView }
+                setIdSelected={ setIdSelected }
+                fnSelected={() => handleRowSelect(row.original)}
+                selectedData={selectedData}
+              />
+            </div>
         ),
       }),
 
@@ -200,11 +217,7 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
                         <div
                           onMouseDown={header.getResizeHandler()}
                           onTouchStart={header.getResizeHandler()}
-                          className={`${tableStyles.resizer} ${
-                            header.column.getIsResizing()
-                              ? tableStyles.isResizing
-                              : ""
-                          }`}
+                          className={`${tableStyles.resizer} ${header.column.getIsResizing() ? tableStyles.isResizing : "" }`}
                         ></div>
                       </div>
                     )}
@@ -222,15 +235,19 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
                 key={row.id}
                 className={`${ selectedData && selectedData?.length > 0 && selectedData.some( data => data.id === row.original.id ) ? 'bg-fuchsia-300 border-2 border-black' : '' }`}
               >
-                {row.getVisibleCells().map((cell) => (
+                {row.getVisibleCells().map((cell) => {
+                  const cellValue: any = cell.getContext().getValue();
+                  const isDeleted = (typeof cellValue === 'string' && cellValue.includes('_DELETED_')) ||
+                            (typeof cellValue === 'object' && cellValue !== null && 'vendorName' in cellValue && typeof cellValue.vendorName === 'string' && cellValue.vendorName.includes('_DELETED_'));
+                  return (
                   <td
                     key={cell.id}
                     style={{ width: cell.column.getSize() }}
-                    className={`${tableStyles.td} ${tableStyles.wrapper}`}
+                    className={`${tableStyles.td} ${tableStyles.wrapper} ${isDeleted ? 'bg-red-600 text-white' : ''}`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
-                ))}
+                )})}
               </tr>
             )})}
           </tbody>

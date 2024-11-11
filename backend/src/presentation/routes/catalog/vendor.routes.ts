@@ -15,13 +15,20 @@ export class VendorRoutes {
 
         router.route('/')
             .post(controller.createVendor)
-            .get(controller.getAllCentrals)
+            .get(controller.getAllVendors)
+            
+        router.route('/clean-vendors')
+            .get(controller.getAllDeletedVendors)
+            // .delete(controller.cleanVendors)
+
+        router.route('/clean-vendors/:vendorid/permanently-delete')
+            .delete(controller.cleanVendor)
 
         router.route('/:vendorid')
             .get(controller.getVendorById)
             .put(controller.updateVendor)
             .delete(controller.deleteVendor)
-
+        
         return router
     }
 

@@ -1,7 +1,7 @@
 import { CentralModel } from '../../../data';
 import { CentralDatasource, CreateCentralDTO, CentralEntity, QueriesDTO, UpdateCentralDTO } from '../../../domain';
-import { sortBy } from '../../../helpers';
 import { CentralEntityWithPagination } from '../../../interface';
+import { generateRandomCode, sortBy } from '../../../helpers';
 
 export class CentralDatasourceImpl implements CentralDatasource {
 
@@ -21,42 +21,13 @@ export class CentralDatasourceImpl implements CentralDatasource {
 
     async getAll(queries?: QueriesDTO): Promise<CentralEntity[] | CentralEntityWithPagination> {
 
-        const [pagination, filters = {}] = QueriesDTO.pagination(queries);
+        const [pagination, filters = {}] = QueriesDTO.pagination( queries );
 
-        const query: { [key: string]: any } = {}
-
-        if (Object.keys(filters).length > 0) {
-            for (const key in filters) {
-                if (filters[key]) {
-                    switch (key) {
-                        case 'latitude':
-                        case 'longitude':
-                            if (!isNaN(filters[key])) query[key] = parseFloat(filters[key]);
-                            break;
-                        case 'status':
-                            query[key] = filters[key];
-                            break;
-                        // case 'and': // Soportar $and
-                        //     query['$and'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
-                        //     break;
-
-                        // case 'or': // Soportar $or
-                        //     query['$or'] = filters[key].map((subFilter: any) => parseSubFilter(subFilter));
-                        //     break;
-                        default:
-                            const regex = new RegExp(filters[key].replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
-                            query[key] = { $regex: regex };
-                            break;
-                    }
-                }
-            }
-        }
-
-        if (pagination) {
+        if ( pagination ) {
             const { page, limit } = pagination;
             const [totalDocs, centrals] = await Promise.all([
-                CentralModel.countDocuments( query ),
-                CentralModel.find(query || {})
+                CentralModel.countDocuments( filters ),
+                CentralModel.find( filters )
                     .limit( limit )
                     .skip( (page - 1) * limit )
                     .sort({ codeName: 1, centralName: 1 })
@@ -80,12 +51,12 @@ export class CentralDatasourceImpl implements CentralDatasource {
             };
         };
 
-        const centrals = await CentralModel.find(query || {});
+        const centrals = await CentralModel.find( filters );
         return sortBy(centrals.map(CentralEntity.fromObject), ['codeName', 'centralName']);
     }
 
     async getById(id: string): Promise<CentralEntity> {
-        const central = await CentralModel.findOne({ _id: id });
+        const central = await CentralModel.findOne({ _id: id, isDeleted: false });
         if (!central) throw "Central Not Found!";
         return CentralEntity.fromObject(central);
     }
@@ -111,10 +82,16 @@ export class CentralDatasourceImpl implements CentralDatasource {
     }
 
     async delete(id: string): Promise<CentralEntity> {
-        await this.getById(id);
-        const centralDelete = await CentralModel.findByIdAndDelete(id);
-        if (!centralDelete) throw 'Central not deleted'
-        return CentralEntity.fromObject(centralDelete)
-
+        const central = await this.getById(id);
+        const auxCode = generateRandomCode( 3 );
+        const centralDelete = await CentralModel.findOneAndUpdate(
+            { _id: id },
+            {
+                codeName: central.codeName + '_DELETE_' + auxCode,
+                siteCode: central.siteCode + '_DELETE_' + auxCode, 
+                isDeleted: true,
+            }, { new: true })
+        if( !centralDelete ) throw "Central Not Found!";
+        return CentralEntity.fromObject(centralDelete);
     }
 }

@@ -1,4 +1,4 @@
-import { CentralOwner } from '../../../interface'
+import { CentralOwnerEnum } from '../../../interface'
 import { CustomError } from '../../errors/custom.errors'
 
 export class CentralEntity {
@@ -7,7 +7,7 @@ export class CentralEntity {
                 public readonly centralName: string,
                 public readonly codeName: string,
                 public readonly siteCode: string,
-                public readonly owner: CentralOwner,
+                public readonly owner: CentralOwnerEnum,
                 public readonly status: boolean,
                 public readonly provinceName?: string,
                 public readonly districtName?: string,
@@ -40,6 +40,7 @@ export class CentralEntity {
                         observations,
                         createdAt,
                         updatedAt,
+                        isDeleted
                 } = object
 
                 if (!id && !id) throw CustomError.badRequest('Missinbg id')
@@ -48,7 +49,8 @@ export class CentralEntity {
                 if (!siteCode) throw CustomError.badRequest('Missinbg Site Code')
                 if (!owner) throw CustomError.badRequest('Missinbg Owner')
                 if (status === undefined || status === null || typeof status !== 'boolean') throw CustomError.badRequest('Missinbg status')
-                if( typeof latitude !== 'number' || typeof longitude !== 'number' ) throw CustomError.badRequest('Latitude and Longitude must be a number')
+                if ( typeof latitude !== 'number' || typeof longitude !== 'number' ) throw CustomError.badRequest('Latitude and Longitude must be a number')
+                if ( typeof isDeleted !== 'boolean' && isDeleted === undefined ) throw CustomError.badRequest(' isDeleted must be boolean and is required!')
 
                 return new CentralEntity(
                         id || _id,

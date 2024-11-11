@@ -7,6 +7,7 @@ export * from './catalog/board/IndexBoardView';
 export * from './catalog/board/NewBoardView';
 export * from './catalog/board/SearchBoardView';
 /* catalog/vendor */
+export * from './catalog/vendor/DeletedVendorsView';
 export * from './catalog/vendor/EditVendorView';
 export * from './catalog/vendor/VendorView';
 /* catalog/signal */
@@ -21,8 +22,9 @@ export * from './catalog/transceiver/TransceiverIndexView';
 
 //* Central
 export * from './central/CentralIndexView';
-export * from './central/EditCentralView';
+export * from './central/DeletedCentralsView';
 export * from './central/DetailsCentralView';
+export * from './central/EditCentralView';
 export * from './central/NewCentralView';
 export * from './central/SearchCentralView';
 

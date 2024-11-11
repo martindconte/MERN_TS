@@ -1,6 +1,7 @@
 import { CustomError } from '../../errors/custom.errors'
 
 export class VendorEntity {
+    
     constructor(
         public readonly id: string,
         public readonly vendorName: string,
@@ -14,8 +15,8 @@ export class VendorEntity {
 
         const { id, _id, vendorName, country, observation, createdAt, updatedAt } = object
 
-        if (!id && !_id) throw CustomError.badRequest('Missinbg VENDOR id')
-        if (!vendorName) throw CustomError.badRequest('Missinbg Vendor Name')
+        if (!id && !_id) throw CustomError.badRequest('Missing VENDOR id')
+        if (!vendorName) throw CustomError.badRequest('Missing Vendor Name')
 
         return new VendorEntity(
             id || _id,

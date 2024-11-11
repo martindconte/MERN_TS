@@ -6,18 +6,19 @@ interface Props {
   register: UseFormRegister<VendorFormData>;
   errors: FieldErrors<VendorFormData>;
   requiredFields?: boolean;
+  isDeleted?: boolean
 }
 
-export const FormBodyVendor = ({ register, errors, requiredFields }: Props) => {
+export const FormBodyVendor = ({ register, errors, requiredFields, isDeleted = false }: Props) => {
   return (
     <div className='flex flex-col text-black text-sm'>
       <div className='flex flex-col-reverse'>
         <div className="flex justify-between my-2 items-center space-x-3">
-          <label className="w-1/3 text-right" htmlFor="centralName">Central</label>
+          <label className="w-1/3 text-right" htmlFor="vendorName">Nombre</label>
           <input
             className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
             type="text"
-            id="centralName"
+            id="vendorName"
             placeholder="Nombre de la Central"
             {...register('vendorName', {
               required: requiredFields && 'El Nombre del Vendor es Obligatorio',
@@ -55,6 +56,23 @@ export const FormBodyVendor = ({ register, errors, requiredFields }: Props) => {
           })}
         />
       </div>
+      {
+        isDeleted && (
+          <div className="flex justify-between my-2 items-center space-x-3">
+          <label className="w-1/3 text-right text-red-600 uppercase font-semibold" htmlFor="isDeleted">Eliminado?</label>
+          <select
+            className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
+            id="isDeleted"
+            {...register('isDeleted', {
+              setValueAs: value => value === "true",
+            })}
+          >
+            <option value="true">ELIMINADO</option>
+            <option value="false">NO... VOLVER A HABILITAR</option>
+          </select>
+        </div>
+        )
+      }
     </div>
   )
 }

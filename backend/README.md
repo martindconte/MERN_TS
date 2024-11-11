@@ -9,6 +9,9 @@ Esta API permite gestionar un catálogo de transceptores, permitiendo crear, lis
 - [Scripts](#scripts)
 - [Configuración](#configuración)
 - [Endpoints](#endpoints)
+  - [Centrales](#centrals)
+    - [Crear una Central](#crear-una-central)
+    - [Buscar Centrales](#buscar-centrales)
   - [Catalogo](#catalog)
     - [Placas](#placas)
         - [Crear Catalogo de una Placa](#crear-un-catalogo-de-una-placa)
@@ -78,8 +81,232 @@ Las variables de entorno necesarias para el funcionamiento de la aplicación se 
 
 <hr style="border: 3px solid red; margin-bottom: 20px;">
 
-
 # <p style="color: red;">Endpoints</p>
+
+## <p style="color: blue">Centrals</p>
+
+## Crear una Central
+
+**URL:** `/api/central`  
+**Método:** `POST`
+**Descripción:** Este endpoint permite ***CREAR*** una **Central**
+
+**Cuerpo del request:**
+
+| Campo | Tipo | Descripción | Obligatorio | Validaciones | Valor Default | Ejemplo |
+|-------|------|-------------|-------------|--------------|---------|---------|
+| `centralName` | `String` | Nombre de la Central | Sí | Se Verifica que se ingrese el valor del tipo String | Obligatorio | "Barracas" |
+| `codeName` | `String` | Codigo de Centro (Asociado a IU) | Si | Valor Unico | Obligatorio | "B.BRR" |
+| `siteCode` | `String` | Codigo de Emplazamiento | Si | Valor Unico | Obligatorio | "ARCF0281" |
+| `provinceName` | `String` | Provincia | No | Debe ser String | `''` | Buenos Aires |
+| `districtName` | `String` | Localidad | No | Debe ser String | `''` | CABA |
+| `localityName` | `String` | Localidad | No | Debe ser String | `''` | CABA |
+| `address` | `String`| Domicilio | No | Debe ser String | `''` | Isabel la Católica No. 1374 |
+| `latitude` | `float`| Latitud | No | Debe ser Numero | 0 | -34.644789577920875 |
+| `longitude` | `float`| Longitud | No | Debe ser Numero | 0 | -58.37194540022318 |
+| `description` | `String` | Descripción de la Central | No |  Debe ser String | `''` | Central Barracas TASA 
+| `observations`| `String` | Observaciones adicionales sobre la central | No |  Debe ser String | `''` | "Centro CORE TASA" |
+| `owner`| `String` | Propietario de la central | No | Valores permitidos `enum CentralOwnerEnum [ 'TASA', 'MVS', 'OTHER' ]` | 'TASA' | "MVS" |
+| `status`  | `Boolean` | Estado de la Central (true = Activa / false = Desafectada) | No | Debe ser boolean | `true` | true |
+| `isDeleted`  | `Boolean` | Estado de la Central es la BASE DE DATOS. Si una central es ELIMINADA isDeleted pasa a true. Se utiliza este valor para no perder referencias | No | Debe ser boolean. Cuando se crea, modifica una central no se podra modificar el valor. Solo pasara a false con el **Método:** `DELETE` | `false` | true |
+
+### Example Request
+```json
+{
+  "centralName": "Barracas",
+  "codeName": "B.BRR",
+  "siteCode": "ARCF0281",
+  "provinceName": "Buenos Aires",
+  "districtName": "CABA",
+  "localityName": "CABA",
+  "address": "Isabel la Católica No. 1374",
+  "latitude": -34.644789577920875,
+  "longitude": -58.37194540022318,
+  "description": "Central Barracas TASA ",
+  "observations": "Centro CORE TASA",
+  "owner": "TASA",
+  "status": true
+}
+```
+
+### Example Response
+```json
+{
+    "status": "success",
+    "msg": "The Central has been successfully created",
+    "payload": {
+        "id": "672c2aa09360616006a8c13d",
+        "centralName": "Barracas",
+        "codeName": "B.BRR",
+        "siteCode": "ARCF0281",
+        "owner": "TASA",
+        "status": true,
+        "provinceName": "BUENOS AIRES",
+        "districtName": "CABA",
+        "localityName": "CABA",
+        "address": "Isabel la Católica No. 1374",
+        "latitude": -34.644789577920875,
+        "longitude": -58.37194540022318,
+        "description": "Central Barracas TASA",
+        "observations": "Centro CORE TASA",
+        "createdAt": "2024-11-07T02:49:04.109Z",
+        "updatedAt": "2024-11-07T02:49:04.109Z"
+    }
+}
+```
+_________________________
+
+## Buscar Centrales
+
+**URL:** `/api/central`  
+**Método:** `GET`  
+**Descripción:** Este endpoint permite obtener la lista de ***Centrales*** almacenados en base de daots. Puede utilizar parámetros de paginación opcionales para limitar la cantidad de registros retornados y navegar por páginas.
+
+**Parametros de Consulta**
+
+| Parámetro      | Tipo de Dato | Descripción                                     | Ejemplo              | Tipo de Busqueda | Obligatorio |
+|----------------|--------------|-------------------------------------------------|----------------------|------------------|-------------|
+| `limit`        | `int`        | Cantidad de registros a devolver por página     | `10`                 | Exacta           | No          |
+| `page`         | `int`        | Número de la página a consultar                 | `2`                  | Exacta           | No          |
+| `centralName`  | `string`     | Nombre de la Central                            | `Cuyo`               | Parcial          | No          |
+| `codeName`     | `string`     | Codigo de la Central (IU)                       | `B.CYO`              | Parcial          | No          |
+| `siteCode`     | `string`     | Codigo Emplazamiento                            | `ARCF0080`           | Parcial          | No          |
+| `provinceName` | `string`     | Nombre de la Provincia                          | `Buenos Aires`       | Parcial          | No          |
+| `districtName` | `string`     | Nombre del Districto                            | `CABA`               | Parcial          | No          |
+| `localityName` | `string`     | Nombre de la Localidad                          | `CABA`               | Parcial          | No          |
+| `address`      | `string`     | Domicilio de la Central                         | `Azcuenaga No. 249`  | Parcial          | No          |
+| `latitude`     | `float`      | Latitud                                         | `-34.60663350844643` | Exacta           | No          |
+| `longitude`    | `float`      | Longitud                                        | `-34.60663350844643` | Exacta           | No          |
+| `description`  | `string`     | Descripcion de la Central                       | `Centro CORE TASA`   | Parcial          | No          |
+| `observations` | `string`     | Observaciones                                   | `Centro CORE TASA`   | Parcial          | No          |
+| `owner`        | `string`     | Propietario de la Central                       | `InService`          | Exacta           | No          |
+| `status`       | `boolean`    | Estado de la Central (Habilitada o Desafectada) | `InService`          | Exacta           | No          |
+
+### Respuestas:
+
+#### Respuesta Sin Paginacion
+
+Cuando NO se envian datos de PAGINACION (limit y page) se retorna `Central[]` (Array con Objectos de Centrales)
+
+```json
+[
+    { /* datos de una central */ },
+    { /* datos de otra central */ },
+    { /* datos de otra central */ },
+    { /* datos de otra central */ },
+]
+```
+
+#### Respuesta Con Paginacion
+
+Cuando se envian datos de PAGINACION (limit y page) se retorna un Objeto con los datos:
+```json
+{
+  "payload": [ 
+    { /* datos de una central */ },
+    { /* datos de otra central */ }
+  ],
+  "pagination": {
+    "totalDocs": Number,        // Número total de documentos
+    "totalResults": Number,     // Número total de documentos (igual que totalDocs)
+    "totalPages": Number,       // Total de páginas calculadas
+    "prevPage": "Link | null",  // Link hacia la página anterior o null si no existe
+    "nextPage": "Link | null",  // Link hacia la página siguiente o null si no existe
+    "page": Number,             // Página actual
+    "hasPrevPage": Boolean,     // Indica si hay o no página anterior
+    "hasNextPage": Boolean      // Indica si hay o no página siguiente
+  }
+}
+```
+
+#### URL Ejemplo *SIN* Paginacion:
+
+`api/central?codeName=B.&districtName=CABA`
+
+#### Ejemplo de Respuesta Sin Paginacion
+
+```json
+[
+    {
+        "id": "672c31e567ceb7be3a6787d9",
+        "centralName": "BARRACAS",
+        "codeName": "B.BRR",
+        "siteCode": "ARCF0281",
+        "owner": "TASA",
+        "status": true,
+        "provinceName": "BUENOS AIRES",
+        "districtName": "CABA",
+        "localityName": "CABA",
+        "address": "Isabel la Católica No. 1374",
+        "latitude": -34.644789577920875,
+        "longitude": -58.37194540022318,
+        "description": "Central Barracas TASA",
+        "observations": "Centro CORE TASA",
+        "createdAt": "2024-11-07T03:20:05.153Z",
+        "updatedAt": "2024-11-07T03:20:05.153Z"
+    },
+    {
+        "id": "672c2b4c9360616006a8c140",
+        "centralName": "CUYO",
+        "codeName": "B.CYO",
+        "siteCode": "ARCF0080",
+        "owner": "TASA",
+        "status": true,
+        "provinceName": "BUENOS AIRES",
+        "districtName": "CABA",
+        "localityName": "CABA",
+        "address": "Azcuenaga No. 249",
+        "latitude": -34.60663350844643,
+        "longitude": -58.400605924176155,
+        "description": "Central Cuyo TASA",
+        "observations": "Centro CORE TASA",
+        "createdAt": "2024-11-07T02:51:56.295Z",
+        "updatedAt": "2024-11-07T02:51:56.295Z"
+    }
+]
+```
+#### URL Ejemplo *CON* Paginacion (se envia valores para `limit` y `page`):
+
+`api/central?limit=1&page=2&codeName=SRS&owner=OTHER`
+
+#### Example Response CON Pagination (se envia valores para `limit` y `page`)
+```json
+{
+    "payload": [
+        {
+            "id": "672c39f32e8cb7470678f8a2",
+            "centralName": "UNIVERSIDAD NACIONAL DE LA PAMPA",
+            "codeName": "SRS.03",
+            "siteCode": "UNLPAM",
+            "owner": "OTHER",
+            "status": true,
+            "provinceName": "LA PAMPA",
+            "districtName": "SANTA ROSA",
+            "localityName": "SANTA ROSA",
+            "address": "Cnel. Gil, L6300 Santa Rosa, La Pampa",
+            "latitude": -36.6203485189302,
+            "longitude": -64.28982543611876,
+            "description": "UNIVERSIDAD NACIONAL DE LA PAMPA",
+            "observations": "Sitio de Cliente",
+            "createdAt": "2024-11-07T03:54:27.813Z",
+            "updatedAt": "2024-11-07T03:54:27.813Z"
+        }
+    ],
+    "pagination": {
+        "totalDocs": 3,
+        "totalResults": 1,
+        "totalPages": 3,
+        "prevPage": "api/central?limit=1&isDeleted=false&codeName=%5Bobject+Object%5D&owner=%5Bobject+Object%5D&page=1",
+        "nextPage": "api/central?limit=1&isDeleted=false&codeName=%5Bobject+Object%5D&owner=%5Bobject+Object%5D&page=3",
+        "page": 2,
+        "hasPrevPage": true,
+        "hasNextPage": true
+    }
+}
+```
+________
+
+
 
 ## <p style="color: blue">Catalog</p>
 
@@ -89,6 +316,7 @@ Las variables de entorno necesarias para el funcionamiento de la aplicación se 
 
 **URL:** `/api/catalog/board`  
 **Método:** `POST`
+
 
 <h1 style="color:red; font-size: 50px" >TODO: TERMINAR!!!!</h1>
 

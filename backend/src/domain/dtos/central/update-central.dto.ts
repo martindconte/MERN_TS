@@ -1,4 +1,4 @@
-import { CentralOwner } from "../../../interface"
+import { CentralOwnerEnum } from "../../../interface"
 
 export class UpdateCentralDTO {
 
@@ -7,7 +7,7 @@ export class UpdateCentralDTO {
         public readonly centralName: string,
         public readonly codeName: string,
         public readonly siteCode: string,
-        public readonly owner: CentralOwner,
+        public readonly owner: CentralOwnerEnum,
         public readonly status: boolean,
         public readonly provinceName?: string,
         public readonly districtName?: string,

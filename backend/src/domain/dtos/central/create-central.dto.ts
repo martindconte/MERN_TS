@@ -1,4 +1,4 @@
-import { CentralOwner } from "../../../interface";
+import { CentralOwnerEnum } from "../../../interface";
 
 export class CreateCentralDTO {
 
@@ -6,8 +6,9 @@ export class CreateCentralDTO {
         public readonly centralName: string,
         public readonly codeName: string,
         public readonly siteCode: string,
-        public readonly owner: CentralOwner,
+        public readonly owner: CentralOwnerEnum,
         public readonly status: boolean,
+        public readonly isDeleted: boolean = false,
         public readonly provinceName?: string,
         public readonly districtName?: string,
         public readonly localityName?: string,
@@ -16,17 +17,15 @@ export class CreateCentralDTO {
         public readonly longitude?: number,
         public readonly description?: string,
         public readonly observations?: string,
-        // public readonly createdAt?: Date,
-        // public readonly updatedAt?: Date,
       ) {}
 
-    static create( central: { [key: string]: any } ): [ string?, CreateCentralDTO?] {
+    static create( central: Partial<Record<keyof CreateCentralDTO, any>> ): [ string?, CreateCentralDTO?] {
 
         const {
             centralName,
             codeName,
             siteCode,
-            owner = 'TASA',
+            owner = CentralOwnerEnum.tasa,
             status = true,
             provinceName,
             districtName,
@@ -36,8 +35,6 @@ export class CreateCentralDTO {
             longitude,
             description,
             observations,
-            // createdAt,
-            // updatedAt,
         } = central;
 
         let statusBoolean = status;
@@ -57,6 +54,7 @@ export class CreateCentralDTO {
             siteCode,
             owner,
             statusBoolean,
+            false, // isDeleted
             provinceName,
             districtName,
             localityName,
@@ -64,11 +62,7 @@ export class CreateCentralDTO {
             latitude,
             longitude,
             description,
-            observations,
-            // createdAt,
-            // updatedAt,
+            observations
         )]
-
     }
-
 }

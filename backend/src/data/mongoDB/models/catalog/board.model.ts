@@ -124,15 +124,15 @@ const boardSchema = new Schema<BoardDocument>(
     technology: {
       type: String,
       trim: true,
-      default: 'DWDM',
-      enum: BoardTechnologyEnum,
+      default: BoardTechnologyEnum.dwdm,
+      enum: Object.values(BoardTechnologyEnum),
       uppercase: true,
     },
     status: {
       type: String,
       trim: true,
-      default: '',
-      enum: BoardStatusEnum,
+      default: BoardStatusEnum.NA,
+      enum: Object.values(BoardStatusEnum),
     },
   },
   {

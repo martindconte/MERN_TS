@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { BitsRatesEnum } from "./bitsRatesTypes";
 
-
 //* enum
 export enum TransceiverTechnologyEnum {
     DWDM = 'DWDM',
@@ -141,7 +140,7 @@ export type TransceiverType = z.infer<typeof transceiverSchema>;
 export type TransceiverPaginationType = z.infer<typeof paginationSchema>;
 export type TransceiverFormData = Pick<
     TransceiverType,
-    "id" | "partNumber" | "model" | "type" | "description" | "vendor" | "observations" | "technology" | "bitsRates" | "status"
+    "partNumber" | "model" | "type" | "description" | "vendor" | "observations" | "technology" | "bitsRates" | "status"
 >
 
 //* response APIs

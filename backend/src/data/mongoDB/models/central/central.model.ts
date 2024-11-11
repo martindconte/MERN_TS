@@ -1,7 +1,27 @@
-import mongoose from 'mongoose';
+import { Schema, Document, Model, model } from 'mongoose';
 import { validateObjectId } from '../../helpers/pre.helpers';
+import { CentralOwnerEnum } from '../../../../interface';
 
-const centralSchema = new mongoose.Schema(
+interface CentralDocument extends Document {
+    centralName: string;
+    codeName: string;
+    siteCode: string;
+    provinceName: string;
+    districtName: string;
+    localityName: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    description: string;
+    owner: CentralOwnerEnum;
+    observations: string;
+    status: boolean;
+    isDeleted: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+const centralSchema = new Schema<CentralDocument>(
     {
         centralName: {
             type: String,
@@ -63,10 +83,9 @@ const centralSchema = new mongoose.Schema(
         },
         owner: {
             type: String,
-            require: true,
+            require: [true, 'Owner is required!'],
             trim: true,
-            default: 'TASA',
-            enum: ['TASA', 'MVS', 'OTHER']
+            default: CentralOwnerEnum.tasa
         },
         observations: {
             type: String,
@@ -77,6 +96,10 @@ const centralSchema = new mongoose.Schema(
             type: Boolean,
             default: true
         },
+        isDeleted: {
+            type: Boolean,
+            default: false,
+        }
     },
     {
         timestamps: true
@@ -92,4 +115,4 @@ centralSchema.pre('findOne', function (next) {
     validateObjectId(this.getQuery(), next);
 });
 
-export const CentralModel = mongoose.model('Central', centralSchema)
+export const CentralModel: Model<CentralDocument> = model('Central', centralSchema)

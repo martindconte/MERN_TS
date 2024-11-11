@@ -3,15 +3,21 @@ export class UpdateVendorDTO {
     private constructor(
         public readonly id: string,
         public readonly vendorName: string,
+        private readonly isDeleted: boolean = false,
         public readonly observation?: string,
         public readonly country?: string,
         public readonly createdAt?: Date,
         public readonly updatedAt?: Date,
     ) {}
 
-    static create( vendor: { [key: string]: any } ): [ string?, UpdateVendorDTO?] {
+    get getIsDeleted() {
+        return this.isDeleted
+    }
 
-        const { id, vendorName, observation, country, createdAt, updatedAt } = vendor
+    static create( vendor: UpdateVendorDTO ): [ string?, UpdateVendorDTO?] {
+    // static create( vendor: Partial<Record<keyof UpdateVendorDTO, any>> ): [ string?, UpdateVendorDTO?] {
+        
+        const { id, vendorName, observation, country, createdAt, updatedAt, isDeleted = false } = vendor
 
         if(!id) return ['Missing Id']
         if(!vendorName) return ['Missing Central Name']
@@ -26,7 +32,8 @@ export class UpdateVendorDTO {
 
         return [ undefined, new UpdateVendorDTO(
             id,
-            vendorName,
+            vendorName.includes('_DELETED_') ? vendorName.replace('_DELETED_', '') : vendorName,
+            isDeleted,
             observation,
             country,
             createdAt,
