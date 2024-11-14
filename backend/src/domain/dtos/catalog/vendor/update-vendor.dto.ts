@@ -19,7 +19,7 @@ export class UpdateVendorDTO {
         
         const { id, vendorName, observation, country, createdAt, updatedAt, isDeleted = false } = vendor
 
-        if(!id) return ['Missing Id']
+        if(!id) return ['Missing Id to Update Vendor']
         if(!vendorName) return ['Missing Central Name']
         if( createdAt ) {
             const date = new Date( createdAt )

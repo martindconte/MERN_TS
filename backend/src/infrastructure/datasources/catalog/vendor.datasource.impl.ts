@@ -27,6 +27,9 @@ export class VendorDatasourceImpl implements VendorDataSource {
             new BoardDatasourceImpl().getAll({ vendor:{ $in: ids }})
         ]);
 
+        // console.log('transceiversWidthVendorDeleted desde IMPL ----> ********** \n', transceiversWidthVendorDeleted);
+        // console.log('boardsWidthVendorDeleted ----> ********** \n', boardsWidthVendorDeleted);
+
         return {
             vendors: vendorsDeleted,
             boards: boardsWidthVendorDeleted as BoardEntity[],
@@ -41,7 +44,7 @@ export class VendorDatasourceImpl implements VendorDataSource {
         return VendorEntity.fromObject( vendor ) 
     };
 
-    async getByIdDeleted( id: VendorEntity['id'] ): Promise<VendorsDeletedType> {
+    async getByIdDeletedVendor( id: VendorEntity['id'] ): Promise<VendorsDeletedType> {
         const vendor = await this.getById( id, { isDeleted: true } );
         const [transceiversWidthVendorDeleted, boardsWidthVendorDeleted] = await Promise.all([
             TransceiverModel.find({ vendor: id }),
@@ -57,7 +60,7 @@ export class VendorDatasourceImpl implements VendorDataSource {
 
     async updateById(updateVendorDTO: UpdateVendorDTO, queries?: QueriesVendorDTO): Promise<VendorEntity> {
 
-        const { isDeleted } = queries || {}
+        const { isDeleted = false } = queries || {}
 
         await this.getById(updateVendorDTO.id, { isDeleted });
 
@@ -83,7 +86,7 @@ export class VendorDatasourceImpl implements VendorDataSource {
             { _id: id },
             { 
                 vendorName: vendor.vendorName + '_DELETED_' + generateRandomCode( 3 ),
-                isDeleted: true
+                isDeleted: true,
             },
             { new: true })
         if (!vendorDeleted) throw 'Vendor not deleted'
@@ -91,7 +94,7 @@ export class VendorDatasourceImpl implements VendorDataSource {
     };
 
     async cleanVendor( id: VendorEntity['id'] ): Promise<VendorEntity>  {
-        const { transceivers, boards } = await this.getByIdDeleted( id );
+        const { transceivers, boards } = await this.getByIdDeletedVendor( id );
         if( transceivers.length > 0 || boards.length > 0 ) throw 'Vendor not deleted. Vendor has associated transceivers or boards';
         const vendorCleaned = await VendorModel.findByIdAndDelete( id );
         if( vendorCleaned ) {

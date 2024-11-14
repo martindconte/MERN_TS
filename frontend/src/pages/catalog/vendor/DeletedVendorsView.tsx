@@ -1,13 +1,13 @@
 import { useMemo, useState } from 'react'
 import { BtnNavVendor, Spinner, Table } from '../../../components'
-import { useVendorMutation, useVendors } from '../../../hook'
+import { useVendorMutation, useVendorsDeleted } from '../../../hook'
 import { VendorDeletedType, VendorType } from '../../../types'
 
 export const DeletedVendorsView = () => {
 
   const [filter, setFilter] = useState<string>('');
 
-  const { queryVendorsDeleted } = useVendors({});
+  const { queryVendorsDeleted } = useVendorsDeleted({});
   const { mutationPermanentlyDeleteVendor } = useVendorMutation()
 
   const filteredVendor: VendorDeletedType = useMemo(() => {
@@ -29,7 +29,6 @@ export const DeletedVendorsView = () => {
       <div className='flex items-start gap-6 px-4 my-6'>
         <h2 className='basis-1/2 text-4xl uppercase font-bold text-right'>Proveedores / Vendors <span className='text-red-500'>Eliminados</span></h2>
         <h3 className='basis-1/2 text-lg uppercase font-bold text-left'>Verifica y Limpia los Registros de Proveedores que aun se encuentran asociados a distintos equipamientos</h3>
-
       </div>
       {
         queryVendorsDeleted.isLoading

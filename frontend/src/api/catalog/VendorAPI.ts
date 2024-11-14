@@ -102,7 +102,7 @@ export const getAllDeletedVendors = async (): Promise<VendorDeletedType> => {
         if( success ) {
             return data;
         } else {
-            throw Error('Validation failed! Check Info')
+            throw Error('Validation failed! Check Info Vendor')
         };
     } catch (error) {
         console.log(error);
@@ -114,20 +114,15 @@ export const getAllDeletedVendors = async (): Promise<VendorDeletedType> => {
 export const cleanVendor = async ( id: VendorType['id'] ) => {
     try {
         const { data: { msg, payload } } = await api.delete(`catalog/vendor/clean-vendors/${ id }/permanently-delete`);
-        console.log({msg});
-        console.log({payload});
         const dataMapped = {
             msg,
             payload: vendorMapped( payload )
         };
-        console.log({dataMapped});
         const { success, data } = responseAPIVendor.safeParse( dataMapped );
-        console.log({success});
-        console.log({data});
         if( success ) return data;
     } catch (error) {
         console.log(error);
         if (isAxiosError(error) && error.response) throw new Error(error.response.data.msg); 
         throw error; // Re-throw the error if it's not an AxiosError
-    }
-}
+    };
+};

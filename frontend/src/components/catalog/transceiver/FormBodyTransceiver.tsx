@@ -1,15 +1,17 @@
 import { FieldErrors, UseFormRegister } from 'react-hook-form'
-import {  /*TransceiverBitsRatesEnum, */ BitsRatesEnum, TransceiverFormData, TransceiverTechnologyEnum, VendorType } from '../../../types'
+import {  /*TransceiverBitsRatesEnum, */ BitsRatesEnum, TransceiverFormData, VendorType } from '../../../types'
 import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm'
+import { TechnologyEnum } from '../../../types/catalog/commonTypes'
 
 interface Props {
     register: UseFormRegister<TransceiverFormData>
     errors: FieldErrors<TransceiverFormData>
     vendors: VendorType[]
-    requiredFields?: boolean
+    requiredFields?: boolean;
+    isDeleted?: boolean
 }
 
-export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields }: Props) => {
+export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields, isDeleted }: Props) => {
 
     return (
         <div className='flex flex-col text-black text-sm'>
@@ -37,6 +39,7 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
                         id="vendor"
                         {...register('vendor', {
                             required: requiredFields && 'Debe Seleccionar un Proveedor',
+                            setValueAs: value => typeof value === 'object' && value !== null ? value.id : value,
                         })}
                     >
                         <option value=''></option>
@@ -53,13 +56,13 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
                 {errors.vendor && <ErrorMsgForm>{errors.vendor.message}</ErrorMsgForm>}
             </div>
             <div className="flex justify-between my-2 items-center space-x-3">
-                <label className="w-1/3 text-right" htmlFor="model">Model</label>
+                <label className="w-1/3 text-right" htmlFor="modelName">Model</label>
                 <input
                     className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
                     type="text"
-                    id="model"
+                    id="modelName"
                     placeholder="Ingrese el modelo. Si no posee Ingrese PN"
-                    {...register('model', {
+                    {...register('modelName', {
                         setValueAs: value => value.trim(),
                     })}
                 />
@@ -112,7 +115,7 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
                     >
                         <option value=''></option>
                         {
-                            Object.values(TransceiverTechnologyEnum).map(technology => (
+                            Object.values(TechnologyEnum).map(technology => (
                                 <option
                                     key={technology}
                                     value={technology}>{technology}</option>
@@ -141,11 +144,11 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
                 </div>
             </div>
             <div className="flex justify-between my-2 items-center space-x-3">
-                <label className="w-1/3 text-right" htmlFor="status">Estado</label>
+                <label className="w-1/3 text-right" htmlFor="roadmap">ROADMAP</label>
                 <select
                     className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
-                    id="status"
-                    {...register('status')}
+                    id="roadmap"
+                    {...register('roadmap')}
                 >
                     <option value="">Sin Datos...</option>
                     <option value="InService">InService</option>
@@ -153,6 +156,23 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields 
                     <option value="EndOfMarketing">EndOfMarketing</option>
                 </select>
             </div>
+            {
+                isDeleted && (
+                    <div className="flex justify-between my-2 items-center space-x-3">
+                        <label className="w-1/3 text-right text-red-600 uppercase font-semibold" htmlFor="isDeleted">Eliminado?</label>
+                        <select
+                            className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
+                            id="isDeleted"
+                            {...register('isDeleted', {
+                                setValueAs: value => value === "true",
+                            })}
+                        >
+                            <option value="true">ELIMINADO</option>
+                            <option value="false">NO... VOLVER A HABILITAR</option>
+                        </select>
+                    </div>
+                )
+            }
         </div>
     )
 }

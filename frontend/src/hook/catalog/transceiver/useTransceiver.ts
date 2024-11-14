@@ -4,13 +4,14 @@ import { getTransceiver } from '../../../api';
 
 interface Props {
     id: TransceiverType['id'];
+    searchParams?: string
 }
 
-export const useTransceiver = ({ id }: Props) => {
+export const useTransceiver = ({ id, searchParams }: Props) => {
 
     const queryTransceiver = useQuery({
         queryKey: [ 'transceiver', id ],
-        queryFn: async () => await getTransceiver( id ),
+        queryFn: async () => await getTransceiver( id, searchParams ),
         retry: false,
         refetchOnWindowFocus: false,
     })

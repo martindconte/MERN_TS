@@ -1,6 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { useVendors } from '../../../../hook'
-import { BitsRatesEnum, TransceiverFormData, TransceiverStatusEnum, TransceiverTechnologyEnum, TransceiverType } from '../../../../types'
+import { BitsRatesEnum, RoadmapEnum, TechnologyEnum, TransceiverFormData, TransceiverType } from '../../../../types'
 import { Spinner } from '../../../shared/spinners/Spinner'
 
 interface Props {
@@ -149,7 +149,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                     >
                         <option value=''></option>
                         {
-                            Object.values(TransceiverTechnologyEnum).map(technology => (
+                            Object.values(TechnologyEnum).map(technology => (
                                 <option
                                     key={technology}
                                     value={technology}>{technology}</option>
@@ -158,19 +158,19 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                     </select>
                 </div>
                 <div className="flex justify-between my-2 items-center space-x-3">
-                    <label className="w-1/3 text-right" htmlFor="status">Estado</label>
+                    <label className="w-1/3 text-right" htmlFor="roadmap">ROADMAP</label>
                     <select
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
-                        id="status"
-                        name="status"
+                        id="roadmap"
+                        name="roadmap"
                         onChange={event => handleOnChange(event)}
                     >
                         <option value="">Sin Datos...</option>
                         {
-                            Object.values(TransceiverStatusEnum).map(status => (
+                            Object.values(RoadmapEnum).map(roadmap => (
                                 <option
-                                    key={status}
-                                    value={status}>{status}</option>
+                                    key={roadmap}
+                                    value={roadmap}>{roadmap}</option>
                             ))
                         }
                     </select>

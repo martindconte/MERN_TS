@@ -63,7 +63,7 @@ export class BoardEntity {
 
         const { id, _id, boardName, partNumber, vendor, signals, description, observations, ports, slotSize, technology, status, createdAt, updatedAt } = object
 
-        if ( !id && !_id ) throw CustomError.badRequest('Missing id');
+        if ( !id && !_id ) throw CustomError.badRequest('Missing id Entity Board');
         if ( !boardName ) throw CustomError.badRequest('Missing BoardName Board');
         if ( !partNumber ) throw CustomError.badRequest('Missing partNumber Board');
         if ( !vendor ) throw CustomError.badRequest('Missing vendor');

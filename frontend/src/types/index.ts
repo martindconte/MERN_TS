@@ -1,11 +1,14 @@
 //* FOLDER --> types
 
 //* Catalog
-/* signal --> types/catalog/signal */
+/* bitRates --> types/catalog/bitRates */
 export * from './catalog/bitsRatesTypes'
 
-/* signal --> types/catalog/signal */
+/* board --> types/catalog/board */
 export * from './catalog/boardTypes'
+
+/* common --> types/catalog/board */
+export * from './catalog/commonTypes'
 
 /* signal --> types/catalog/signal */
 export * from './catalog/signalTypes'

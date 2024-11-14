@@ -23,5 +23,4 @@ export class SubrackRepositoryImpl implements SubrackRepository {
     deleteById(id: string): Promise<SubrackEntity> {
         return this.datasource.deleteById( id )
     }
-
 }

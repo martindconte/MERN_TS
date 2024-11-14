@@ -57,13 +57,16 @@ const equipmentsPortsSchema = z.object({
     techonology: z.string(),
 })
 
+//! transceiverTypes importa boardSchema y boardSchema importa transceiverTypes esto creo una refrencia circular! Se soluciono con z.lazy (funcionalidad de zod)
+//! otra opcion es mover las partes comunes a un archivo y realizar las importantes desde ahi...
+
 const portsInBoardSchema = z.object({
     port: z.number(),
     type: z.nativeEnum(BoardPortType).default(BoardPortType.any),
     physical: z.string(),
     NMS: z.string(),
     equipment: z.union([
-        z.array( transceiverSchema ).optional().default([]),
+        z.array( z.lazy(() => transceiverSchema )).optional().default([]),
         z.array( equipmentsPortsSchema ).optional().default([])
     ]),
     logicalFacilities: z.record(z.nativeEnum( LogicalSignal ), z.array(z.string())),

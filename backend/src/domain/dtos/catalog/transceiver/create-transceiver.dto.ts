@@ -1,43 +1,42 @@
-import { BitsRatesEnum, StatusEnum, TechnologyEnum } from '../../../../interface';
+import { BitsRatesEnum, RoadmapEnum, TechnologyEnum } from '../../../../interface';
 
 export class CreateTransceiverDTO {
     constructor(
         public readonly partNumber: string,
         public readonly vendor: string,
+        private readonly isDeleted: boolean = false,
         public readonly type?: string,
-        public readonly model?: string,
+        public readonly modelName?: string,
         public readonly description?: string,
         public readonly observations?: string,
         public readonly technology?: TechnologyEnum,
         public readonly bitsRates?: BitsRatesEnum[],
-        public readonly status?: StatusEnum,
+        public readonly roadmap?: RoadmapEnum,
     ) { }
 
-    static create(transceiver: { [key: string]: any }): [string?, CreateTransceiverDTO?] {
-        const { partNumber, vendor, type, model, description, observations, technology, bitsRates, status } = transceiver
+    static create(transceiver: CreateTransceiverDTO): [string?, CreateTransceiverDTO?] {
+        const { partNumber, vendor, type, modelName, description, observations, technology, bitsRates, roadmap } = transceiver
 
-        console.log(bitsRates);
-        console.log(bitsRates.every((rate: any) => Object.values(BitsRatesEnum).includes(rate)));
-        
         if( !partNumber ) throw ['Missing Part Number'];
         if( !vendor ) throw ['Missinbg Vendor'];
-        if( technology && !Object.values(TechnologyEnum ).includes( technology.toUpperCase()) ) throw ['Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO'];
+        if( technology && !Object.values( TechnologyEnum ).includes( technology ) ) throw ['Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO'];
         if( !Array.isArray(bitsRates) ) throw ['Invalid bitsRate']
         if( bitsRates && Array.isArray(bitsRates) && bitsRates.length > 0 && !bitsRates.every((rate: any) => Object.values(BitsRatesEnum).includes(rate)) ) throw ['Invalid bitsRate'];
-        if( status && !Object.values(StatusEnum).includes(status) ) throw ['Invalid Status'];
+        if( roadmap && !Object.values( RoadmapEnum ).includes( roadmap ) ) throw ['Invalid Status'];
 
         return [
             undefined,
             new CreateTransceiverDTO( 
                 partNumber,
                 vendor,
+                false,
                 type,
-                model,
+                modelName,
                 description,
                 observations,
                 technology,
                 bitsRates,
-                status,
+                roadmap,
             )
         ]
     }

@@ -1,8 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { createTransceiver, deleteTransceiver, updateTransceiver } from '../../../api'
+import { cleanTransceiver, createTransceiver, deleteTransceiver, updateTransceiver } from '../../../api'
 import { TransceiverType, TransceiverFormData } from '../../../types'
 
+interface IUpdate {
+  id: TransceiverType['id'];
+  formData: TransceiverFormData;
+  searchParams?: string
+}
 
 export const useTransceiverMutation = () => {
 
@@ -14,26 +19,26 @@ export const useTransceiverMutation = () => {
     onSuccess: (response) => {
       if (response) {
         const { msg, payload } = response
-        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.model} / Description: ${payload.description}`, {
+        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.modelName} / Description: ${payload.description}`, {
           theme: 'colored'
         })
       }
     }
-  })
+  });
 
   const mutationUpdateTransceiver = useMutation({
-    mutationFn: async ({ id, formData }: { id: TransceiverType['id']; formData: TransceiverFormData }) => await updateTransceiver({ id, formData }),
+    mutationFn: async ( { id, formData, searchParams }: IUpdate ) => await updateTransceiver({ id, formData, searchParams }),
     onError: (error) => toast.error(error.message, { theme: 'colored' }),
     onSuccess: (response) => {
       if (response) {
         const { msg, payload } = response
         queryClient.invalidateQueries({ queryKey: ['transceiver', payload.id] })
-        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.model} / Description: ${payload.description}`, {
+        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.modelName} / Description: ${payload.description}`, {
           theme: 'colored'
         })
       }
     }
-  })
+  });
 
   const mutationDeleteTransceiver = useMutation({
     mutationFn: async ({ id }: { id: TransceiverType['id'] } ) => {
@@ -48,7 +53,23 @@ export const useTransceiverMutation = () => {
         queryClient.invalidateQueries({
           queryKey: ['transceivers']
         })
-        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.model} / Description: ${payload.description}`, {
+        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.modelName} / Description: ${payload.description}`, {
+          theme: 'colored'
+        })
+      }
+    }
+  });
+
+  const mutationPermanentlyDeleteTransceiver = useMutation({
+    mutationFn: async ( id: TransceiverType['id'] ) => await cleanTransceiver( id ),
+    onError: (error) => toast.error(error.message, { theme: 'colored' }),
+    onSuccess: (response) => {
+      if (response) {
+        const { msg, payload } = response
+        queryClient.invalidateQueries({
+          queryKey: ['transceivers']
+        })
+        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.modelName} / Description: ${payload.description}`, {
           theme: 'colored'
         })
       }
@@ -59,5 +80,6 @@ export const useTransceiverMutation = () => {
     mutationCreateTransceiver,
     mutationUpdateTransceiver,
     mutationDeleteTransceiver,
+    mutationPermanentlyDeleteTransceiver
   }
 }

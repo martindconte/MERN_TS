@@ -82,6 +82,13 @@ export const DetailsTransceiverView = () => {
         <div className="w-80 h-fit bg-gray-50 px-3 py-4 rounded-lg text-sm space-y-2">
           {
             transceiverKeys.map(({ key, label }) => {
+              if( key === 'vendor' ) {
+                const value = queryTransceiver.data?.[key]
+                return (
+                  <p key={key} className="break-words">
+                    <strong className="uppercase mr-1">{label}:</strong>{ value?.vendorName }</p>
+                );
+              }
               const value = queryTransceiver.data![key as keyof typeof queryTransceiver.data];
               return (
                 <p key={key} className="break-words">

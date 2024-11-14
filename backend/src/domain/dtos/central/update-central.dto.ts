@@ -25,7 +25,7 @@ export class UpdateCentralDTO {
 
         const { id, centralName, codeName, siteCode, owner, status, provinceName, districtName, localityName, address, latitude, longitude, description, observations, createdAt, updatedAt } = central
 
-        if (!id) return ['Missing id']
+        if (!id) return ['Missing id to Update Central']
         if (!centralName) return ['Missing Central Name']
         if (!codeName) return ['Missing Code Name']
         if (!siteCode) return ['Missing Site Code']

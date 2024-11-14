@@ -1,16 +1,21 @@
-import mongoose from 'mongoose'
-import { BitsRatesEnum } from '../../../../interface';
+import { Document, Model, Schema, Types } from 'mongoose'
+import { BitsRatesEnum, RoadmapEnum, TechnologyEnum } from '../../../../interface';
+import { model } from 'mongoose';
 
-// const BitRatesValues = [
-//     "STM-1", "STM-4", "STM-16", "STM-64", "OC-3", "OC-12", "OC-48", "OC-192",
-//     "FE", "GE", "10GE WAN", "10GE LAN", "25GE", "40GE", "50GE", "100GE",
-//     "200GE", "400GE", "FlexE 100G unaware", "FlexE 200G unaware", "FDDI",
-//     "ESCON", "FC100/FICON", "FC200/FICON Express", "FC400/FICON4G", "FC800/FICON8G",
-//     "FC1200/FICON10G", "FC1600", "FC3200", "OTU1", "OTU2", "OTU2e", "OTU4",
-//     "OCH", "DVB-ASI", "SD-SDI", "HD-SDI", "HD-SDIRBR", "3G-SDI", "3G-SDIRBR"
-// ] as const;
+interface TransceiverDocument extends Document {
+    partNumber: string;
+    vendor: Types.ObjectId;
+    type?: string;
+    modelName?: string;
+    description?: string;
+    observations?: string;
+    technology?: TechnologyEnum;
+    bitsRates?: BitsRatesEnum[];
+    roadmap?: RoadmapEnum;
+    isDeleted: boolean;
+}
 
-const transceiverSchema = new mongoose.Schema(
+const transceiverSchema = new Schema<TransceiverDocument>(
     {
         partNumber: {
             type: String,
@@ -24,7 +29,7 @@ const transceiverSchema = new mongoose.Schema(
             trim: true,
             uppercase: true,
         },
-        model: {
+        modelName: {
             type: String,
             trim: true,
             uppercase: true,
@@ -34,7 +39,7 @@ const transceiverSchema = new mongoose.Schema(
             trim: true,
         },
         vendor: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             require: [true, 'Vendor is required!'],
             ref: 'Vendor',
             default: '',
@@ -46,22 +51,24 @@ const transceiverSchema = new mongoose.Schema(
         technology: {
             type: String,
             trim: true,
-            default: 'DWDM',
+            default: TechnologyEnum.dwdm,
             uppercase: true,
-            enum: ['DWDM', 'SDH', 'RX', 'CWDM', 'IP', 'GENERIC']
+            enum: Object.values( TechnologyEnum )
         },
         bitsRates: [{
             type: String,
             enum: BitsRatesEnum,
             default: [],
-            trim: true
         }],
-        status: {
+        roadmap: {
             type: String,
-            trim: true,
-            default: '',
-            enum: ['InService', 'EndOfSupport', 'EndOfMarketing', '']
+            default: RoadmapEnum.NA,
+            enum: Object.values( RoadmapEnum )
         },
+        isDeleted: {
+            type: Boolean,
+            default: false
+        },        
     },
     {
         timestamps: true
@@ -76,4 +83,4 @@ transceiverSchema.set('toJSON', {
     },
 })
 
-export const TransceiverModel = mongoose.model('Transceiver', transceiverSchema)
+export const TransceiverModel: Model<TransceiverDocument> = model('Transceiver', transceiverSchema);

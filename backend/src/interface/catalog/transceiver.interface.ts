@@ -1,20 +1,12 @@
-import { TransceiverEntity } from "../../domain";
+import { BoardEntity, SubrackEntity, TransceiverEntity } from "../../domain";
 
-export enum TechnologyEnum {
-    dwdm = 'DWDM',
-    sdh = 'SDH',
-    rx = 'RX',
-    cwdm = 'CWDM',
-    ip = 'IP',
-    generic = 'GENERICO'
-};
-
-export enum StatusEnum {
+//! NO UTILIZAR --> PASARA A ROADMAP
+export enum StatusEnumNO {
     InService = 'InService',
     EndOfSupport = 'EndOfSupport',
     EndOfMarketing = 'EndOfMarketing',
     NA = '',
-}
+};
 
 export interface TransceiverEntityWithPagination {
     payload: TransceiverEntity[];
@@ -29,3 +21,13 @@ export interface TransceiverEntityWithPagination {
         hasNextPage: boolean;
     };
 };
+
+export interface ITransceiversDeleted {
+    transceivers: TransceiverEntity[],
+    boards: BoardEntity[],
+    subracks: SubrackEntity[],
+}
+
+export type ITransceiverDeleted = Omit<ITransceiversDeleted, 'transceivers'> & {
+    transceiver: TransceiverEntity;
+  };

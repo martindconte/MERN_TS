@@ -5,7 +5,7 @@ export const BtnNavTransceiver = () => {
   const location = useLocation();
 
   return (
-    <div className="w-full text-xs font-roboto py-5 flex justify-center items-stretch gap-4">
+    <div className="w-3/4 text-xs font-roboto py-5 flex justify-center items-stretch gap-4">
       <button
         onClick={() => navigate(-1)}
         className="basis-1/2 uppercase flex justify-center items-center bg-green-400 py-2 px-3 rounded-lg font-semibold hover:bg-green-600 hover:text-black"
@@ -30,6 +30,13 @@ export const BtnNavTransceiver = () => {
           <span className="material-symbols-outlined">search</span>
         </Link>
       )}
+      <Link
+        to="../deleted"
+        className="basis-1/2 uppercase flex justify-center items-center gap-3 bg-red-400 py-2 px-3 rounded-lg font-semibold hover:bg-red-600"
+      >
+        Ver Transceivers Eliminados
+        <span className="material-symbols-outlined">search</span>
+      </Link>
     </div>
   );
 };

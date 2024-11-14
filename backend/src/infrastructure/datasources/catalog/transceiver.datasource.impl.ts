@@ -1,7 +1,9 @@
-import { TransceiverModel } from '../../../data';
-import { CreateTransceiverDTO, QueriesDTO, TransceiverDatasource, TransceiverEntity, UpdateTransceiverDTO } from '../../../domain';
-import { sortBy } from '../../../helpers';
-import { TransceiverEntityWithPagination } from '../../../interface';
+import { BoardModel, SubrackModel, TransceiverModel } from '../../../data';
+import { BoardEntity, CreateTransceiverDTO, QueriesDTO, SearchTransceiverDTO, SubrackEntity, TransceiverDatasource, TransceiverEntity, UpdateTransceiverDTO } from '../../../domain';
+import { generateRandomCode, sortBy } from '../../../helpers';
+import { ITransceiverDeleted, ITransceiversDeleted, TransceiverEntityWithPagination } from '../../../interface';
+import { BoardDatasourceImpl } from './board.datasource.impl';
+import { SubrackDatasourceImpl } from './subrack.datasource.impl';
 
 export class TransceiverDatasourceImpl implements TransceiverDatasource {
 
@@ -14,7 +16,7 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
                     $and: [
                         { model: { $exists: true } },
                         { model: { $ne: '' } },
-                        { model: createTransceiverDTO.model }
+                        { model: createTransceiverDTO.modelName }
                     ],
                 },
             ],
@@ -32,39 +34,44 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
 
     async getAll(queries?: QueriesDTO): Promise<TransceiverEntity[] | TransceiverEntityWithPagination> {
 
-        const [pagination, filters = {}] = QueriesDTO.pagination(queries)
+        const [pagination, filters = {}] = QueriesDTO.pagination(queries);
         if (pagination) {
-            const { page, limit } = pagination
+            const { page, limit } = pagination;
             const [totalDocs, transceivers] = await Promise.all([
                 TransceiverModel.countDocuments(filters || {}),
-                TransceiverModel.aggregate([
-                    { $match: filters },
-                    {
-                        $lookup: {
-                            from: 'vendors',
-                            localField: 'vendor',
-                            foreignField: '_id',
-                            as: 'vendor'
-                        },
-                    },
-                    {
-                        $unwind: '$vendor'
-                    },
-                    {
-                        $sort: {
-                            'vendor.vendorName': 1, // Ordenar por vendorName
-                            type: 1,
-                            partNumber: 1,
-                            model: 1
-                        }
-                    },
-                    {
-                        $skip: (page - 1) * limit // Paginación
-                    },
-                    {
-                        $limit: limit // Limitar la cantidad de resultados
-                    }
-                ])
+                TransceiverModel.find( filters )
+                    .populate([
+                        { path: 'vendor', select: 'vendorName' }
+                    ])
+
+                // TransceiverModel.aggregate([
+                //     { $match: filters },
+                //     {
+                //         $lookup: {
+                //             from: 'vendors',
+                //             localField: 'vendor',
+                //             foreignField: '_id',
+                //             as: 'vendor'
+                //         },
+                //     },
+                //     {
+                //         $unwind: '$vendor'
+                //     },
+                //     {
+                //         $sort: {
+                //             'vendor.vendorName': 1, // Ordenar por vendorName
+                //             type: 1,
+                //             partNumber: 1,
+                //             model: 1
+                //         }
+                //     },
+                //     {
+                //         $skip: (page - 1) * limit // Paginación
+                //     },
+                //     {
+                //         $limit: limit // Limitar la cantidad de resultados
+                //     }
+                // ])
 
             ]);
 
@@ -83,26 +90,60 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
                     hasNextPage: page < totalPages,
                 }
             };
-        }
+        };
 
+        
         const transceivers = await TransceiverModel.find(filters || {}).populate('vendor', 'vendorName')
-        return sortBy( transceivers.map(TransceiverEntity.fromObject), [ 'vendor.vendorName', 'type', 'partNumber', 'model' ] );
+        return sortBy(transceivers.map(TransceiverEntity.fromObject), ['vendor.vendorName', 'type', 'partNumber', 'model']);
+    };
+
+    async getAllDeleted(): Promise<ITransceiversDeleted> {
+        const transceiversDeleted = await TransceiverModel.find({ isDeleted: true }).populate([{ path: 'vendor', select: 'vendorName' }]);        
+        const ids = transceiversDeleted.map(( transceiver ) => transceiver.id );
+        const [boards, subracks] = await Promise.all([
+            new BoardDatasourceImpl().getAll({ ports: { $elemMatch: { equipment: { $in: ids }}}}),
+            new SubrackDatasourceImpl().getAll({ vendor:{ $in: ids }})
+        ]);
+
+        return {
+            transceivers: sortBy(transceiversDeleted.map( TransceiverEntity.fromObject ), ['vendor.vendorName', 'type', 'partNumber', 'model']),
+            boards: sortBy(boards as BoardEntity[], ['vendor.vendorName', 'partNumber', 'boardName']),
+            subracks: subracks as SubrackEntity[],
+        }
     }
 
-    async getById(id: TransceiverEntity["id"]): Promise<TransceiverEntity> {
-        const transceiver = await TransceiverModel.findOne({ _id: id });
-        if (!transceiver) throw new Error(`The Transceiver whit this Part Number or Model is already registered`);
+    async getById(id: TransceiverEntity["id"], queries?: SearchTransceiverDTO): Promise<TransceiverEntity> {
+        const { isDeleted = false } = queries || {};
+        const transceiver = await TransceiverModel.findOne({ _id: id, isDeleted });
+        if (!transceiver) throw new Error(`Transceiver not found!`);
         await transceiver.populate([
             { path: 'vendor', select: 'vendorName' },
-            // { path: 'signals', select: 'type subType' }
         ]);
         return TransceiverEntity.fromObject(transceiver);
     }
 
-    async updateById(updateTransceiverDTO: UpdateTransceiverDTO): Promise<TransceiverEntity> {
-        const transceiver = await TransceiverModel.findOne({ _id: updateTransceiverDTO.id});
+    async getByIdDeleted(id: TransceiverEntity['id']): Promise<ITransceiverDeleted> {
+        const transceiver = await this.getById(id, { isDeleted: true });
+        const [boards, subracks] = await Promise.all([
+            BoardModel.find({ ports: { $elemMatch: { equipment: { $in: id }}}}),
+            SubrackModel.find({ vendor: id }),
+        ])
 
-        if( !transceiver ) throw new Error(`Transceiver not Found!`);
+        return {
+            transceiver: transceiver,
+            boards: boards.map(BoardEntity.fromObject),
+            subracks: subracks.map(SubrackEntity.fromObject)
+        }
+    }
+
+    async updateById(updateTransceiverDTO: UpdateTransceiverDTO, queries?: SearchTransceiverDTO): Promise<TransceiverEntity> {
+
+        const { isDeleted = false } = queries || {};
+
+        await this.getById(updateTransceiverDTO.id, { isDeleted })
+        // const transceiver = await TransceiverModel.findOne({ _id: updateTransceiverDTO.id, isDeleted });
+
+        // if( !transceiver ) throw new Error(`Transceiver not Found!`);
 
         const trasceiverDuplicated = await TransceiverModel.findOne({
             $and: [
@@ -111,7 +152,7 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
             ]
         });
 
-        if( trasceiverDuplicated ) throw new Error(`The Transceiver whit this Part Number ${ updateTransceiverDTO.partNumber } already registered`);
+        if (trasceiverDuplicated) throw new Error(`The Transceiver whit this Part Number ${updateTransceiverDTO.partNumber} already registered`);
 
         const transceiverUpdated = await TransceiverModel.findByIdAndUpdate(
             updateTransceiverDTO.id,
@@ -119,17 +160,39 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
             { new: true },
         ).populate({ path: 'vendor', select: 'vendorName' });
 
-        if( !transceiverUpdated ) throw new Error('Error - Update Transceiver failed');
-        return TransceiverEntity.fromObject( transceiverUpdated );
+        if (!transceiverUpdated) throw new Error('Error - Update Transceiver failed');
+        return TransceiverEntity.fromObject(transceiverUpdated);
     }
 
     async deleteById(id: TransceiverEntity["id"]): Promise<TransceiverEntity> {
-        const transceiver = await TransceiverModel.findOne({ _id: id })
-        if (!transceiver) throw new Error('Transceiver Not Found!')
-        const transceiverDelete = await TransceiverModel.findByIdAndDelete(id).populate({ path: 'vendor', select: 'vendorName' });
-        console.log(transceiverDelete);
+        const transceiver = await this.getById(id)
+        const randomCode = generateRandomCode(3);
+        const transceiverDelete = await TransceiverModel.findOneAndUpdate(
+            { _id: id },
+            {
+                partNumber: transceiver.partNumber + '_DELETED_' + randomCode,
+                modalName: transceiver.modelName + '_DELETED_' + randomCode,
+                isDeleted: true,
+            },
+            { new: true }
+        ).populate({ path: 'vendor', select: 'vendorName' })
+
+        // const transceiver = await TransceiverModel.findOne({ _id: id })
+        // if (!transceiver) throw new Error('Transceiver Not Found!')
+        // const transceiverDelete = await TransceiverModel.findByIdAndDelete(id).populate({ path: 'vendor', select: 'vendorName' });
         if (!transceiverDelete) throw new Error('Subrack not deleted');
         return TransceiverEntity.fromObject(transceiverDelete);
     }
 
-}
+    async clean(id: TransceiverEntity['id']): Promise<TransceiverEntity> {
+        const { boards, subracks, transceiver } = await this.getByIdDeleted(id);
+        if (boards.length > 0 || subracks.length > 0) throw 'Transceiver not deleted. The transceiver has associated bords or subracks';
+        const transceiverDeleted = await TransceiverModel.findByIdAndDelete(id).populate([{ path: 'vendor', select: 'vendorName' }]);
+        if (transceiverDeleted) {
+            return TransceiverEntity.fromObject(transceiverDeleted);
+        } else {
+            throw 'Error - Delete failed';
+        };
+    };
+
+};

@@ -13,37 +13,40 @@ interface Props {
     buttonLabel: string;
     status?: MutationStatus;
     defaultValues?: TransceiverFormData;
+    isDeleted?: boolean;
 }
 
-export const FormTransceiver = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props) => {
+export const FormTransceiver = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues, isDeleted }: Props) => {
 
     const { queryVendors } = useVendors({ enabled: true })
-    const { register, formState: { errors }, handleSubmit, reset } = useForm({ defaultValues })
+    const { register, formState: { errors }, handleSubmit, reset } = useForm<TransceiverFormData>({ defaultValues })
 
     useEffect(() => {
         if (status === 'success') reset();
     }, [status, reset]);
-    
-    if( queryVendors.isLoading ) return <Spinner />
 
-  return (
-    <form
-        className="font-roboto bg-gray-100 px-3 py-4 rounded-lg"
-        onSubmit={ handleSubmit(onSubmit) }
-        noValidate
-    >
-        <FormBodyTransceiver
-            register={ register }
-            errors={ errors }
-            vendors={ queryVendors.data || [] }
-            requiredFields={ requiredFields }
-        />
 
-        <BtnFormTransceiver
-            reset={ reset }
-            status={ status }
-            buttonLabel={ buttonLabel }
-        />
-    </form>
-  )
+    if (queryVendors.isLoading) return <Spinner />
+
+    return (
+        <form
+            className="font-roboto bg-gray-100 px-3 py-4 rounded-lg"
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
+        >
+            <FormBodyTransceiver
+                register={register}
+                errors={errors}
+                vendors={queryVendors.data || []}
+                requiredFields={requiredFields}
+                isDeleted={isDeleted}
+            />
+
+            <BtnFormTransceiver
+                reset={reset}
+                status={status}
+                buttonLabel={buttonLabel}
+            />
+        </form>
+    )
 }

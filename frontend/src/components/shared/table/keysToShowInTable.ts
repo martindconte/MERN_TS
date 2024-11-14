@@ -49,7 +49,7 @@ interface KeyLabel<T> {
     catalogTransceiver: [
       { key: 'vendor', label: 'Vendor' },
       { key: 'partNumber', label: 'No. Parte' },
-      { key: 'model', label: 'Model' },
+      { key: 'modelName', label: 'Model' },
       { key: 'type', label: 'Tipo' },
       { key: 'technology', label: 'Tecnologia' },
       { key: 'description', label: 'Descripcion' },

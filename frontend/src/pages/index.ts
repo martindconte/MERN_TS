@@ -14,6 +14,7 @@ export * from './catalog/vendor/VendorView';
 export * from './catalog/signal/EditSignalView';
 export * from './catalog/signal/SignalView';
 /* catalog/transceiver */
+export * from './catalog/transceiver/DeletedTransceiversView';
 export * from './catalog/transceiver/DetailsTransceiverView';
 export * from './catalog/transceiver/EditTransceiverView';
 export * from './catalog/transceiver/NewTransceiverView';

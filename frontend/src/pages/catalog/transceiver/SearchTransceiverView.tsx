@@ -23,6 +23,7 @@ export const SearchTransceiverView = () => {
   }
   
   const handleDelete = async ( id: TransceiverType['id'] ): Promise<{ msg?: string, payload: TransceiverType }>  => {
+    console.log(id);
     return await mutationDeleteTransceiver.mutateAsync({ id })
   }
 

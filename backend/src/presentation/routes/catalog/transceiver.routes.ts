@@ -19,6 +19,12 @@ export class TransceiverRoutes {
             .post( controllerTransceiver.create )
             .get( controllerTransceiver.getAll )
 
+        router.route('/clean-transceiver')
+            .get(controllerTransceiver.getAllDeleted)
+
+        router.route('/clean-transceiver/:transceiverid/permanently-delete')
+            .delete(controllerTransceiver.clean)
+
         router.route('/:transceiverid')
             .get( controllerTransceiver.getById )
             .put( controllerTransceiver.updateById )

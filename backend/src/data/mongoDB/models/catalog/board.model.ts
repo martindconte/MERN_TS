@@ -97,12 +97,10 @@ const boardSchema = new Schema<BoardDocument>(
       ref: 'Vendor',
       default: '',
     },
-    signals: [
-      {
+    signals: [{
         type: String,
         enum: Object.values( BitsRatesEnum ),
-      },
-    ],
+      }],
     description: {
       type: String,
       trim: true,
