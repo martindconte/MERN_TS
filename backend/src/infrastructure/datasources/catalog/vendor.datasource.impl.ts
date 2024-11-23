@@ -24,7 +24,8 @@ export class VendorDatasourceImpl implements VendorDataSource {
         const ids = vendorsDeleted.map(( vendor: VendorEntity ) => vendor.id )
         const [transceiversWidthVendorDeleted, boardsWidthVendorDeleted] = await Promise.all([
             new TransceiverDatasourceImpl().getAll({ vendor: { $in: ids } }),
-            new BoardDatasourceImpl().getAll({ vendor:{ $in: ids }})
+            BoardModel.find({ vendor:{ $in: ids }})
+            // new BoardDatasourceImpl().getAll({ vendor:{ $in: ids }})
         ]);
 
         // console.log('transceiversWidthVendorDeleted desde IMPL ----> ********** \n', transceiversWidthVendorDeleted);
@@ -32,7 +33,8 @@ export class VendorDatasourceImpl implements VendorDataSource {
 
         return {
             vendors: vendorsDeleted,
-            boards: boardsWidthVendorDeleted as BoardEntity[],
+            boards: boardsWidthVendorDeleted.map( BoardEntity.fromObject ),
+            // boards: boardsWidthVendorDeleted as BoardEntity[],
             transceivers: transceiversWidthVendorDeleted as TransceiverEntity[]
         };
     };

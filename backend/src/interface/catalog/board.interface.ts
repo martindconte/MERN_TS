@@ -1,20 +1,5 @@
-import { BoardEntity } from "../../domain";
-
-export enum BoardTechnologyEnum {
-    dwdm = 'DWDM',
-    sdh = 'SDH',
-    rx = 'RX',
-    cwdm = 'CWDM',
-    ip = 'IP',
-    generic = 'GENERIC'
-};
-
-export enum BoardStatusEnum {
-    InService = 'InService',
-    EndOfSupport = 'EndOfSupport',
-    EndOfMarketing = 'EndOfMarketing',
-    NA = '',
-}
+import { BoardEntity, SubrackEntity, TransceiverEntity } from "../../domain";
+import { IPagination } from "./common.interface";
 
 export enum BoardPortType {
     client = 'CLIENT',
@@ -23,11 +8,12 @@ export enum BoardPortType {
 }
 
 export interface Port {
+    // id?: string
     port: number;
     type: BoardPortType;
     physical: string;
     NMS: string;
-    equipment?: string[];
+    equipments?: string[] | Partial<TransceiverEntity>[];
     logicalFacilities?: Record<string, string[]>,
     fullName?: string;
 };
@@ -45,3 +31,14 @@ export interface BoardEntityWithPagination {
         hasNextPage: boolean;
     };
 };
+
+export interface IBoardSearch {
+    searchParams?:Partial<BoardEntity>;
+    paginationData?: IPagination;
+    otherQueries?: {[ key: string ]: any }
+}
+
+export interface IBoardsDeleted {
+    boards: BoardEntity[],
+    subracks: SubrackEntity[]
+}

@@ -15,11 +15,13 @@ export class UpdateTransceiverDTO {
         public readonly bitsRates?: BitsRatesEnum[],
         // public readonly signals?: { id: string, type: string, subtype: string }[],
         public readonly roadmap?: RoadmapEnum,
+        public readonly createdAt?: Date,
+        public readonly updatedAt?: Date,
       ) {}
 
     static update( transceiver: UpdateTransceiverDTO ): [ string?, UpdateTransceiverDTO?] {
         
-        const { id, partNumber, vendor, type, modelName, description, observations, technology, bitsRates, roadmap, isDeleted = false } = transceiver;
+        const { id, partNumber, vendor, type, modelName, description, observations, technology, bitsRates, roadmap, isDeleted = false, createdAt, updatedAt } = transceiver;
         
         if( !id) throw ['Missinbg ID Transceiver'];
         if( !partNumber ) throw ['Missinbg Part Number Transceiver'];
@@ -42,6 +44,8 @@ export class UpdateTransceiverDTO {
                 technology,
                 bitsRates,
                 roadmap,
+                createdAt,
+                updatedAt,
             )
         ]
     }

@@ -20,8 +20,8 @@ export class BoardRoutes {
 
         router.route('/:boardid')
             .get(controller.getById)
-        //     .put(controller.updateSignal)
-        //     .delete(controller.deleteSignal)
+            .put(controller.updateById)
+            .delete(controller.deleteById)
 
         return router
     }

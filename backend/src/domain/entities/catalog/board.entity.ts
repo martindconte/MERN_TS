@@ -1,92 +1,150 @@
-import { helpersDB } from '../../../data';
-import { BoardPortType, BoardStatusEnum, BoardTechnologyEnum, Port } from '../../../interface';
-import { CustomError } from '../../errors/custom.errors';
+import { helpersDB } from "../../../data";
+import { BitsRatesEnum, BoardPortType, Port, RoadmapEnum, TechnologyEnum } from "../../../interface";
+import { CustomError } from "../../errors/custom.errors";
+import { TransceiverEntity } from "./transceiver.entity";
+import { VendorEntity } from "./vendor.entity";
 
 export class BoardEntity {
     constructor(
         public readonly id: string,
         public readonly boardName: string,
         public readonly partNumber: string,
-        public readonly vendor: string,
-        public readonly signals: string[],
+        public readonly vendor: Partial<VendorEntity>,
+        public readonly bitsRates: string[],
+        private readonly isDeleted: boolean = false,
+        public readonly bandwidthMax?: number,
         public readonly description?: string,
         public readonly observations?: string,
         public readonly ports?: Port[],
         public readonly slotSize?: number,
-        public readonly technology?: BoardTechnologyEnum,
-        public readonly status?: BoardStatusEnum,
+        public readonly technology?: TechnologyEnum,
+        public readonly roadmap?: RoadmapEnum,
         public readonly createdAt?: string,
         public readonly updatedAt?: string,
-    ) {}
+    ) { }
 
-    private static checkDataPorts( ports: Port[] | undefined ): [ string?, Port[]? ] {
-
-        if ( !ports ) return [ undefined, [] ]
-        if ( !Array.isArray( ports ) ) return ['Ports must be Array'];
-        
-            for (const port of ports) {
-
-                if( !port.port && typeof port.port !== 'number' ) return ['PortNumber is Required and must be a Number'];
-                if( port.type === undefined || !Object.values(BoardPortType).includes(port.type)) return ['Invalid port type'];
-                if( !port.physical && typeof port.physical !== 'string' ) return ['PortPhysical is Required and must be a String'];
-                if( !port.NMS && typeof port.NMS !== 'string' ) return ['PortNMS is Required and must be a String'];
-                if( !port.equipment ) port.equipment = [];
-                // if( port.equipment.length > 0 && !port.equipment.some(( equipment: string ) => helpersDB.isMongoID( equipment ) ) ) return ['Invalid Equipment value!'];
-
-                if( !port.logicalFacilities ) {
-                    port.logicalFacilities = {}
-                    continue;
-                }
-
-            //     const keys = Object.keys( port.logicalFacilities );
-            //     const values: string[] = Object.values( port );
-            //     const keysSet = new Set();
-            //     const valuesSet = new Set();
-        
-            //     for ( const key of keys ) {
-            //         if ( keysSet.has( key ) ) return [ `${key} is Duplicated!` ];
-            //         keysSet.add( key );
-            //     };
-        
-            //     for ( const value of values ) {
-            //         for ( const data of value ) {
-            //             if ( valuesSet.has( data ) ) return [ `${data} is Duplicated!` ];
-            //             valuesSet.add( data )
-            //         }
-            //     }
-            };
-
-        return [undefined, ports]
+    static get getPublicKeys(): (keyof BoardEntity)[] {
+        return [
+            'id',
+            'boardName',
+            'partNumber',
+            'vendor',
+            'bitsRates',
+            'description',
+            'observations',
+            'bandwidthMax',
+            'ports',
+            'slotSize',
+            'technology',
+            'roadmap',
+            'createdAt',
+            'updatedAt',
+        ];
     }
 
-    static fromObject( object: {[ key: string ]: any} ) {
+    private static checkDataPorts(ports: Port[] | undefined): [string?, Port[]?] {
 
-        const { id, _id, boardName, partNumber, vendor, signals, description, observations, ports, slotSize, technology, status, createdAt, updatedAt } = object
+        if (!ports || ports.length < 0) return [undefined, []]
+        if (!Array.isArray(ports)) return ['Ports must be Array'];
+        const setPortsValues = new Set<number>()
 
-        if ( !id && !_id ) throw CustomError.badRequest('Missing id Entity Board');
-        if ( !boardName ) throw CustomError.badRequest('Missing BoardName Board');
-        if ( !partNumber ) throw CustomError.badRequest('Missing partNumber Board');
-        if ( !vendor ) throw CustomError.badRequest('Missing vendor');
-        if ( signals && signals.lenght > 0 && !signals.some(( signal: string ) => helpersDB.isMongoID( signal ) ) ) throw ['Invalid Signal value!'];
-        if ( technology && !Object.values( BoardTechnologyEnum ).includes( technology.toUpperCase() ) ) throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
-        if ( status && !Object.values( BoardStatusEnum ).includes( status )) throw CustomError.badRequest('Invalid Status');
-        if ( typeof slotSize !== 'number' && slotSize < 0 ) throw CustomError.badRequest('Invalid Status');
-        // const [ error, portsCheck ] = this.checkDataPorts( ports )
-        const [ error, portsCheck ] = BoardEntity.checkDataPorts( ports )
-        if ( error ) throw [ error ]
+        for (const port of ports) {
+
+            const { NMS, physical, type, equipments = [], fullName, port: portNumber, logicalFacilities } = port
+
+            if (!portNumber && typeof portNumber !== 'number') return ['PortNumber is Required and must be a Number'];
+            if (type === undefined || !Object.values(BoardPortType).includes(type)) return ['Invalid port type'];
+            if (!physical && typeof physical !== 'string') return ['PortPhysical is Required and must be a String'];
+            if (!NMS && typeof NMS !== 'string') return ['PortNMS is Required and must be a String'];
+            if (fullName && typeof fullName !== 'string') return ['Full Name Must be a String'];
+            // if (!equipments) equipments = [];
+            // if( equipments.length > 0 ) {
+            //     console.log({equipments});
+            //     console.log('isMongoID', !equipments.some((equipment: Partial<TransceiverEntity>) => helpersDB.isMongoID(equipment.id as string)));
+            // }
+            if ( equipments.length > 0 && !equipments.some((equipment: Partial<TransceiverEntity>) => helpersDB.isMongoID(equipment.id as string))) return [`Invalid Equipment value! ${fullName}`];
+
+            if (logicalFacilities) {
+                const keysSet = new Set<string>();
+                const valuesSet = new Set<string>();
+
+                for (const [key, values] of Object.entries(logicalFacilities)) {
+
+                    if (keysSet.has(key)) return [`Key "${key}" is duplicated`];
+
+                    for (const value of values) {
+                        for (const data of value) {
+                            if (valuesSet.has(data)) return [`${data} is Duplicated!`];
+                            valuesSet.add(data)
+                        };
+                    };
+                };
+            };
+
+            // if (logicalFacilities) {
+
+            //     const keys = Object.keys(logicalFacilities);
+            //     const values = Object.values(logicalFacilities);
+            //     const keysSet = new Set();
+            //     const valuesSet = new Set();
+
+            //     for (const key of keys) {
+            //         if (keysSet.has(key)) return [`${key} is Duplicated!`];
+            //         keysSet.add(key);
+            //     };
+
+            //     for (const value of values) {
+            //         for (const data of value) {
+            //             if (valuesSet.has(data)) return [`${data} is Duplicated!`];
+            //             valuesSet.add(data)
+            //         };
+            //     };
+            // }
+
+            if (setPortsValues.has(port.port)) return [` Port Number ${port.port} is Duplicated!`];
+            setPortsValues.add(port.port);
+        };
+
+        const updatePorts = ports.map( port => ({
+            ...port,
+            logicalFacilities: port.logicalFacilities instanceof Map
+                ? Object.fromEntries( port.logicalFacilities )
+                : port.logicalFacilities
+        }))
+
+        return [undefined, updatePorts]
+    }
+
+    // static fromObject(object: BoardEntity) {
+    static fromObject(object: { [key: string]: any }) {
+
+        const { id = object._id, bandwidthMax, boardName, partNumber, vendor, bitsRates, description, observations, ports = [], slotSize, technology, roadmap, createdAt, updatedAt } = object
+
+        if (!id) throw CustomError.badRequest('Missing id Entity Board');
+        if (!boardName) throw CustomError.badRequest('Missing BoardName Board');
+        if (!partNumber) throw CustomError.badRequest('Missing partNumber Board');
+        if (!vendor) throw CustomError.badRequest('Missing vendor');
+        if (bitsRates && Array.isArray(bitsRates) && bitsRates.length > 0 && !bitsRates.every((rate: any) => Object.values(BitsRatesEnum).includes(rate))) throw ['Invalid bitsRate'];
+        if (technology && !Object.values(TechnologyEnum).includes(technology.toUpperCase())) throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
+        if (roadmap && !Object.values(RoadmapEnum).includes(roadmap)) throw CustomError.badRequest('Invalid Status');
+        if (typeof slotSize !== 'number' && slotSize < 0) throw CustomError.badRequest('Invalid Status');
+        const [error, portsCheck] = BoardEntity.checkDataPorts(ports)
+        if (error) throw [error]
 
         return new BoardEntity(
-            id || _id,
+            id,
             boardName,
             partNumber,
-            vendor,
-            signals,
+            { id: vendor.id, vendorName: vendor.vendorName },
+            bitsRates,
+            false,
+            bandwidthMax,
             description,
             observations,
             portsCheck,
             slotSize,
             technology,
-            status,
+            roadmap,
             createdAt,
             updatedAt,
         )

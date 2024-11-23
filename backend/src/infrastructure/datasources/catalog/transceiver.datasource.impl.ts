@@ -2,7 +2,6 @@ import { BoardModel, SubrackModel, TransceiverModel } from '../../../data';
 import { BoardEntity, CreateTransceiverDTO, QueriesDTO, SearchTransceiverDTO, SubrackEntity, TransceiverDatasource, TransceiverEntity, UpdateTransceiverDTO } from '../../../domain';
 import { generateRandomCode, sortBy } from '../../../helpers';
 import { ITransceiverDeleted, ITransceiversDeleted, TransceiverEntityWithPagination } from '../../../interface';
-import { BoardDatasourceImpl } from './board.datasource.impl';
 import { SubrackDatasourceImpl } from './subrack.datasource.impl';
 
 export class TransceiverDatasourceImpl implements TransceiverDatasource {
@@ -39,10 +38,12 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
             const { page, limit } = pagination;
             const [totalDocs, transceivers] = await Promise.all([
                 TransceiverModel.countDocuments(filters || {}),
-                TransceiverModel.find( filters )
+                TransceiverModel.find(filters)
                     .populate([
                         { path: 'vendor', select: 'vendorName' }
                     ])
+                    .limit(limit)
+                    .skip((page - 1) * limit)
 
                 // TransceiverModel.aggregate([
                 //     { $match: filters },
@@ -92,22 +93,36 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
             };
         };
 
-        
+
         const transceivers = await TransceiverModel.find(filters || {}).populate('vendor', 'vendorName')
         return sortBy(transceivers.map(TransceiverEntity.fromObject), ['vendor.vendorName', 'type', 'partNumber', 'model']);
     };
 
     async getAllDeleted(): Promise<ITransceiversDeleted> {
-        const transceiversDeleted = await TransceiverModel.find({ isDeleted: true }).populate([{ path: 'vendor', select: 'vendorName' }]);        
-        const ids = transceiversDeleted.map(( transceiver ) => transceiver.id );
+        const transceiversDeleted = await TransceiverModel.find({ isDeleted: true }).populate([{ path: 'vendor', select: 'vendorName' }]);
+        const ids = transceiversDeleted.map((transceiver) => transceiver.id);
         const [boards, subracks] = await Promise.all([
-            new BoardDatasourceImpl().getAll({ ports: { $elemMatch: { equipment: { $in: ids }}}}),
-            new SubrackDatasourceImpl().getAll({ vendor:{ $in: ids }})
+            BoardModel.find({ ports: { $elemMatch: { equipments: { $in: ids } } } }).populate([
+                { path: 'vendor', select: 'vendorName' },
+                {
+                    path: 'ports.equipments',
+                    select: 'partNumber modelName vendor description bitsRates',
+                    populate: { path: 'vendor', select: 'vendorName', model: 'Vendor' },
+                },
+            ]),
+            // new BoardDatasourceImpl().getAll({ ports: { $elemMatch: { equipment: { $in: ids }}}}),
+            new SubrackDatasourceImpl().getAll({ vendor: { $in: ids } })
         ]);
 
+        const boardPlain = boards.map(board => board.toObject())
+
+        console.log('Desde getAllDeleted Transceivers', { transceiversDeleted });
+        console.log('Desde getAllDeleted Transceivers', { boards }, { subracks });
+
         return {
-            transceivers: sortBy(transceiversDeleted.map( TransceiverEntity.fromObject ), ['vendor.vendorName', 'type', 'partNumber', 'model']),
-            boards: sortBy(boards as BoardEntity[], ['vendor.vendorName', 'partNumber', 'boardName']),
+            transceivers: sortBy(transceiversDeleted.map(TransceiverEntity.fromObject), ['vendor.vendorName', 'type', 'partNumber', 'model']),
+            boards: sortBy(boardPlain.map(BoardEntity.fromObject), ['vendor.vendorName', 'partNumber', 'boardName']),
+            // boards: sortBy(boards as BoardEntity[], ['vendor.vendorName', 'partNumber', 'boardName']),
             subracks: subracks as SubrackEntity[],
         }
     }
@@ -125,7 +140,7 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
     async getByIdDeleted(id: TransceiverEntity['id']): Promise<ITransceiverDeleted> {
         const transceiver = await this.getById(id, { isDeleted: true });
         const [boards, subracks] = await Promise.all([
-            BoardModel.find({ ports: { $elemMatch: { equipment: { $in: id }}}}),
+            BoardModel.find({ ports: { $elemMatch: { equipment: { $in: id } } } }),
             SubrackModel.find({ vendor: id }),
         ])
 

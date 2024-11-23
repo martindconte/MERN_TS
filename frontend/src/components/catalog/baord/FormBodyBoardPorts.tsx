@@ -7,55 +7,57 @@ import { AddPort } from './AddPort';
 interface Props {
     requiredFields?: boolean;
 }
-export const FormBodyBoardPorts = ({ requiredFields }: Props) => {
+export const FormBodyBoardPorts = ( { requiredFields }: Props ) => {
 
     const { control, setValue } = useFormContext<BoardFormData>()
 
-    const { fields, append, remove, move } = useFieldArray({
+    const { fields, append, remove, move } = useFieldArray( {
         control,
         name: "ports",
-    });
+    } );
 
-    const ports = useWatch({
+    const ports = useWatch( {
         control,
         name: "ports",
-        defaultValue: [],
-    });
+        // defaultValue: [],
+    } );
 
-    const physical = useMemo(() => ports?.map(port => port.physical), [ports]);
-    const nms = useMemo(() => ports?.map(port => port.NMS), [ports]);
+    console.log({ports});
 
-    useEffect(() => {
-        if (ports && ports.length > 0) {
-            ports.forEach((port, index) => {
+    const physical = useMemo( () => ports?.map( port => port.physical ), [ports] );
+    const nms = useMemo( () => ports?.map( port => port.NMS ), [ports] );
+
+    useEffect( () => {
+        if ( ports && ports.length > 0 ) {
+            ports.forEach( ( port, index ) => {
                 const expectedFullName = `${port.NMS}(${port.physical})`;
-                if (port.physical && port.NMS && port.fullName !== expectedFullName) {
-                    setValue(`ports.${index}.fullName`, expectedFullName);
+                if ( port.physical && port.NMS && port.fullName !== expectedFullName ) {
+                    setValue( `ports.${index}.fullName`, expectedFullName );
                 }
-            });
+            } );
         }
-    }, [physical, nms, setValue]);
+    }, [physical, nms, setValue] );
 
     return (
         <div className='font-roboto text-sm px-3 py-2 rounded-lg'>
             <button
                 type="button"
                 className='font-oswald uppercase flex items-center justify-center gap-2 bg-emerald-500 px-3 py-1 my-2 rounded-md w-full cursor-pointer transition hover:bg-emerald-400 hover:shadow-lg hover:shadow-emerald-600/100'
-                onClick={() => append({
+                onClick={() => append( {
                     port: fields.length + 1,
                     type: BoardPortType.client,
                     physical: '',
                     NMS: '',
-                    equipment: [],
+                    equipments: [],
                     logicalFacilities: {},
                     fullName: ''
-                })}
+                } )}
             >
                 Agregar Port <span className="material-symbols-outlined">add_circle</span>
             </button>
             <div className='h-[560px] overflow-y-auto text-xs'>
                 {
-                    fields.map((field, index) => (
+                    fields.map( ( field, index ) => (
                         <div
                             key={field.id}
                             className='flex flex-wrap'
@@ -74,7 +76,7 @@ export const FormBodyBoardPorts = ({ requiredFields }: Props) => {
                                 remove={remove}
                             />
                         </div>
-                    ))
+                    ) )
                 }
             </div>
         </div>

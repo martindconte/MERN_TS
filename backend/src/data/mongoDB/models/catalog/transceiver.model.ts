@@ -79,7 +79,10 @@ transceiverSchema.set('toJSON', {
     virtuals: true,
     versionKey: false,
     transform: function (doc, ret, options) {
+        //! revisar si es necesario el ret.id = ret._id
+        ret.id = ret._id
         delete ret._id;
+        return ret;
     },
 })
 

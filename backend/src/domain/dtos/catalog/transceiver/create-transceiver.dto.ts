@@ -12,7 +12,7 @@ export class CreateTransceiverDTO {
         public readonly technology?: TechnologyEnum,
         public readonly bitsRates?: BitsRatesEnum[],
         public readonly roadmap?: RoadmapEnum,
-    ) { }
+    ) {}
 
     static create(transceiver: CreateTransceiverDTO): [string?, CreateTransceiverDTO?] {
         const { partNumber, vendor, type, modelName, description, observations, technology, bitsRates, roadmap } = transceiver
@@ -38,6 +38,6 @@ export class CreateTransceiverDTO {
                 bitsRates,
                 roadmap,
             )
-        ]
-    }
-}
+        ];
+    };
+};

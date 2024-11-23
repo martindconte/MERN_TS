@@ -10,29 +10,29 @@ export class SignalDatasourceImpl implements SignalDataSource {
         const { type, subType, bandwidth } = createSignalDTO
 
         // Inicializamos la consulta con type y subType
-    const query: Record<string, any> = {
-        type: type.toUpperCase(),
-        subType: subType.toUpperCase(),
-    };
+        const query: Record<string, any> = {
+            type: type.toUpperCase(),
+            subType: subType.toUpperCase(),
+        };
 
-    // Si se proporciona bandwidth, agregamos dos posibilidades:
-    // 1. Que haya coincidencia exacta en amount y unit de bandwidth.
-    // 2. Que el documento almacenado no tenga bandwidth (es decir, no exista el campo).
-    if (bandwidth && bandwidth.amount && bandwidth.unit) {
-        query.$or = [
-            { 'bandwidth': { $exists: false } },  // Coincidir con documentos sin bandwidth
-            {
-                $and: [                          // Coincidir con documentos con bandwidth
-                    { 'bandwidth.amount': bandwidth.amount },
-                    { 'bandwidth.unit': bandwidth.unit.toUpperCase() }
-                ]
-            }
-        ];
-    } else {
-        // Si no se proporciona bandwidth, buscamos documentos que tampoco lo tengan
-        query.bandwidth = { $exists: false };
-    }
-        
+        // Si se proporciona bandwidth, agregamos dos posibilidades:
+        // 1. Que haya coincidencia exacta en amount y unit de bandwidth.
+        // 2. Que el documento almacenado no tenga bandwidth (es decir, no exista el campo).
+        if (bandwidth && bandwidth.amount && bandwidth.unit) {
+            query.$or = [
+                { 'bandwidth': { $exists: false } },  // Coincidir con documentos sin bandwidth
+                {
+                    $and: [                          // Coincidir con documentos con bandwidth
+                        { 'bandwidth.amount': bandwidth.amount },
+                        { 'bandwidth.unit': bandwidth.unit.toUpperCase() }
+                    ]
+                }
+            ];
+        } else {
+            // Si no se proporciona bandwidth, buscamos documentos que tampoco lo tengan
+            query.bandwidth = { $exists: false };
+        }
+
         const duplicateSignal = await SignalModel.findOne(query);
         console.log(util.inspect(query, { showHidden: false, depth: null, colors: true }));
         console.log(util.inspect(duplicateSignal, { showHidden: false, depth: null, colors: true }));

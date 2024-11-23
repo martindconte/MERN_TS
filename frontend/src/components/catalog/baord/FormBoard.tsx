@@ -8,29 +8,30 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface Props {
-  onSubmit: (formData: BoardFormData) => void;
+  onSubmit: ( formData: BoardFormData ) => void;
   status?: MutationStatus;
   requiredFields: boolean;
   buttonLabel: string;
   defaultValues?: BoardFormData;
+  isDeleted?: boolean
 }
 
-export const FormBoard = ({ onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props) => {
+export const FormBoard = ( { onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props ) => {
 
   const location = useLocation()
-  const showFormBodyBoardPorts = location.pathname.includes('board/search')
+  const showFormBodyBoardPorts = location.pathname.includes( 'board/search' )
 
-  const methods = useForm<BoardFormData>({ defaultValues })
+  const methods = useForm<BoardFormData>( { defaultValues } )
 
-  useEffect(() => {
-    if (status === 'success') methods.reset();
-  }, [status, methods.reset]);
+  useEffect( () => {
+    if ( status === 'success' ) methods.reset();
+  }, [status, methods.reset] );
 
   return (
     <FormProvider {...methods}>
       <form
         className="flex flex-col font-roboto bg-gray-100 px-3 py-4 rounded-lg mx-8"
-        onSubmit={methods.handleSubmit(onSubmit)}
+        onSubmit={methods.handleSubmit( onSubmit )}
         noValidate
       >
         <div className='flex gap-3'>

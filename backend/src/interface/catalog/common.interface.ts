@@ -13,3 +13,8 @@ export enum RoadmapEnum {
     EndOfMarketing = 'EndOfMarketing',
     NA = '',
 }
+
+export interface IPagination {
+    page: number,
+    limit: number
+}

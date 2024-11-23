@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import transceiverLogo from '../../../assets/img/catalog/transceiver/transceiverLogo.svg'
 import newTransceiverLogo from '../../../assets/img/catalog/transceiver/newTransceiverLogo.svg'
 
-export const TransceiverIndexView = () => {
+export const IndexTransceiverView = () => {
     return (
         <main className='flex-1 px-2 py-4 bg-blue-50'>
             <h2 className='text-4xl uppercase font-extrabold text-center my-4'>DWDM <span className='text-red-700'>Planner</span></h2>

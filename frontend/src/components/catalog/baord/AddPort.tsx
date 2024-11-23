@@ -11,16 +11,18 @@ interface Props {
     requiredFields?: boolean;
 };
 
-export const AddPort = ({ field, index, requiredFields }: Props) => {
+export const AddPort = ( { field, index, requiredFields }: Props ) => {
 
     const [modalLogicalFacilities, setModalLogicalFacilities] = useState<boolean>( false );
     const [modalEquipmentPort, setModalEquipmentPort] = useState<boolean>( false );
     const { control, formState: { errors }, register } = useFormContext<BoardFormData>();
 
-    const ports = useWatch({
+    const ports = useWatch( {
         control,
         name: "ports",
-    });
+    } );
+
+    console.log({ports});
 
     return (
         <div
@@ -62,17 +64,17 @@ export const AddPort = ({ field, index, requiredFields }: Props) => {
                         className='px-1 py-1 w-12 outline-none'
                         type="number"
                         min={1}
-                        {...register(`ports.${index}.port` as const, {
+                        {...register( `ports.${index}.port` as const, {
                             required: requiredFields && 'Port Invalido - Debe ser un Numero',
-                            setValueAs: value => parseInt(value),
+                            setValueAs: value => parseInt( value ),
                             valueAsNumber: true,
                             validate: value => {
-                                const isUnique = ports.every((port, i) => i === index || port.port !== value);
+                                const isUnique = ports.every( ( port, i ) => i === index || port.port !== value );
                                 return isUnique || 'El puerto debe ser único';
                             },
                             // validate: value => !isNaN(value) || 'Debe ser un número válido',
                             min: 1
-                        })}
+                        } )}
                     />
                 </div>
                 <div className="flex gap-2 items-center px-2 py-1 rounded-md">
@@ -80,16 +82,16 @@ export const AddPort = ({ field, index, requiredFields }: Props) => {
                     <select
                         id={`${field.id}-${index}-${field.type}`}
                         className='px-1 py-1 outline-none'
-                        {...register(`ports.${index}.type`)}
+                        {...register( `ports.${index}.type` )}
                     >
                         <option value=''></option>
                         {
-                            Object.values(BoardPortType).map(type => (
+                            Object.values( BoardPortType ).map( type => (
                                 <option
                                     key={type}
                                     value={type}
                                 >{type}</option>
-                            ))
+                            ) )
                         }
                     </select>
                 </div>
@@ -100,11 +102,11 @@ export const AddPort = ({ field, index, requiredFields }: Props) => {
                         id={`${field.id}-${index}-${field.physical}+1`}
                         className='px-1 py-1 w-20 outline-none'
                         type="text"
-                        {...register(`ports.${index}.physical` as const, {
+                        {...register( `ports.${index}.physical` as const, {
                             required: requiredFields && 'Nombre Invalido',
                             setValueAs: value => value.toUpperCase(),
-                            onChange: (event) => event.target.value = event.target.value.toUpperCase()
-                        })}
+                            onChange: ( event ) => event.target.value = event.target.value.toUpperCase()
+                        } )}
                     />
                 </div>
 
@@ -115,10 +117,10 @@ export const AddPort = ({ field, index, requiredFields }: Props) => {
                         id={`${field.id}-${index}-${field.NMS}+2`}
                         className='px-1 py-1 w-20 outline-none'
                         type="text"
-                        {...register(`ports.${index}.NMS` as const, {
+                        {...register( `ports.${index}.NMS` as const, {
                             required: requiredFields && 'Nombre Invalido',
                             setValueAs: value => value.toUpperCase(),
-                        })}
+                        } )}
                     />
                 </div>
                 <div className="flex gap-2 items-center px-2 py-1 rounded-md">
@@ -127,24 +129,24 @@ export const AddPort = ({ field, index, requiredFields }: Props) => {
                         id={`${field.id}-${index}-${field.fullName}`}
                         className='px-1 py-1 w-28'
                         type="text"
-                        {...register(`ports.${index}.fullName` as const, {
+                        {...register( `ports.${index}.fullName` as const, {
                             required: requiredFields && 'Nombre Invalido',
                             setValueAs: value => value.toUpperCase(),
-                        })}
+                        } )}
                     />
                 </div>
                 <div className='flex flex-wrap gap-1'>
                     <button
                         type='button'
                         className='bg-yellow-300 text-xs w-16 uppercase font-oswald px-2 py-1 rounded-lg hover:bg-yellow-900 hover:text-white'
-                        onClick={() => setModalLogicalFacilities(true)}
+                        onClick={() => setModalLogicalFacilities( true )}
                     >
                         Puertos Logicos
                     </button>
                     <button
                         type='button'
                         className='bg-fuchsia-300 text-xs w-16 break-words uppercase font-oswald px-2 py-1 rounded-lg hover:bg-fuchsia-900 hover:text-white'
-                        onClick={() => setModalEquipmentPort(true)}
+                        onClick={() => setModalEquipmentPort( true )}
                     >
                         Modulos
                     </button>

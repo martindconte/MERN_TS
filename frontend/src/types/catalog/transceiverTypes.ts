@@ -3,23 +3,6 @@ import { BitsRatesEnum } from "./bitsRatesTypes";
 import { RoadmapEnum, TechnologyEnum } from "./commonTypes";
 import { boardSchema } from "./boardTypes";
 
-//* enum
-// export enum TransceiverTechnologyEnum {
-//     DWDM = 'DWDM',
-//     SDH = 'SDH',
-//     RX = 'RX',
-//     CWDM = 'CWDM',
-//     IP = 'IP',
-//     GENERIC = 'GENERIC'
-// };
-
-// export enum TransceiverStatusEnum {
-//     inService = 'InService',
-//     EndOfSupport = 'EndOfSupport',
-//     EndOfMarketing = 'EndOfMarketing',
-//     empty = ''
-// };
-
 //* schemas
 export const transceiverSchema = z.object({
     id: z.string(),
@@ -34,9 +17,7 @@ export const transceiverSchema = z.object({
     observations: z.string().trim().optional().default(''),
     technology: z.nativeEnum( TechnologyEnum ).optional().default( TechnologyEnum.DWDM ),
     bitsRates: z.array(z.nativeEnum(BitsRatesEnum)).optional().default([]),
-    // bitsRates: z.array(z.nativeEnum(TransceiverBitsRatesEnum)).optional().default([]),
     roadmap: z.nativeEnum( RoadmapEnum ).optional().default(RoadmapEnum.empty),
-    // status: z.nativeEnum(TransceiverStatusEnum).optional().default(TransceiverStatusEnum.empty),
     createdAt: z.date(),
     updatedAt: z.date(),
     isDeleted: z.boolean().optional(),
@@ -49,28 +30,6 @@ export const TransceiversDeletedSchema = z.object({
     boards: z.array(z.lazy( () => boardSchema )),
     transceivers: z.array( transceiverSchema )
 });
-
-//todo --> subracks: z.array(  ),
-// export const transceiverSchema = z.object({
-//     id: z.string(),
-//     partNumber: z.string({ required_error: 'Part Number is required!' }).trim().transform((val) => val.toUpperCase()),
-//     model: z.string().trim().optional().default('').transform((val) => val.toUpperCase()),
-//     description: z.string().optional().default(''),
-//     type: z.string().optional().default(''),
-//     vendor: z.object({
-//         id: z.string(),
-//         vendorName: z.string()
-//     }).refine(data => data.vendorName, { message: 'Vendor is required!', path: ['vendor'] }),
-//     observations: z.string().trim().optional().default(''),
-//     technology: z.nativeEnum(TransceiverTechnologyEnum).optional().default(TransceiverTechnologyEnum.DWDM),
-//     bitsRates: z.array(z.nativeEnum(TransceiverBitsRatesEnum)).optional().default([]),
-//     status: z.nativeEnum(TransceiverStatusEnum).optional().default(TransceiverStatusEnum.empty),
-//     createdAt: z.date(),
-//     updatedAt: z.date(),
-// }).transform( data => ({
-//     ...data,
-//     vendor: data.vendor.vendorName
-// })) ;
 
 const paginationSchema = z.object({
     totalDocs: z.number().nonnegative(),
@@ -93,10 +52,6 @@ export type TransceiverFormData = Pick<
 > & {
     vendor: string
 };
-// export type TransceiverFormData = Pick<
-//     TransceiverType,
-//     "partNumber" | "modelName" | "type" | "description" | "vendor" | "observations" | "technology" | "bitsRates" | "roadmap"
-// >
 
 //* response APIs
 export const responseAPITransceiverSchema = z.object({

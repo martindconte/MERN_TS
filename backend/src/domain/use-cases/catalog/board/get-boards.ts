@@ -1,18 +1,18 @@
-import { BoardEntity, TransceiverEntity } from '../../../entities';
-import { BoardRepository, TransceiverRepository } from '../../../repositories';
-import { QueriesDTO } from '../../../dtos';
-import { BoardEntityWithPagination, TransceiverEntityWithPagination } from '../../../../interface';
+import { BoardEntity } from '../../../entities';
+import { BoardRepository } from '../../../repositories';
+import { QueriesDTO, SearchBoardDTO } from '../../../dtos';
+import { BoardEntityWithPagination, IBoardSearch } from '../../../../interface';
 
 
 export interface GetBoardsUseCase {
-    execute( queries?: QueriesDTO ): Promise<BoardEntity[] | BoardEntityWithPagination>
+    execute( queries?: IBoardSearch ): Promise<BoardEntity[] | BoardEntityWithPagination>
 }
 
 export class GetBoards implements GetBoardsUseCase {
     constructor(
         private readonly repository: BoardRepository
     ) {}
-    execute( queries?: QueriesDTO ): Promise<BoardEntity[] | BoardEntityWithPagination> {
+    execute( queries?: IBoardSearch ): Promise<BoardEntity[] | BoardEntityWithPagination> {
         return this.repository.getAll( queries );
     }
 }

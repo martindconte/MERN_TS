@@ -1,6 +1,7 @@
 //* Catalog
 export * from './catalog/CatalogIndexView';
 /* catalog/board */
+export * from './catalog/board/DeletedBoardsView';
 export * from './catalog/board/DetailsBoardView';
 export * from './catalog/board/EditBoard.View';
 export * from './catalog/board/IndexBoardView';
@@ -19,7 +20,7 @@ export * from './catalog/transceiver/DetailsTransceiverView';
 export * from './catalog/transceiver/EditTransceiverView';
 export * from './catalog/transceiver/NewTransceiverView';
 export * from './catalog/transceiver/SearchTransceiverView';
-export * from './catalog/transceiver/TransceiverIndexView';
+export * from './catalog/transceiver/IndexTransceiverView';
 
 //* Central
 export * from './central/CentralIndexView';

@@ -7,6 +7,7 @@ export const NewBoardView = () => {
   const { mutationCreateBoard } = useBoardMutation()
 
   const handleForm = async (formData: BoardFormData) => {
+    console.log(formData);
     const response = await mutationCreateBoard.mutateAsync(formData)
     console.log(response);
     if (response.payload) {

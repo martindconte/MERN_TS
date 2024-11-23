@@ -104,6 +104,7 @@ export const deleteTransceiver = async ( id: TransceiverType['id'] ) => {
 export const getAllTransceiversDeleted = async () => {
     try {
         const { data: { boards, transceivers } }: {data: TransceiversDeletedType} = await api('/catalog/transceiver/clean-transceiver');
+        console.log({boards}, {transceivers});
         const dataMapped: TransceiversDeletedType = {
             transceivers: transceivers.map( transceiver => transceiverMapped( transceiver ) ),
             boards: boards.map( board => boardMapped( board ) ),

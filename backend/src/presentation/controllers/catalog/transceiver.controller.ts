@@ -56,7 +56,6 @@ export class TransceiverController {
     updateById = (req: Request, res: Response) => {
         const { transceiverid } = req.params;
         const queries = SearchTransceiverDTO.createQueries(req.query)
-        console.log('updateQueries ------->', queries);
         const [error, updateTransceiverDTO] = UpdateTransceiverDTO.update({ ...req.body, id: transceiverid });
         if (error) return res.status(400).json({ error });
         new TransceiverUseCase.UpdateTransceiver(this.transceiverRepository)

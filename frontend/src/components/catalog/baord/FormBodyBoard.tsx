@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form'
 // import { UseFormRegister, FieldErrors, useFormContext } from 'react-hook-form'
-import { BitsRatesEnum, BoardFormData, BoardStatusEnum, BoardTechnologyEnum } from '../../../types'
+import { BitsRatesEnum, BoardFormData, RoadmapEnum, TechnologyEnum } from '../../../types'
 import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm'
 import { useVendors } from '../../../hook'
 import { Spinner } from '../../shared/spinners/Spinner'
@@ -63,7 +63,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
                   type="checkbox"
                   id={bitRate}
                   value={bitRate}
-                  {...register('signals')}
+                  {...register('bitsRates')}
                 />
                 <label htmlFor={bitRate}>{bitRate}</label>
               </div>
@@ -79,7 +79,8 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
             id="vendor"
             {...register('vendor', {
               required: requiredFields && 'Debe Seleccionar un Proveedor',
-            })}
+              setValueAs: value => typeof value === 'object' && value !== null ? value.id : value,
+          })}
           >
             <option value=''></option>
             {
@@ -92,7 +93,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
             }
           </select>
         </div>
-        {errors.vendor?.id && <ErrorMsgForm>{errors.vendor.id.message}</ErrorMsgForm>}
+        {errors.vendor && <ErrorMsgForm>{errors.vendor.message}</ErrorMsgForm>}
       </div>
       <div className='flex flex-col-reverse'>
         <div className="flex justify-between my-2 items-center space-x-3">
@@ -169,7 +170,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
           >
             <option value=''></option>
             {
-              Object.values(BoardTechnologyEnum).map(technology => (
+              Object.values(TechnologyEnum).map(technology => (
                 <option
                   key={technology}
                   value={technology}>{technology}</option>
@@ -185,15 +186,15 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
           <select
             className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
             id="status"
-            {...register('status', {
+            {...register('roadmap', {
               required: requiredFields && 'Debe Seleccionar un Estado',
             })}
           >
             {
-              Object.values(BoardStatusEnum).map(status => (
+              Object.values(RoadmapEnum).map(roadmap => (
                 <option
-                  key={status}
-                  value={status}>{status}</option>
+                  key={roadmap}
+                  value={roadmap}>{roadmap}</option>
               ))
             }
           </select>

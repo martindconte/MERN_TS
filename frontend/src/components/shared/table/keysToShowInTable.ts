@@ -1,9 +1,19 @@
+// interface Props {
+//   central: Array<{ key: string, label: string }>;
+//   catalogSubrack: Array<{ key: string, label: string }>;
+//   catalogBoard: Array<{ key: string, label: string }>;
+//   catalogTransceiver: Array<{ key: string, label: string }>;
+//   catalogSignal: Array<{ key: string, label: string }>;
+//   catalogVendor: Array<{ key: string, label: string }>;
+// }
+
 interface KeyLabel<T> {
   key: keyof T & string;
   label: string;
 }
 
   export const keyToShowInTable: Record<string, KeyLabel<any>[]> = {
+  // export const keyToShowInTable: Props = {
     central: [
       { key: 'centralName', label: 'Central' },
       { key: 'codeName', label: 'Sitio' },
@@ -41,8 +51,9 @@ interface KeyLabel<T> {
       { key: 'vendor', label: 'Vendor' },
       { key: 'description', label: 'Descripcion' },
       { key: 'observations', label: 'Obs.' },
+      // { key: 'bitsRates', label: 'Señales' },
       { key: 'slotSize', label: 'Cant. Slot Ocupa' },
-      { key: 'status', label: 'Estado' },
+      { key: 'roadmap', label: 'ROADMAP' },
       { key: 'createdAt', label: 'Creado' },
       { key: 'updatedAt', label: 'Modificado' },
     ],

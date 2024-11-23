@@ -10,17 +10,39 @@ interface Props {
     remove: UseFieldArrayRemove;
 }
 
-export const BtnAddPort = ({ append, fields, index, move, ports,remove }: Props ) => {
+export const BtnAddPort = ({ append, fields, index, move, ports, remove }: Props) => {
+    console.log({ports});
 
-    const onClone = ( index: number ) => {
+    console.log({index});
+
+    const onClone = (index: number) => {
         const portToClone = ports[index]
+
+        console.log(portToClone);
+
+        // Nuevos valores de port, physical y NMS
+        const newPort = portToClone.port + 1;
+        const newPhysical = portToClone.physical.replace(/\d+/g, (match) => (parseInt(match) + 1).toString());
+        const newNMS = portToClone.NMS.replace(/\d+/g, (match) => (parseInt(match) + 1).toString());
+
+        // Modificar logicalFacilities
+        const updatedLogicalFacilities = Object.entries(portToClone.logicalFacilities).reduce((acc, [key, values]) => {
+            acc[key] = values.map((value) =>
+                value.replace(/\d+\(.*?\)/, (match) =>
+                    match.replace(/^\d+/, newPort.toString()).replace(/\(.*?\)/, `(${newPhysical})`)
+                )
+            );
+            return acc;
+        }, {} as Record<string, string[]>);
+
+        // Agregar el nuevo puerto
         append({
             ...portToClone,
-            port: portToClone.port + 1,
-            physical: portToClone.physical.replace(/\d+/g, (match) => (parseInt(match) + 1).toString()),
-            NMS: portToClone.NMS.replace(/\d+/g, (match) => (parseInt(match) + 1).toString()),
-            logicalFacilities: { ...portToClone.logicalFacilities }
-        })
+            port: newPort,
+            physical: newPhysical,
+            NMS: newNMS,
+            logicalFacilities: updatedLogicalFacilities, // Actualizamos logicalFacilities
+        });
     }
 
     return (

@@ -32,16 +32,20 @@ const vendorSchema = new Schema<VendorDocument>({
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
     }
 );
 
-vendorSchema.set('toJSON', {
-    virtuals: true,
-    versionKey: false,
-    transform: function (doc, ret, options) {
-        delete ret._id
-    },
-});
+// vendorSchema.set('toJSON', {
+//     virtuals: true,
+//     versionKey: false,
+//     transform: function (doc, ret, options) {
+//         ret.id = ret._id;
+//         delete ret._id;
+//         return ret;
+//     },
+// });
 
 export const VendorModel: Model<VendorDocument> = model('Vendor', vendorSchema)

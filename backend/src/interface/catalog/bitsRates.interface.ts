@@ -69,5 +69,5 @@ export enum BitsRatesEnum {
     HD_SDI = 'HD-SDI',
     HD_SDIRBR = 'HD-SDIRBR',
     THREE_G_SDI = '3G-SDI',
-    THREE_G_SDIRBR = '3G-SDIRBR'
+    THREE_G_SDIRBR = '3G-SDIRBR',
 };

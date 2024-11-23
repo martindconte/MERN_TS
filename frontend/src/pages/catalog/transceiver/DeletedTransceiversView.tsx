@@ -11,6 +11,8 @@ export const DeletedTransceiversView = () => {
   const { queryTransceiversDeleted } = useTransceiversDeleted({});
   const { mutationPermanentlyDeleteTransceiver } = useTransceiverMutation();
 
+  console.log(queryTransceiversDeleted.data);
+
   const filteredTransceiver: TransceiversDeletedType = useMemo(() => {
     return {
       transceivers: queryTransceiversDeleted.data?.transceivers.filter(transceiver =>
@@ -19,7 +21,7 @@ export const DeletedTransceiversView = () => {
       ) || [],
       boards: queryTransceiversDeleted.data?.boards.filter(board =>
         board.vendor.vendorName?.toLocaleLowerCase().includes(filterVendor.toLocaleLowerCase()) &&
-        board.ports.filter(port => port.equipment.filter(eq => eq.partNumber.toLocaleLowerCase() === filterPartNumber.toLocaleLowerCase()))
+        board.ports.filter(port => port.equipments.filter(eq => eq.partNumber.toLocaleLowerCase() === filterPartNumber.toLocaleLowerCase()))
       ) || [],
     };
   }, [filterVendor, filterPartNumber, queryTransceiversDeleted.data]);
@@ -78,7 +80,7 @@ export const DeletedTransceiversView = () => {
               />
             </div>
             <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
-              <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Placas Eliminadas Con Transceivers Eliminados</p>
+              <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Placas Con Transceivers Eliminados</p>
               <Table
                 data={filteredTransceiver.boards}
                 info='catalogBoard'

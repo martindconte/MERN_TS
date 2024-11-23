@@ -23,6 +23,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      'space-in-parens': ['error', 'always'], // Añadido para espacios en paréntesis
     },
   },
 )

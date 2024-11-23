@@ -8,24 +8,24 @@ interface Props {
     index: number;
 }
 
-export const AddPortEquipment = ({ close, index }: Props) => {
+export const AddPortEquipment = ( { close, index }: Props ) => {
 
-    const [selectedData, setSelectedData] = useState<TransceiverType[]>([])
+    const [selectedData, setSelectedData] = useState<TransceiverType[]>( [] )
     const { control, setValue } = useFormContext<BoardFormData>()
 
-    const { equipment }: Partial<BoardPortsType> = useWatch({
+    const { equipments }: Partial<BoardPortsType> = useWatch( {
         control,
         name: `ports.${index}`,
-    });
+    } );
     
     const handleAddEquipment = () => {
-        setValue(`ports.${index}.equipment`, selectedData)
+        setValue( `ports.${index}.equipments`, selectedData )
         close( false )
     }
 
-    useEffect(() => {
-        setSelectedData( equipment as TransceiverType[] )
-    }, [ equipment ])
+    useEffect( () => {
+        setSelectedData( equipments as TransceiverType[] )
+    }, [ equipments ] )
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black z-50 font-roboto_condensed">
@@ -44,7 +44,7 @@ export const AddPortEquipment = ({ close, index }: Props) => {
                     <button
                         className="text-white bg-red-500 font-semibold px-3 py-2 rounded-md ring-offset-2 flex items-center gap-2 hover:bg-red-800 hover:ring-red-800 hover:ring-2"
                         type="button"
-                        onClick={() => close(false)}
+                        onClick={() => close( false )}
                     >
                         CANCELAR <span className="material-symbols-outlined">close</span>
                     </button>
