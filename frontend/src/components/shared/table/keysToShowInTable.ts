@@ -46,9 +46,9 @@ interface KeyLabel<T> {
       { key: 'status', label: 'Estado' }
     ],
     catalogBoard: [
+      { key: 'vendor', label: 'Vendor' },
       { key: 'boardName', label: 'Nombre' },
       { key: 'partNumber', label: 'No de Parte' },
-      { key: 'vendor', label: 'Vendor' },
       { key: 'description', label: 'Descripcion' },
       { key: 'observations', label: 'Obs.' },
       { key: 'slotSize', label: 'Cant. Slot Ocupa' },

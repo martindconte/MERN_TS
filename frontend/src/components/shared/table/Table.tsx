@@ -238,15 +238,15 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
                   className={`${selectedData && selectedData?.length > 0 && selectedData.some(data => data.id === row.original.id) ? 'bg-fuchsia-300 border-2 border-black' : ''} ${ row.original.isDeleted ? 'bg-red-200' : '' }`}
                 >
                   {row.getVisibleCells().map((cell) => {
-                    // const cellValue: any = cell.getContext().getValue();
-                    // const isDeleted = (typeof cellValue === 'string' && cellValue.includes('_DELETED_')) ||
-                    //   (typeof cellValue === 'object' && cellValue !== null && 'vendorName' in cellValue && typeof cellValue.vendorName === 'string' && cellValue.vendorName.includes('_DELETED_'));
+                    const cellValue: any = cell.getContext().getValue();
+                    const isDeleted = (typeof cellValue === 'string' && cellValue.includes('_DELETED_')) ||
+                      (typeof cellValue === 'object' && cellValue !== null && 'vendorName' in cellValue && typeof cellValue.vendorName === 'string' && cellValue.vendorName.includes('_DELETED_'));
                     return (
                       <td
                         key={cell.id}
                         style={{ width: cell.column.getSize() }}
-                        className={`${tableStyles.td} ${tableStyles.wrapper}`}
-                        // className={`${tableStyles.td} ${tableStyles.wrapper} ${isDeleted ? 'bg-red-600 text-white' : ''}`}
+                        // className={`${tableStyles.td} ${tableStyles.wrapper}`}
+                        className={`${tableStyles.td} ${tableStyles.wrapper} ${isDeleted ? 'bg-red-600 text-white' : ''}`}
                       >
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </td>

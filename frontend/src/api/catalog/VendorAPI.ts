@@ -7,9 +7,10 @@ import { boardMapped } from "./BaordAPI";
 export const vendorMapped = (vendor: VendorType) => {
     return {
         id: vendor.id,
-        vendorName: vendor.vendorName || '',
-        country: vendor.country || '',
-        observation: vendor.observation || '',
+        vendorName: vendor.vendorName,
+        country: vendor.country,
+        observation: vendor.observation,
+        isDeleted: vendor.isDeleted,
         createdAt: vendor.createdAt ? new Date(vendor.createdAt) : new Date(),
         updatedAt: vendor.updatedAt ? new Date(vendor.updatedAt) : new Date(),
     }

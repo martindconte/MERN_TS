@@ -1,4 +1,6 @@
 import { BoardEntity, TransceiverEntity, VendorEntity } from '../../domain';
+import { IBoard } from './board.interface';
+import { ITransceiver } from './transceiver.interface';
 
 export interface IVendor {
     readonly id: string,
@@ -10,12 +12,18 @@ export interface IVendor {
 }
 
 export interface IVendorsDeleted {
-    vendors: VendorEntity[];
-    transceivers: TransceiverEntity[];
-    boards: BoardEntity[];
+    vendors: IVendor[];
+    transceivers: ITransceiver[];
+    boards: IBoard[];
     //todo subrack: 
 }
+// export interface IVendorsDeleted {
+//     vendors: VendorEntity[];
+//     transceivers: TransceiverEntity[];
+//     boards: BoardEntity[];
+//     //todo subrack: 
+// }
 
 export type VendorsDeletedType = Omit<IVendorsDeleted, 'vendors'> & {
-    vendor: VendorEntity;
+    vendor: IVendor;
   };

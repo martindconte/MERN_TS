@@ -16,6 +16,7 @@ export const boardMapped = (board: BoardType): BoardType => ({
     board.ports.length > 0
       ? board.ports.map((port) => ({
         ...port,
+        logicalFacilities: port.logicalFacilities ?? {},
         equipments: port.equipments.map((eq) =>
           transceiverMapped(eq as TransceiverType)
         ),
@@ -91,6 +92,8 @@ export const getBoards = async (query = {}) => {
 export const getBoard = async (id: BoardType['id'], searchParams: string = '') => {
   try {
     const { data } = await api(`catalog/board/${id}` + searchParams);
+    console.log(data);
+    console.log(boardMapped(data));
     const response = boardSchema.safeParse(boardMapped(data));
     if (response.success) return response.data;
   } catch (error) {

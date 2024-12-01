@@ -1,12 +1,12 @@
-import { BitsRatesEnum, RoadmapEnum, TechnologyEnum,  } from '../../../interface';
+import { BitsRatesEnum, ITransceiver, IVendor, RoadmapEnum, TechnologyEnum,  } from '../../../interface';
 import { CustomError } from '../../errors/custom.errors';
 import { VendorEntity } from './vendor.entity';
 
-export class TransceiverEntity {
+export class TransceiverEntity implements ITransceiver {
   constructor(
     public readonly id: string,
     public readonly partNumber: string,
-    public readonly vendor: Partial<VendorEntity>,
+    public readonly   vendor: Pick<IVendor, 'id' | 'vendorName'>,
     private readonly isDeleted: boolean = false,
     public readonly type?: string,
     public readonly modelName?: string,

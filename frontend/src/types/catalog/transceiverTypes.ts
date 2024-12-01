@@ -20,7 +20,8 @@ export const transceiverSchema = z.object({
     roadmap: z.nativeEnum( RoadmapEnum ).optional().default(RoadmapEnum.empty),
     createdAt: z.date(),
     updatedAt: z.date(),
-    isDeleted: z.boolean().optional(),
+    isDeleted: z.boolean(),
+    // isDeleted: z.boolean().optional(),
 });
 
 //! transceiverTypes importa boardSchema y boardSchema importa transceiverTypes esto creo una refrencia circular! Se soluciono con z.lazy (funcionalidad de zod)

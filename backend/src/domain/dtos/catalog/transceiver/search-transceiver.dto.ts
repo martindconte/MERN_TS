@@ -20,7 +20,6 @@ export class SearchTransceiverDTO {
     ) {}
 
     static createQueries(queries: Partial<Record<keyof SearchCentralDTO, any>>): Partial<SearchTransceiverDTO> {
-        console.log('desde aqui...........', queries);
         const searchParams: { [key: string]: any } = { isDeleted: false };
         const instanceKeys = new Set(Object.keys(new SearchTransceiverDTO()));
 
@@ -60,9 +59,6 @@ export class SearchTransceiverDTO {
                 }
             }
         }
-
-        console.log('desde SearchDTO -------------->', searchParams);
-
         return searchParams;
     }
 }

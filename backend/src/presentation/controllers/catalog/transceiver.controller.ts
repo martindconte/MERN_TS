@@ -50,7 +50,10 @@ export class TransceiverController {
         new TransceiverUseCase.GetTransceiver(this.transceiverRepository)
             .execute(transceiverid, queries)
             .then(transceiver => res.json(transceiver))
-            .catch(error => res.json(error))
+            .catch(error => res.status(400).json({
+                status: 'error',
+                msg: error.message,
+            }));
     };
 
     updateById = (req: Request, res: Response) => {
