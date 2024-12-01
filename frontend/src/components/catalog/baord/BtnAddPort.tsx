@@ -11,14 +11,9 @@ interface Props {
 }
 
 export const BtnAddPort = ({ append, fields, index, move, ports, remove }: Props) => {
-    console.log({ports});
-
-    console.log({index});
 
     const onClone = (index: number) => {
         const portToClone = ports[index]
-
-        console.log(portToClone);
 
         // Nuevos valores de port, physical y NMS
         const newPort = portToClone.port + 1;

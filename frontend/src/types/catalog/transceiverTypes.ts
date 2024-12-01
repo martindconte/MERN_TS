@@ -48,9 +48,12 @@ export type TransceiversDeletedType = z.infer<typeof TransceiversDeletedSchema>
 export type TransceiverPaginationType = z.infer<typeof paginationSchema>;
 export type TransceiverFormData = Pick<
     TransceiverType,
-    "partNumber" | "modelName" | "type" | "description" | "observations" | "technology" | "bitsRates" | "roadmap" | "isDeleted"
+    "partNumber" | "modelName" | "type" | "description" | "observations" | "technology" | "bitsRates" | "roadmap"
+    // "partNumber" | "modelName" | "type" | "description" | "observations" | "technology" | "bitsRates" | "roadmap" | "isDeleted"
 > & {
     vendor: string
+} & {
+    isDeleted: boolean | 'all'
 };
 
 //* response APIs

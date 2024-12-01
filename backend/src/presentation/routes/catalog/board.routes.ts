@@ -18,6 +18,12 @@ export class BoardRoutes {
             .post(controller.create)
             .get(controller.getAll)
 
+        router.route('/clean-board')
+            .get(controller.getAllDeleted)
+
+            router.route('/clean-board/:boardid/permanently-delete')
+            .delete(controller.cleanById)
+
         router.route('/:boardid')
             .get(controller.getById)
             .put(controller.updateById)

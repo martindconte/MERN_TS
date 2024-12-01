@@ -14,7 +14,19 @@ export enum RoadmapEnum {
     NA = '',
 }
 
-export interface IPagination {
+export interface IPageLimit {
     page: number,
     limit: number
 }
+
+export interface IPagination {
+    totalDocs: number;
+    totalResults: number;
+    totalPages: number;
+    prevPage: string | null;
+    nextPage: string | null;
+    page: number;
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+  }
+  

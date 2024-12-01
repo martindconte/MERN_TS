@@ -7,25 +7,22 @@ export interface Port {
   physical: string;
   NMS: string;
   equipments: Types.ObjectId[];
-  // logicalFacilities?: {[key: string]: string[] }
   logicalFacilities?: Record<string, string[]>;
   fullName?: string;
 }
 
 export interface BoardDocument extends Document {
-  // _id: Types.ObjectId,
   boardName: string;
   partNumber: string;
   vendor: Types.ObjectId;
   bitsRates: BitsRatesEnum[];
-  // signals: Types.ObjectId[];
   description?: string;
   observations?: string;
   ports?: Port[];
   bandwidthMax?: number;
   slotSize?: number;
   technology?: TechnologyEnum;
-  isDeleted: boolean
+  isDeleted: boolean;
   roadmap?: RoadmapEnum;
 }
 
@@ -62,12 +59,17 @@ const portSchema = new Schema<Port>(
       },
     ],
 
-    // todo: DEJAR DE USAR MAP!!!!
     logicalFacilities: {
-      type: Map,
-      of: [String],
+      type: Object,
       default: {},
     },
+
+    // todo: DEJAR DE USAR MAP!!!!
+    // logicalFacilities: {
+    //   type: Map,
+    //   of: [String],
+    //   default: {},
+    // },
     fullName: {
       type: String,
       trim: true,
@@ -100,10 +102,12 @@ const boardSchema = new Schema<BoardDocument>(
       default: '',
     },
     bitsRates: {
-      type: [{
-        type: String,
-        enum: Object.values(BitsRatesEnum),
-      }],
+      type: [
+        {
+          type: String,
+          enum: Object.values(BitsRatesEnum),
+        },
+      ],
       default: [], // Establece un array vacío como valor predeterminado
     },
     description: {
@@ -139,19 +143,31 @@ const boardSchema = new Schema<BoardDocument>(
     },
     isDeleted: {
       type: Boolean,
-      default: false
+      default: false,
     },
   },
   {
     timestamps: true,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        ret.id = ret._id?.toString(); // Convierte _id a string y crea un campo id legible
+        delete ret._id; // Elimina el campo _id original
+        delete ret.__v; // Opcional: elimina __v si no lo necesitas
+        return ret;
+      },
+    },
+    toObject: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        ret.id = ret._id?.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
   }
 );
-
-// boardSchema.virtual('id').get(function (this: Document & { _id: any }) {
-//   return this._id.toString();
-// });
 
 boardSchema.pre('validate', function (next) {
   this.ports?.forEach((port) => {
@@ -162,68 +178,16 @@ boardSchema.pre('validate', function (next) {
   next();
 });
 
-boardSchema.pre('save', async function (next) {
-  await this.populate({
-    path: 'ports.equipments',
-    select: 'partNumber modelName vendor description bitsRates',
-    populate: {
-      path: 'vendor',
-      select: 'vendorName _id' // Populación anidada
-    }
-  });
-  next();
-});
-
-// boardSchema.set('toJSON', {
-//   virtuals: true,
-//   transform: function (doc, ret, options) {
-//     ret.vendor.id = ret.vendor._id.toString(); // Agregamos la propiedad id
-//     delete ret._id; // Opcional: Eliminamos el _id del objeto board
-//     return ret;
-//   },
-// });
-
-// boardSchema.pre<Query<BoardDocument, BoardDocument>>(/^find/, function (next) {
-//   this.populate({
+// boardSchema.pre('save', async function (next) {
+//   await this.populate({
 //     path: 'ports.equipments',
 //     select: 'partNumber modelName vendor description bitsRates',
 //     populate: {
 //       path: 'vendor',
-//       select: 'vendorName _id',
-//       model: 'Vendor',
-//       options: { lean: true }, // Aseguramos que se devuelva un objeto plano
-//     }
-//   })
-//   .populate({
-//     path: 'vendor', // Este es el campo vendor del BoardDocument
-//     select: 'vendorName _id', // Solo el campo vendorName
-//     model: 'Vendor',
-//     options: { lean: true }, // Devolver como objeto plano
+//       select: 'vendorName _id', // Populación anidada
+//     },
 //   });
-
 //   next();
 // });
 
-// boardSchema.set('toJSON', {
-//   virtuals: true,
-//   versionKey: false,
-//   transform: function (doc, ret, options) {
-//     // Eliminar _id de vendor, si existe
-//     if (ret.vendor) {
-//       ret.vendor.id = ret.vendor._id;
-//       delete ret.vendor._id;
-//     }
-
-//     // Eliminar _id del objeto board
-//     ret.id = ret._id;
-//     delete ret._id;
-
-//     return ret;
-//   }
-// });
-
-// boardSchema.set('toObject', { virtuals: true });
-// boardSchema.set('toJSON', { virtuals: true });
-
 export const BoardModel: Model<BoardDocument> = model('Board', boardSchema);
-

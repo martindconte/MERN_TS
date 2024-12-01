@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BtnNavBoard, FormBoard, HiddenComponent, Spinner, Table } from '../../../components';
 import { useBoardMutation, useBoards } from '../../../hook';
 import { BoardFormData, BoardType } from '../../../types';
@@ -15,6 +15,10 @@ export const SearchBoardView = () => {
     setSearch(cleanedData as BoardFormData);
   };
 
+  useEffect(()=> {
+    setPage(1)
+  }, [ limit ])
+
   if (queryBoards.isError)
     return (
       <p className="flex-1 bg-gray-900 text-white text-center font-roboto_condensed text-2xl font-extrabold uppercase py-10">
@@ -22,12 +26,9 @@ export const SearchBoardView = () => {
       </p>
     );
 
-  const handleDelete = async (id: BoardType['id']): Promise<{ msg?: string, payload: BoardType } | undefined> => {
-    console.log(id);
+  const handleDelete = async (id: BoardType['id']) => {
     return await mutationDeletedBoard.mutateAsync({ id })
   }
-
-  console.log(queryBoards.data);
 
   return (
     <main className="flex-1 bg-zinc-800 text-white font-roboto">
@@ -42,7 +43,7 @@ export const SearchBoardView = () => {
       <div className="mx-auto my-3">
         <div className="flex flex-col items-center gap-3 mx-auto">
           <HiddenComponent>
-            <FormBoard onSubmit={handleForm} buttonLabel="Buscar Transceivers" requiredFields={false} />
+            <FormBoard onSubmit={handleForm} buttonLabel="Buscar Placas" requiredFields={false} />
           </HiddenComponent>
         </div>
         {queryBoards.isLoading ? (

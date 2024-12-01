@@ -22,8 +22,6 @@ export const AddPort = ( { field, index, requiredFields }: Props ) => {
         name: "ports",
     } );
 
-    console.log({ports});
-
     return (
         <div
             key={field.id}

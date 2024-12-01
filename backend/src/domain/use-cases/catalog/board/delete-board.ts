@@ -1,15 +1,13 @@
-import { BoardEntity } from '../../../entities';
+import { IBoard, IBoardResponse } from '../../../../interface';
 import { BoardRepository } from '../../../repositories';
 
 interface DeleteBoardUseCase {
-    execute( id: BoardEntity['id']  ): Promise<BoardEntity>
+  execute(id: IBoard['id']): Promise<IBoardResponse>;
 }
 
 export class DeleteBoard implements DeleteBoardUseCase {
-    constructor(
-        private readonly repository: BoardRepository
-    ) {}
-    execute(id: BoardEntity["id"]): Promise<BoardEntity> {
-        return this.repository.deleteById( id );
-    };
-};
+  constructor(private readonly repository: BoardRepository) {}
+  execute(id: IBoard['id']): Promise<IBoardResponse> {
+    return this.repository.deleteById(id);
+  }
+}

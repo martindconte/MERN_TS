@@ -16,10 +16,11 @@ export class SearchTransceiverDTO {
         public readonly roadmap?: RoadmapEnum,
         public readonly limit?: number,
         public readonly page?: number,
-        public readonly isDeleted?: boolean,
+        public readonly isDeleted?: boolean | 'all',
     ) {}
 
     static createQueries(queries: Partial<Record<keyof SearchCentralDTO, any>>): Partial<SearchTransceiverDTO> {
+        console.log('desde aqui...........', queries);
         const searchParams: { [key: string]: any } = { isDeleted: false };
         const instanceKeys = new Set(Object.keys(new SearchTransceiverDTO()));
 
@@ -43,8 +44,15 @@ export class SearchTransceiverDTO {
                         searchParams[key] = { $all: bitsRatesArray.filter((rate: any) => Object.values(BitsRatesEnum).includes(rate)) };
                         break;
                     case 'isDeleted':
-                        searchParams[key] = queries[key].toLocaleLowerCase() === 'true' 
+                        if (queries[key].toLowerCase() === 'all') {
+                            // Eliminar la clave si el valor es 'all'
+                            delete searchParams[key];
+                        } else {
+                            searchParams[key] = queries[key].toLowerCase() === 'true';
+                        }
                         break;
+                        // searchParams[key] = queries[key].toLocaleLowerCase() === 'all' ? queries[key].toLocaleLowerCase() === 'all' : queries[key].toLocaleLowerCase() === 'true' 
+                        // break;
                     default:
                         const regex = new RegExp(decodedValue, 'i');
                         searchParams[key] = { $regex: regex };
@@ -52,6 +60,8 @@ export class SearchTransceiverDTO {
                 }
             }
         }
+
+        console.log('desde SearchDTO -------------->', searchParams);
 
         return searchParams;
     }

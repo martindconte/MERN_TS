@@ -9,16 +9,17 @@ interface Props {
   // register: UseFormRegister<BoardFormData>
   // errors: FieldErrors<BoardFormData>
   requiredFields?: boolean
+  isDeleted?: boolean;
 }
 
 // export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
-export const FormBodyBoard = ({ requiredFields }: Props) => {
+export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
 
   const { queryVendors } = useVendors({ enabled: true })
   const { register, formState: { errors } } = useFormContext<BoardFormData>()
 
   if (queryVendors.isLoading) return <Spinner />
-  
+
   return (
     <div className='flex flex-col text-black text-sm max-w-[400px] grow'>
       <div className='flex flex-col-reverse'>
@@ -32,6 +33,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
             {...register('boardName', {
               required: requiredFields && 'El Nombre es Obligatorio',
               setValueAs: value => value.trim(),
+              validate: value => !value.includes('_DELETED_') || 'El nombre no puede contener "_DELETED_"',
             })}
           />
         </div>
@@ -48,6 +50,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
             {...register('partNumber', {
               required: requiredFields && 'El Part Number es Obligatorio',
               setValueAs: value => value.trim(),
+              validate: value => !value.includes('_DELETED_') || 'El nombre no puede contener "_DELETED_"',
             })}
           />
         </div>
@@ -80,7 +83,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
             {...register('vendor', {
               required: requiredFields && 'Debe Seleccionar un Proveedor',
               setValueAs: value => typeof value === 'object' && value !== null ? value.id : value,
-          })}
+            })}
           >
             <option value=''></option>
             {
@@ -152,7 +155,7 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
               min: 1,
               setValueAs: value => parseInt(value),
               valueAsNumber: true,
-              onChange: e => e.target.value < 1 ? e.target.value = 1 : e.target.value  
+              onChange: e => e.target.value < 1 ? e.target.value = 1 : e.target.value
             })}
           />
         </div>
@@ -201,6 +204,23 @@ export const FormBodyBoard = ({ requiredFields }: Props) => {
         </div>
         {errors.technology && <ErrorMsgForm>{errors.technology.message}</ErrorMsgForm>}
       </div>
+      {
+        isDeleted && (
+          <div className="flex justify-between my-2 items-center space-x-3">
+            <label className="w-1/3 text-right text-red-600 uppercase font-semibold" htmlFor="isDeleted">Eliminado?</label>
+            <select
+              className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
+              id="isDeleted"
+              {...register('isDeleted', {
+                setValueAs: value => value === "true",
+              })}
+            >
+              <option value="true">ELIMINADO</option>
+              <option value="false">NO!... VOLVER A HABILITAR</option>
+            </select>
+          </div>
+        )
+      }
     </div>
   )
 }

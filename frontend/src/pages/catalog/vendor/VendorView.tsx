@@ -33,7 +33,7 @@ export const VendorView = () => {
                     <Link
                         to='deleted'
                         className="bg-red-500 w-fit mx-auto px-4 py-2 rounded-lg text-white shadow-xl shadow-red-800 hover:bg-red-900 hover:shadow-red-950"
-                    >Centrales Eliminadas</Link>
+                    >Vendors Eliminados</Link>
                 </div>
                 <div  className="basis-1/2 mx-4">
                     {

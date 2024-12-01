@@ -97,7 +97,7 @@ export class VendorDatasourceImpl implements VendorDataSource {
 
     async cleanVendor( id: VendorEntity['id'] ): Promise<VendorEntity>  {
         const { transceivers, boards } = await this.getByIdDeletedVendor( id );
-        if( transceivers.length > 0 || boards.length > 0 ) throw 'Vendor not deleted. Vendor has associated transceivers or boards';
+        if( transceivers.length > 0 || boards.length > 0 ) throw 'Vendor not deleted. Vendor has associated transceivers, boards or subracks';
         const vendorCleaned = await VendorModel.findByIdAndDelete( id );
         if( vendorCleaned ) {
             return VendorEntity.fromObject( vendorCleaned )

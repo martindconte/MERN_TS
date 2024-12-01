@@ -16,7 +16,7 @@ interface Props {
   isDeleted?: boolean
 }
 
-export const FormBoard = ( { onSubmit, status, requiredFields, buttonLabel, defaultValues }: Props ) => {
+export const FormBoard = ( { onSubmit, status, requiredFields, buttonLabel, defaultValues, isDeleted }: Props ) => {
 
   const location = useLocation()
   const showFormBodyBoardPorts = location.pathname.includes( 'board/search' )
@@ -37,6 +37,7 @@ export const FormBoard = ( { onSubmit, status, requiredFields, buttonLabel, defa
         <div className='flex gap-3'>
           <FormBodyBoard
             requiredFields={requiredFields}
+            isDeleted={ isDeleted }
           />
 
           { !showFormBodyBoardPorts && <FormBodyBoardPorts requiredFields={requiredFields} /> }

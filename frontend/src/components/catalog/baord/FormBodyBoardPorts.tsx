@@ -22,8 +22,6 @@ export const FormBodyBoardPorts = ( { requiredFields }: Props ) => {
         // defaultValue: [],
     } );
 
-    console.log({ports});
-
     const physical = useMemo( () => ports?.map( port => port.physical ), [ports] );
     const nms = useMemo( () => ports?.map( port => port.NMS ), [ports] );
 

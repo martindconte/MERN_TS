@@ -15,8 +15,8 @@ export const PortsBoardDetails = ({ data: { ports } }: Props) => {
           {ports.map((port, index) => {
             const dataPortField: JSX.Element[] = [];
             return (
-              <div key={index + 3000} className="flex border border-gray-400 px-2 py-1 my-1 rounded-lg space-x-4 bg-orange-100 h-40">
-                <div>
+              <div key={index + 3000} className="flex border border-gray-400 px-2 py-1 my-1 rounded-lg space-x-2 bg-orange-100 h-40">
+                <div className='w-1/6'>
                   <p className="uppercase text-center font-bold mb-2">Informacion</p>
                   {dataPortField}
                 </div>
@@ -24,28 +24,24 @@ export const PortsBoardDetails = ({ data: { ports } }: Props) => {
                   const key = keyPort as keyof typeof port;
                   if (key === 'equipments') {
                     return (
-                      <div key={index + 1000} className="overflow-y-auto">
+                      <div key={index + 1000} className="overflow-y-auto w-1/4">
                         <p className="uppercase text-center font-bold mb-2">{key}</p>
                         <ul className="flex flex-col space-y-1">
                           {port[key].map((equipment) => (
-                            <li key={equipment.id} className={`flex items-center gap-1 px-1 py-1 rounded-md ${ equipment.partNumber.includes('_DELETED_') ? 'bg-red-400' : "bg-emerald-300"}`}>
-                              <p>
-                                {equipment.partNumber} // {equipment.modelName}
-                              </p>
-                              <Link
-                                to={`/catalog/transceiver/details/${equipment.id}`}
-                                className="material-symbols-outlined text-sm font-bold cursor-pointer"
-                              >
-                                info
-                              </Link>
-                            </li>
+                            <Link 
+                              key={equipment.id}
+                              to={`/catalog/transceiver/details/${equipment.id}`}
+                              className={`flex items-center justify-between gap-1 px-1 py-1 rounded-md cursor-pointer ${ equipment.partNumber.includes('_DELETED_') ? 'bg-red-400' : "bg-emerald-300"} hover:bg-emerald-600 `}>
+                              <p>{equipment.partNumber} {equipment.modelName}</p>
+                              <p className="material-symbols-outlined text-sm font-bold cursor-pointer">info</p>
+                            </Link>
                           ))}
                         </ul>
                       </div>
                     );
                   } else if (key === 'logicalFacilities') {
                     return (
-                      <div key={index + 2000} className="overflow-y-auto">
+                      <div key={index + 2000} className="overflow-y-auto grow">
                         <p className="uppercase mb-2 font-bold text-center">{key}</p>
                         {Object.entries(port.logicalFacilities).map(([lpKey, lpValue]) => (
                           <div key={lpKey} className="flex items-center mb-2 space-x-3 border border-black px-2 py-1">

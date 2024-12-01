@@ -13,7 +13,6 @@ const vendorSchema = new Schema<VendorDocument>({
             require: [true, 'vendorName is required!'],
             trim: true,
             uppercase: true,
-            // unique: true,
         },
         country: {
             type: String,
@@ -37,15 +36,5 @@ const vendorSchema = new Schema<VendorDocument>({
         toObject: { virtuals: true }
     }
 );
-
-// vendorSchema.set('toJSON', {
-//     virtuals: true,
-//     versionKey: false,
-//     transform: function (doc, ret, options) {
-//         ret.id = ret._id;
-//         delete ret._id;
-//         return ret;
-//     },
-// });
 
 export const VendorModel: Model<VendorDocument> = model('Vendor', vendorSchema)

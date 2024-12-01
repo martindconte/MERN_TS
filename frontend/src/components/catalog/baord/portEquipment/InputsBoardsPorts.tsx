@@ -13,41 +13,41 @@ interface Props {
 // export const InputsBoardsPorts = () => {
 export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData }: Props) => {
 
-    const [search, setSearch] = useState<Partial<TransceiverFormData>>({})
+    const [search, setSearch] = useState<Partial<TransceiverFormData>>({ isDeleted: 'all' })
     const { queryVendors } = useVendors({ enabled: true })
 
     const handleOnChange = (event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
         const { name, value, checked } = event.target as HTMLInputElement | HTMLSelectElement & { checked?: boolean };
-
         setSearch(prevState => {
             let newState = { ...prevState };
-
             if (name === 'bitsRates') {
                 const bitRateValue = value as BitsRatesEnum;
                 const bitRates = prevState.bitsRates || [];
                 newState.bitsRates = checked ? [...bitRates, bitRateValue] : bitRates.filter(bitRate => bitRate !== bitRateValue);
+            } else if( name === 'isDeleted' ) {
+                value === 'all' ? newState = { ...prevState, [name]: value } : newState = { ...prevState, [name]: value === 'true' };
             } else {
                 newState = { ...prevState, [name]: value };
             }
-
             if (value === '') {
-                delete newState[name as keyof TransceiverFormData];
+                delete newState[name as keyof TransceiverFormData]; 
             }
-
             return newState;
         });
     }
-
-    if (queryVendors.isLoading) return <Spinner />
 
     const onSubmit = () => {
         handleSearch && handleSearch(search)
     }
 
+    console.log(search);
+
+    if (queryVendors.isLoading) return <Spinner />
+
     return (
         <div className='flex gap-3'>
-            <div className='flex flex-col justify-between border border-gray-400 px-2 rounded-md'>
-                <div className="flex justify-between my-2 items-center space-x-3">
+            <div className='flex flex-col justify-between p-2 border border-gray-400 rounded-md'>
+                <div className="flex justify-between my-1 items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="partNumber">No. Parte</label>
                     <input
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -58,7 +58,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                         onChange={event => handleOnChange(event)}
                     />
                 </div>
-                <div className="flex justify-between my-2 items-center space-x-3">
+                <div className="flex justify-between my-1 items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="vendor">Vendor</label>
                     <select
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -77,7 +77,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                         }
                     </select>
                 </div>
-                <div className="flex justify-between my-2 items-center space-x-3">
+                <div className="flex justify-between my-1 items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="model">Model</label>
                     <input
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -88,7 +88,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                         onChange={event => handleOnChange(event)}
                     />
                 </div>
-                <div className="flex justify-between my-2 items-center space-x-3">
+                <div className="flex justify-between my-1 items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="type">Tipo</label>
                     <input
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -99,7 +99,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                     />
                 </div>
             </div>
-            <div className="flex justify-between items-center space-x-3 border border-gray-400 px-2 rounded-md">
+            <div className="flex justify-between items-center gap-1 border border-gray-400 px-2 rounded-md">
                 <label className="text-right" htmlFor="bitsRates">Bit Rates</label>
                 <div className="w-2/3 h-44 overflow-y-auto border border-gray-300 p-2 outline-none rounded shadow-md bg-white my-1">
                     {Object.values(BitsRatesEnum).map((bitRate) => (
@@ -116,8 +116,8 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                     ))}
                 </div>
             </div>
-            <div className='flex flex-col justify-between border border-gray-400 px-2 rounded-md'>
-                <div className="flex justify-between my-2 items-center space-x-3">
+            <div className='flex flex-col justify-between p-2 border border-gray-400 rounded-md'>
+                <div className="flex justify-between items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="description">Descripcion</label>
                     <input
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -128,7 +128,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
 
                     />
                 </div>
-                <div className="flex justify-between my-2 items-center space-x-3">
+                <div className="flex justify-between items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="observations">Observaciones</label>
                     <input
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -139,7 +139,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                         onChange={event => handleOnChange(event)}
                     />
                 </div>
-                <div className="flex justify-between my-2 items-center space-x-3">
+                <div className="flex justify-between items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="technology">Tecnologia</label>
                     <select
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -157,7 +157,7 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                         }
                     </select>
                 </div>
-                <div className="flex justify-between my-2 items-center space-x-3">
+                <div className="flex justify-between items-center gap-1">
                     <label className="w-1/3 text-right" htmlFor="roadmap">ROADMAP</label>
                     <select
                         className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
@@ -173,6 +173,19 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
                                     value={roadmap}>{roadmap}</option>
                             ))
                         }
+                    </select>
+                </div>
+                <div className="flex justify-between items-center gap-1 bg-red-600 rounded-md">
+                    <label className="w-1/3 text-right text-white" htmlFor="roadmap">ELIMINADOS</label>
+                    <select
+                        className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
+                        id="isDeleted"
+                        name="isDeleted"
+                        onChange={event => handleOnChange(event)}
+                    >
+                        <option value="all">Cualquiera</option>
+                        <option value="false">Dsiponibles</option>
+                        <option value="true">Eliminados</option>
                     </select>
                 </div>
             </div>

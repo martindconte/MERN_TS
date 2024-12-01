@@ -68,7 +68,7 @@ const equipmentsPortsSchema = transceiverSchema.pick({
   bitsRates: true,
 });
 
-//! transceiverTypes importa boardSchema y boardSchema importa transceiverTypes esto creo una refrencia circular! Se soluciono con z.lazy (funcionalidad de zod)
+//! transceiverTypes importa boardSchema y... boardSchema importa transceiverTypes esto creo una refrencia circular! Se soluciono con z.lazy (funcionalidad de zod)
 //! otra opcion es mover las partes comunes a un archivo y realizar las importantes desde ahi...
 
 const portsInBoardSchema = z.object({
@@ -107,6 +107,7 @@ export const boardSchema = z.object({
   slotSize: z.number().optional().default(1),
   technology: z.nativeEnum(TechnologyEnum).optional().default(TechnologyEnum.DWDM),
   roadmap: z.nativeEnum(RoadmapEnum).optional().default(RoadmapEnum.empty),
+  isDeleted: z.boolean().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -125,12 +126,21 @@ const paginationSchema = z.object({
 // response APIs
 export const respAPIBoardSchema = z.object({
   msg: z.string().optional(),
-  payload: boardSchema,
+  payload: boardSchema.pick({ id: true, boardName: true, partNumber: true, vendor: true, description: true }),
 });
+// export const respAPIBoardSchema = z.object({
+//   msg: z.string().optional(),
+//   payload: boardSchema,
+// });
 
 export const respAPIBoardsSchema = z.object({
   payload: z.array(boardSchema),
   pagination: paginationSchema,
+});
+
+export const boardsDeletedSchema = z.object({
+  boards: z.array(boardSchema),
+  subracks: z.string().default('TODO... PENDIENTE SUBRACKS')
 });
 
 //* types
@@ -138,9 +148,10 @@ export type BoardType = z.infer<typeof boardSchema>;
 export type BoardPaginationType = z.infer<typeof paginationSchema>;
 export type BoardPortsType = z.infer<typeof portsInBoardSchema>;
 export type EquipmentType = z.infer<typeof equipmentsPortsSchema>;
+export type BoardsDeletedType = z.infer<typeof boardsDeletedSchema>;
 export type BoardFormData = Pick<
   BoardType,
-  'boardName'| 'partNumber'| 'bitsRates'| 'bandwidthMax'| 'description'| 'observations'| 'ports'| 'slotSize'| 'technology'| 'roadmap'
+  'boardName'| 'partNumber'| 'bitsRates'| 'bandwidthMax'| 'description'| 'observations'| 'ports'| 'slotSize'| 'technology'| 'roadmap' | 'isDeleted'
 > & {
   vendor: string
 };

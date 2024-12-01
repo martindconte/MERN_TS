@@ -1,16 +1,20 @@
+import { IBoardResponse } from '../../../../interface';
 import { CreateBoardDTO } from '../../../dtos';
-import { BoardEntity } from '../../../entities';
 import { BoardRepository } from '../../../repositories';
 
 interface CreateBoardUseCase {
-    execute( dto: CreateBoardDTO ): Promise<BoardEntity> 
+  execute(dto: CreateBoardDTO): Promise<IBoardResponse>;
 }
 
-export class CreateBoard implements CreateBoardUseCase{
-    constructor(
-        private readonly repository: BoardRepository
-    ) {}
-    execute(dto: CreateBoardDTO): Promise<BoardEntity> {
-        return this.repository.create( dto )
-    }
+export class CreateBoard implements CreateBoardUseCase {
+  constructor(private readonly repository: BoardRepository) {}
+  execute(dto: CreateBoardDTO): Promise<IBoardResponse> {
+    return this.repository.create(dto);
+  }
+  // constructor(
+  //     private readonly repository: BoardRepository
+  // ) {}
+  // execute(dto: CreateBoardDTO): Promise<BoardEntity> {
+  //     return this.repository.create( dto )
+  // }
 }

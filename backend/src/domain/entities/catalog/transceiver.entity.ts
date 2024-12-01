@@ -7,6 +7,7 @@ export class TransceiverEntity {
     public readonly id: string,
     public readonly partNumber: string,
     public readonly vendor: Partial<VendorEntity>,
+    private readonly isDeleted: boolean = false,
     public readonly type?: string,
     public readonly modelName?: string,
     public readonly description?: string,
@@ -20,7 +21,7 @@ export class TransceiverEntity {
   ) {}
 
   static fromObject(object: {[ key: string ]: any }) {
-    const { id = object._id, partNumber, modelName, vendor, type, description, observations, technology, bitsRates, roadmap, createdAt, updatedAt } = object;
+    const { id = object._id, partNumber, modelName, vendor, type, description, observations, technology, bitsRates, roadmap, createdAt, updatedAt, isDeleted = false } = object;
     // const { id, _id, partNumber, model, vendor, type, description, observations, technology, bitsRates, signals, status, createdAt, updatedAt } = object;
 
     if( !id ) throw CustomError.badRequest(`Missing id - id: ${id} - partNumber: ${ partNumber }`);
@@ -40,6 +41,7 @@ export class TransceiverEntity {
       id,
       partNumber,
       vendorMapped,
+      isDeleted,
       type,
       modelName,
       description,

@@ -1,18 +1,19 @@
-import { BoardEntity } from '../../../entities';
 import { BoardRepository } from '../../../repositories';
-import { QueriesDTO, SearchBoardDTO } from '../../../dtos';
-import { BoardEntityWithPagination, IBoardSearch } from '../../../../interface';
-
+import { IBoardSearch, IBoardsResponse } from '../../../../interface';
 
 export interface GetBoardsUseCase {
-    execute( queries?: IBoardSearch ): Promise<BoardEntity[] | BoardEntityWithPagination>
+  execute(queries?: IBoardSearch): Promise<IBoardsResponse>;
 }
 
 export class GetBoards implements GetBoardsUseCase {
-    constructor(
-        private readonly repository: BoardRepository
-    ) {}
-    execute( queries?: IBoardSearch ): Promise<BoardEntity[] | BoardEntityWithPagination> {
-        return this.repository.getAll( queries );
-    }
+  constructor(private readonly repository: BoardRepository) {}
+  execute(queries?: IBoardSearch): Promise<IBoardsResponse> {
+    return this.repository.getAll(queries);
+  }
+  // constructor(
+  //     private readonly repository: BoardRepository
+  // ) {}
+  // execute( queries?: IBoardSearch ): Promise<BoardEntity[] | BoardEntityWithPagination> {
+  //     return this.repository.getAll( queries );
+  // }
 }

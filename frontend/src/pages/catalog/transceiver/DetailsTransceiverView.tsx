@@ -1,9 +1,11 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { keyToShowInTable } from '../../../components/shared/table/keysToShowInTable';
 import { BtnNavTransceiver, Spinner } from '../../../components';
 import { useTransceiver } from '../../../hook';
 import { useMemo } from 'react';
 
+
+//todo: rearmar en componentes y reutilizar las interfaces (Rearmar como DetailBoard)
 interface Categories {
   SDH: string[];
   SONNET: string[];
@@ -42,7 +44,7 @@ const colors = [
 const categories: Categories = {
   OTN: [
     'OTS', 'OMS', 'OSC', 'OCH', 'OTU1', 'OTU2', 'OTU3', 'OTU4', 'OTUCn', 'OTU25', 'OTU50', 'ODU0', 'ODU1', 'ODU2',
-    'ODU2e', 'ODU3', 'ODU4', 'ODUflex', 'ODUCn', 'OPU0','OPU1', 'OPU2', 'OPU2e', 'OPU3', 'OPU4', 'OPUflex', 'OPUCn'
+    'ODU2e', 'ODU3', 'ODU4', 'ODUflex', 'ODUCn', 'OPU0', 'OPU1', 'OPU2', 'OPU2e', 'OPU3', 'OPU4', 'OPUflex', 'OPUCn'
   ],
   SDH: ["STM-1", "STM-4", "STM-16", "STM-64"],
   SONNET: ["OC-3", "OC-12", "OC-48", "OC-192"],
@@ -63,8 +65,10 @@ const groupBitRates = (data: string[]): { [key in keyof Categories]: string[] } 
 export const DetailsTransceiverView = () => {
 
   const transceiverKeys = keyToShowInTable['catalogTransceiver']
+  const { search } = useLocation()
+  const queryParams = new URLSearchParams(search)
   const { transceiverId } = useParams<{ transceiverId: string }>();
-  const { queryTransceiver } = useTransceiver({ id: transceiverId! })
+  const { queryTransceiver } = useTransceiver({ id: transceiverId!, searchParams: search })
 
   const groupedBitRates = useMemo(() => {
     return queryTransceiver.data ? groupBitRates(queryTransceiver.data.bitsRates) : {} as { [key in keyof Categories]: string[] };
@@ -74,7 +78,14 @@ export const DetailsTransceiverView = () => {
   if (!queryTransceiver.data) return <div className="flex-1 bg-stone-900 text-4xl text-white font-oswald uppercase font-bold text-center px-3 py-4">No se Encontraron datos</div>;
 
   return (
+
     <main className="flex-1 bg-stone-900 font-roboto">
+      {
+        queryParams.get('isDeleted') === 'true' &&
+        <div className="text-white bg-red-600 shadow-xl shadow-red-900 px-4 py-2 mx-auto my-6 text-center uppercase font-semibold w-3/5 rounded-lg">
+          <p>El Transceiver consultado se encuentra eliminado. Aun Puede volver a habilitarlo</p>
+        </div>
+      }
       <h2 className="uppercase text-2xl font-extrabold text-white px-4 py-4">
         <span className="text-blue-500">Datos de </span>Transceiver/Modulo:
       </h2>
@@ -82,11 +93,11 @@ export const DetailsTransceiverView = () => {
         <div className="w-80 h-fit bg-gray-50 px-3 py-4 rounded-lg text-sm space-y-2">
           {
             transceiverKeys.map(({ key, label }) => {
-              if( key === 'vendor' ) {
+              if (key === 'vendor') {
                 const value = queryTransceiver.data?.[key]
                 return (
                   <p key={key} className="break-words">
-                    <strong className="uppercase mr-1">{label}:</strong>{ value?.vendorName }</p>
+                    <strong className="uppercase mr-1">{label}:</strong>{value?.vendorName}</p>
                 );
               }
               const value = queryTransceiver.data![key as keyof typeof queryTransceiver.data];

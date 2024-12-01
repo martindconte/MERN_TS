@@ -11,8 +11,6 @@ export const DeletedTransceiversView = () => {
   const { queryTransceiversDeleted } = useTransceiversDeleted({});
   const { mutationPermanentlyDeleteTransceiver } = useTransceiverMutation();
 
-  console.log(queryTransceiversDeleted.data);
-
   const filteredTransceiver: TransceiversDeletedType = useMemo(() => {
     return {
       transceivers: queryTransceiversDeleted.data?.transceivers.filter(transceiver =>

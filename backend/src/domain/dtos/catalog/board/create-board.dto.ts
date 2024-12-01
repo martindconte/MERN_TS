@@ -48,7 +48,7 @@ export class CreateBoardDTO {
 
                 for (const value of values) {
                     for (const data of value) {
-                        if (valuesSet.has(data)) return [`${data} is Duplicated!`];
+                        if (valuesSet.has(data)) return [`value ${data} is Duplicated!`];
                         valuesSet.add(data)
                     };
                 };
@@ -85,7 +85,7 @@ export class CreateBoardDTO {
                 partNumber,
                 vendor,
                 false,
-                bitsRates,
+                bitsRates || [],
                 description,
                 observations,
                 portsCheck,

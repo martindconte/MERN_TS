@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { TransceiverFormData, TransceiverType } from '../../../../types';
 import { InputsBoardsPorts } from './InputsBoardsPorts';
-import { useTransceivers } from '../../../../hook';
+import { useTransceivers, /* useTransceiversDeleted */ } from '../../../../hook';
 import { Table } from '../../../shared/table/Table';
 import { Spinner } from '../../../shared/spinners/Spinner';
 
@@ -12,9 +12,14 @@ interface Props {
 
 export const SearchPortEquipment = ({ selectedData, setSelectedData }: Props) => {
 
-    const [search, setSearch] = useState<Partial<TransceiverFormData>>({})
+    const [search, setSearch] = useState<Partial<TransceiverFormData>>({ isDeleted: true })
     const [enabled, setEnabled] = useState(false)
     const { queryTransceivers, limit, page, setLimit, setPage } = useTransceivers({ enabled, search })
+    // const { queryTransceiversDeleted } = useTransceiversDeleted({})
+
+        // console.log('quewry --->', queryTransceivers.data);
+
+        // console.log('eliminados', queryTransceiversDeleted.data?.transceivers);
 
     useEffect(() => {
         setPage(1)

@@ -67,7 +67,7 @@ export const useTransceiverMutation = () => {
       if (response) {
         const { msg, payload } = response
         queryClient.invalidateQueries({
-          queryKey: ['transceivers']
+          queryKey: ['transceiversDeleted']
         })
         toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.modelName} / Description: ${payload.description}`, {
           theme: 'colored'

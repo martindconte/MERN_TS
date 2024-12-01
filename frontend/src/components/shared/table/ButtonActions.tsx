@@ -10,9 +10,10 @@ interface Props {
     setIdSelected?: Dispatch<React.SetStateAction<string>>
     fnSelected: () => void;
     selectedData?: any[];
+    isDeleted?: boolean;
 }
 
-export const ButtonActions = ({ path, id, btnDelete, setModalView, setIdSelected, fnSelected, selectedData }: Props) => {
+export const ButtonActions = ({ path, id, btnDelete, setModalView, setIdSelected, fnSelected, selectedData, isDeleted }: Props) => {
 
   const { pathname } = useLocation();
 
@@ -23,11 +24,16 @@ export const ButtonActions = ({ path, id, btnDelete, setModalView, setIdSelected
   .split('/')
   .filter(segment => segment && segment !== 'search')
   .join('/');
+  
+  // console.log({pathname});
+  // console.log({path});
+  // console.log({window: window.location.pathname});
+  // console.log({basePath});
 
   // Lógica para navegar
   const handleNavigate = ( subpath: string ) => {
     const targetPath = `/${basePath}/${subpath}/${id}`;
-    return pathname.includes('deleted') ? `${targetPath}?isDeleted=true` : targetPath;
+    return pathname.includes('deleted') && isDeleted ? `${targetPath}?isDeleted=true` : targetPath;
   };
 
   //* antes de agregar ?isDeleted=true

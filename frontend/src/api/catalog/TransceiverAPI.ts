@@ -10,12 +10,13 @@ export const transceiverMapped = (transceiver: TransceiverType) => ({
     partNumber: transceiver.partNumber,
     modelName: transceiver.modelName,
     description: transceiver.description || '',
-    vendor: transceiver.vendor,
+    vendor: { id: transceiver.vendor.id, vendorName: transceiver.vendor.vendorName },
     type: transceiver.type,
     observations: transceiver.observations || '',
     technology: transceiver.technology || TechnologyEnum.DWDM,
     bitsRates: transceiver.bitsRates || [],
     roadmap: transceiver.roadmap || RoadmapEnum.empty,
+    isDeleted: transceiver.isDeleted,
     createdAt: transceiver.createdAt ? new Date(transceiver.createdAt) : new Date(),
     updatedAt: transceiver.updatedAt ? new Date( transceiver.updatedAt ) : new Date(),
 })
@@ -37,8 +38,10 @@ export const createTransceiver = async ( formData: TransceiverFormData ) => {
 }
 
 export const getTransceivers = async ( query = {} ) => {
+    console.log(query);
     const baseURL = '/catalog/transceiver';
     const URL = buildURL( baseURL, query );
+    console.log({URL});
     try {
         const { data: { payload, pagination } } = await api(URL);
         const mappedData: { payload: TransceiverType[], pagination: TransceiverPaginationType  } = {
@@ -104,7 +107,6 @@ export const deleteTransceiver = async ( id: TransceiverType['id'] ) => {
 export const getAllTransceiversDeleted = async () => {
     try {
         const { data: { boards, transceivers } }: {data: TransceiversDeletedType} = await api('/catalog/transceiver/clean-transceiver');
-        console.log({boards}, {transceivers});
         const dataMapped: TransceiversDeletedType = {
             transceivers: transceivers.map( transceiver => transceiverMapped( transceiver ) ),
             boards: boards.map( board => boardMapped( board ) ),

@@ -1,4 +1,5 @@
 import { SubrackEntity } from "../../domain"
+import { RoadmapEnum, TechnologyEnum } from "./common.interface"
 
 export interface SubrackEntityWithPagination {
     payload: SubrackEntity[]
@@ -32,6 +33,25 @@ export enum SubrackStatus {
     inService = 'InService',
     endOfSupport = 'EndOfSupport',
     endOfMarketing = 'EndOfMarketing'
+}
+
+export interface ISubarck {
+    id: string,
+    partNumber: string,
+    slots: ISlots[],
+    subrackFamily: string,
+    subrackType: string,
+    totalSlot: number,
+    vendor: string,
+    boards?: string,
+    description?: string,
+    model?: string,
+    observations?: string,
+    owner?: SubrackOwner,
+    roadmap?: RoadmapEnum,
+    technology?: TechnologyEnum,
+    createdAt?: Date,
+    updatedAt?: Date,
 }
 
 export interface ISlots {

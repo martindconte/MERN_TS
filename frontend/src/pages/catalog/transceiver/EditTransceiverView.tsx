@@ -42,7 +42,6 @@ export default function EditTransceiverView() {
         <FormTransceiver
           onSubmit={handleForm}
           buttonLabel='Editar Transceiver'
-          // defaultValues={{...queryTransceiver.data, vendor: { id: queryTransceiver.data.vendor.id }}}
           defaultValues={{ ...queryTransceiver.data, vendor: queryTransceiver.data.vendor.id }}
           requiredFields
           isDeleted={queryParams.get('isDeleted') === 'true'}

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createBoard, deleteBoard, updateBoard } from '../../../api'
+import { cleanBoard, createBoard, deleteBoard, updateBoard } from '../../../api'
 import { toast } from 'react-toastify'
 import { BoardType } from '../../../types'
 
@@ -68,9 +68,26 @@ export const useBoardMutation = () => {
     }
   })
 
+  const mutationPermanentlyDeleteBoard = useMutation({
+    mutationFn: async ( id: BoardType['id'] ) => await cleanBoard( id ),
+    onError: (error) => toast.error(error.message, { theme: 'colored' }),
+    onSuccess: (response) => {
+      if (response) {
+        const { msg, payload } = response
+        queryClient.invalidateQueries({
+          queryKey: ['boardsDeleted']
+        })
+        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.boardName} / Description: ${payload.description}`, {
+          theme: 'colored'
+        })
+      }
+    }
+  })
+
   return {
     mutationCreateBoard,
     mutationUpdateBoard,
-    mutationDeletedBoard
+    mutationDeletedBoard,
+    mutationPermanentlyDeleteBoard,
   }
 }

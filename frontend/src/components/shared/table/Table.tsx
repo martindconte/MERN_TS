@@ -1,8 +1,7 @@
 import { useState, Dispatch, useMemo } from 'react';
-// import { UseMutationResult } from '@tanstack/react-query';
 import { useReactTable, createColumnHelper, getCoreRowModel, flexRender, ColumnDef, getSortedRowModel, getPaginationRowModel } from '@tanstack/react-table';
 
-import { /* Central, */ Pagination } from '../../../types';
+import { Pagination } from '../../../types';
 
 import { ButtonActions } from './ButtonActions';
 import { ColumnSelector } from './ColumnSelector';
@@ -14,50 +13,55 @@ import { formatDate } from '../../../helpers';
 
 import tableStyles from './styles/table.module.css';
 
-export interface DeleteResponse<T>{
+export interface DeleteResponse<T> {
   msg?: string;
   payload: T;
 }
 
 interface Identifiable {
   id: string;
+  isDeleted?: boolean;
 }
 
 type Props<T extends Identifiable> = {
   data: T[];
   selectedData?: T[];
   info: string;
-  fnDelete?: ( id: string ) => Promise<any> | void;
+  fnDelete?: (id: string) => Promise<any> | void;
   // fnDelete?: UseMutationResult<DeleteResponse<T>, Error, { id: string }, unknown>;
   // fnDelete?: ( id: string ) => DeleteResponse<T>
   fnSelected?: (selectedRows: T[]) => void;
   path?: string;
 } & (
-  | {
+    | {
       pagination: Pagination;
       page: number;
       setPage: Dispatch<React.SetStateAction<number>>;
       limit: number;
       setLimit: Dispatch<React.SetStateAction<number>>;
     }
-  | {
+    | {
       pagination?: undefined;
       page?: never;
       setPage?: never;
       limit?: never;
       setLimit?: never;
     }
-);
+  );
+
+//* type que paso a ButtonActions para usar en las paginas /*****/deleted. Para de esta manera poder armar el link con el condicional si esta o no eliminado
+// type BaseRowData = { id: string; isDeleted?: boolean };
 
 export const Table = <T extends Identifiable>({ data, pagination, info, page, setPage, limit, setLimit, fnDelete, fnSelected, selectedData, path }: Props<T>) => {
+  // export const Table = <T extends Identifiable & BaseRowData>({ data, pagination, info, page, setPage, limit, setLimit, fnDelete, fnSelected, selectedData, path }: Props<T>) => {
 
-  const [selectedColumns, setSelectedColumns] = useState<string[]>( keyToShowInTable[info].map(({ key }) => key) );
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(keyToShowInTable[info].map(({ key }) => key));
   const [modalView, setModalView] = useState(false);
   const [idSelected, setIdSelected] = useState('');
 
   const handleDelete = async () => {
     if (idSelected) {
-      const result = fnDelete?.( idSelected );
+      const result = fnDelete?.(idSelected);
       if (result instanceof Promise) {
         await result; // Si es una promesa, espera a que se resuelva
       }
@@ -95,19 +99,19 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
         id: "actions",
         header: () => "Acciones",
         cell: ({ row }) => (
-
-            <div className={tableStyles.actions}>
-              <ButtonActions
-                path={ path }
-                // path={ pathname }
-                id={ row.original.id }
-                btnDelete={ fnDelete ? true : false}
-                setModalView={ setModalView }
-                setIdSelected={ setIdSelected }
-                fnSelected={() => handleRowSelect(row.original)}
-                selectedData={selectedData}
-              />
-            </div>
+          <div className={tableStyles.actions}>
+            <ButtonActions
+              path={path}
+              // path={ pathname }
+              id={row.original.id}
+              btnDelete={fnDelete ? true : false}
+              setModalView={setModalView}
+              setIdSelected={setIdSelected}
+              fnSelected={() => handleRowSelect(row.original)}
+              selectedData={selectedData}
+              isDeleted={row.original?.isDeleted}
+            />
+          </div>
         ),
       }),
 
@@ -129,10 +133,10 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
             header: () => label,
             cell: (info) => {
               const value = info.getValue();
-              if ( value instanceof Date ) return formatDate( value );
-              if ( typeof value === 'boolean' ) return value ? "Activo" : "Desafectado";
-              if ( typeof value === 'object' && value !== null ) {
-                if ( 'vendorName' in value ) return value.vendorName;
+              if (value instanceof Date) return formatDate(value);
+              if (typeof value === 'boolean') return value ? "Activo" : "Desafectado";
+              if (typeof value === 'object' && value !== null) {
+                if ('vendorName' in value) return value.vendorName;
                 // if ( 'amount' in value ) return value.amount;
                 // if ( 'unit' in value ) return value.unit;
               }
@@ -180,8 +184,8 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
     <>
       {
         modalView && <ModalDelete
-          handleDelete={ handleDelete }
-          setModalView={ setModalView }
+          handleDelete={handleDelete}
+          setModalView={setModalView}
         />
       }
       <div className={tableStyles.tableContainer}>
@@ -217,7 +221,7 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
                         <div
                           onMouseDown={header.getResizeHandler()}
                           onTouchStart={header.getResizeHandler()}
-                          className={`${tableStyles.resizer} ${header.column.getIsResizing() ? tableStyles.isResizing : "" }`}
+                          className={`${tableStyles.resizer} ${header.column.getIsResizing() ? tableStyles.isResizing : ""}`}
                         ></div>
                       </div>
                     )}
@@ -228,28 +232,29 @@ export const Table = <T extends Identifiable>({ data, pagination, info, page, se
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => {
-              // console.log( selectedData && selectedData.some( data => data.id === row.original.id ));
-              // console.log( row.original ) 
-            return (
-              <tr 
-                key={row.id}
-                className={`${ selectedData && selectedData?.length > 0 && selectedData.some( data => data.id === row.original.id ) ? 'bg-fuchsia-300 border-2 border-black' : '' }`}
-              >
-                {row.getVisibleCells().map((cell) => {
-                  const cellValue: any = cell.getContext().getValue();
-                  const isDeleted = (typeof cellValue === 'string' && cellValue.includes('_DELETED_')) ||
-                            (typeof cellValue === 'object' && cellValue !== null && 'vendorName' in cellValue && typeof cellValue.vendorName === 'string' && cellValue.vendorName.includes('_DELETED_'));
-                  return (
-                  <td
-                    key={cell.id}
-                    style={{ width: cell.column.getSize() }}
-                    className={`${tableStyles.td} ${tableStyles.wrapper} ${isDeleted ? 'bg-red-600 text-white' : ''}`}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                )})}
-              </tr>
-            )})}
+              return (
+                <tr
+                  key={row.id}
+                  className={`${selectedData && selectedData?.length > 0 && selectedData.some(data => data.id === row.original.id) ? 'bg-fuchsia-300 border-2 border-black' : ''} ${ row.original.isDeleted ? 'bg-red-200' : '' }`}
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    // const cellValue: any = cell.getContext().getValue();
+                    // const isDeleted = (typeof cellValue === 'string' && cellValue.includes('_DELETED_')) ||
+                    //   (typeof cellValue === 'object' && cellValue !== null && 'vendorName' in cellValue && typeof cellValue.vendorName === 'string' && cellValue.vendorName.includes('_DELETED_'));
+                    return (
+                      <td
+                        key={cell.id}
+                        style={{ width: cell.column.getSize() }}
+                        className={`${tableStyles.td} ${tableStyles.wrapper}`}
+                        // className={`${tableStyles.td} ${tableStyles.wrapper} ${isDeleted ? 'bg-red-600 text-white' : ''}`}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
           </tbody>
         </table>
         {pagination && (

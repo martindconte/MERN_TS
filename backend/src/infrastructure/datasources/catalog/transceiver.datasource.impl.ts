@@ -2,7 +2,7 @@ import { BoardModel, SubrackModel, TransceiverModel } from '../../../data';
 import { BoardEntity, CreateTransceiverDTO, QueriesDTO, SearchTransceiverDTO, SubrackEntity, TransceiverDatasource, TransceiverEntity, UpdateTransceiverDTO } from '../../../domain';
 import { generateRandomCode, sortBy } from '../../../helpers';
 import { ITransceiverDeleted, ITransceiversDeleted, TransceiverEntityWithPagination } from '../../../interface';
-import { SubrackDatasourceImpl } from './subrack.datasource.impl';
+// import { SubrackDatasourceImpl } from './subrack.datasource.impl';
 
 export class TransceiverDatasourceImpl implements TransceiverDatasource {
 
@@ -99,33 +99,79 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
     };
 
     async getAllDeleted(): Promise<ITransceiversDeleted> {
-        const transceiversDeleted = await TransceiverModel.find({ isDeleted: true }).populate([{ path: 'vendor', select: 'vendorName' }]);
-        const ids = transceiversDeleted.map((transceiver) => transceiver.id);
-        const [boards, subracks] = await Promise.all([
-            BoardModel.find({ ports: { $elemMatch: { equipments: { $in: ids } } } }).populate([
+        const transceiversDeleted = await TransceiverModel.find({ isDeleted: true })
+            .populate({ path: 'vendor', select: 'vendorName' })
+            .sort({ 'vendor.vendorName': 1, type: 1, partNumber: 1, modelName: 1 })
+            .lean();
+        const ids = transceiversDeleted.map((transceiver) => transceiver._id);
+        const boardsWidthTransceiverDeleted = await BoardModel.find({ ports: { $elemMatch: { equipments: { $in: ids } } } })
+            .select('-ports -bitsRates')
+            .populate([
                 { path: 'vendor', select: 'vendorName' },
-                {
-                    path: 'ports.equipments',
-                    select: 'partNumber modelName vendor description bitsRates',
-                    populate: { path: 'vendor', select: 'vendorName', model: 'Vendor' },
-                },
-            ]),
-            // new BoardDatasourceImpl().getAll({ ports: { $elemMatch: { equipment: { $in: ids }}}}),
-            new SubrackDatasourceImpl().getAll({ vendor: { $in: ids } })
-        ]);
+                // {
+                //     path: 'ports.equipments',
+                //     select: 'partNumber modelName vendor description bitsRates',
+                //     populate: { path: 'vendor', select: 'vendorName', model: 'Vendor' },
+                // },
+            ])
+            .sort({ 'vendor.vendorName': 1, type: 1, partNumber: 1, modelName: 1 })
+        // const [boards, subracks] = await Promise.all([
+        //     BoardModel.find({ ports: { $elemMatch: { equipments: { $in: ids } } } }).populate([
+        //         { path: 'vendor', select: 'vendorName' },
+        //         {
+        //             path: 'ports.equipments',
+        //             select: 'partNumber modelName vendor description bitsRates',
+        //             populate: { path: 'vendor', select: 'vendorName', model: 'Vendor' },
+        //         },
+        //     ]),
+        //     // new BoardDatasourceImpl().getAll({ ports: { $elemMatch: { equipment: { $in: ids }}}}),
+        //     new SubrackDatasourceImpl().getAll({ vendor: { $in: ids } })
+        // ]);
 
-        const boardPlain = boards.map(board => board.toObject())
+        // const boardPlain = boards.map(board => board.toObject())
+        const boardsToObject = boardsWidthTransceiverDeleted.map( board => board.toObject() )
 
-        console.log('Desde getAllDeleted Transceivers', { transceiversDeleted });
-        console.log('Desde getAllDeleted Transceivers', { boards }, { subracks });
+        // console.log('Desde getAllDeleted Transceivers', { boards }, { subracks });
 
         return {
-            transceivers: sortBy(transceiversDeleted.map(TransceiverEntity.fromObject), ['vendor.vendorName', 'type', 'partNumber', 'model']),
-            boards: sortBy(boardPlain.map(BoardEntity.fromObject), ['vendor.vendorName', 'partNumber', 'boardName']),
-            // boards: sortBy(boards as BoardEntity[], ['vendor.vendorName', 'partNumber', 'boardName']),
-            subracks: subracks as SubrackEntity[],
+            boards: boardsToObject.map( BoardEntity.fromObject ),
+            transceivers: transceiversDeleted.map( TransceiverEntity.fromObject )
         }
+        // return {
+        //     transceivers: sortBy(transceiversDeleted.map(TransceiverEntity.fromObject), ['vendor.vendorName', 'type', 'partNumber', 'model']),
+        //     boards: sortBy(boardPlain.map(BoardEntity.fromObject), ['vendor.vendorName', 'partNumber', 'boardName']),
+        //     // boards: sortBy(boards as BoardEntity[], ['vendor.vendorName', 'partNumber', 'boardName']),
+        //     subracks: subracks as SubrackEntity[],
+        // }
     }
+    // async getAllDeleted(): Promise<ITransceiversDeleted> {
+    //     const transceiversDeleted = await TransceiverModel.find({ isDeleted: true }).populate([{ path: 'vendor', select: 'vendorName' }]);
+    //     const ids = transceiversDeleted.map((transceiver) => transceiver.id);
+    //     const [boards, subracks] = await Promise.all([
+    //         BoardModel.find({ ports: { $elemMatch: { equipments: { $in: ids } } } }).populate([
+    //             { path: 'vendor', select: 'vendorName' },
+    //             {
+    //                 path: 'ports.equipments',
+    //                 select: 'partNumber modelName vendor description bitsRates',
+    //                 populate: { path: 'vendor', select: 'vendorName', model: 'Vendor' },
+    //             },
+    //         ]),
+    //         // new BoardDatasourceImpl().getAll({ ports: { $elemMatch: { equipment: { $in: ids }}}}),
+    //         new SubrackDatasourceImpl().getAll({ vendor: { $in: ids } })
+    //     ]);
+
+    //     const boardPlain = boards.map(board => board.toObject())
+
+    //     console.log('Desde getAllDeleted Transceivers', { transceiversDeleted });
+    //     console.log('Desde getAllDeleted Transceivers', { boards }, { subracks });
+
+    //     return {
+    //         transceivers: sortBy(transceiversDeleted.map(TransceiverEntity.fromObject), ['vendor.vendorName', 'type', 'partNumber', 'model']),
+    //         boards: sortBy(boardPlain.map(BoardEntity.fromObject), ['vendor.vendorName', 'partNumber', 'boardName']),
+    //         // boards: sortBy(boards as BoardEntity[], ['vendor.vendorName', 'partNumber', 'boardName']),
+    //         subracks: subracks as SubrackEntity[],
+    //     }
+    // }
 
     async getById(id: TransceiverEntity["id"], queries?: SearchTransceiverDTO): Promise<TransceiverEntity> {
         const { isDeleted = false } = queries || {};
@@ -137,17 +183,19 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
         return TransceiverEntity.fromObject(transceiver);
     }
 
+    //todo: NO SE REQUIERE SUBRACKS... NO SE INSTALAN TRANSCEIVERS EN SUBRACKS. OPTIMIZAR EL RETORNO (NO SE REQUIERE EL OBJETO TRANSCEIVER COMPLETO NI BOARD COMPLETO)
     async getByIdDeleted(id: TransceiverEntity['id']): Promise<ITransceiverDeleted> {
         const transceiver = await this.getById(id, { isDeleted: true });
         const [boards, subracks] = await Promise.all([
-            BoardModel.find({ ports: { $elemMatch: { equipment: { $in: id } } } }),
+            BoardModel.find({ 'ports.equipments': id }),
+            // BoardModel.find({ ports: { $elemMatch: { equipment: id } } }),
             SubrackModel.find({ vendor: id }),
         ])
 
         return {
             transceiver: transceiver,
             boards: boards.map(BoardEntity.fromObject),
-            subracks: subracks.map(SubrackEntity.fromObject)
+            // subracks: subracks.map(SubrackEntity.fromObject)
         }
     }
 
@@ -200,8 +248,8 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
     }
 
     async clean(id: TransceiverEntity['id']): Promise<TransceiverEntity> {
-        const { boards, subracks, transceiver } = await this.getByIdDeleted(id);
-        if (boards.length > 0 || subracks.length > 0) throw 'Transceiver not deleted. The transceiver has associated bords or subracks';
+        const { boards } = await this.getByIdDeleted(id);
+        if (boards.length > 0) throw 'Transceiver not deleted. The transceiver has associated bords';
         const transceiverDeleted = await TransceiverModel.findByIdAndDelete(id).populate([{ path: 'vendor', select: 'vendorName' }]);
         if (transceiverDeleted) {
             return TransceiverEntity.fromObject(transceiverDeleted);
@@ -209,5 +257,15 @@ export class TransceiverDatasourceImpl implements TransceiverDatasource {
             throw 'Error - Delete failed';
         };
     };
+    // async clean(id: TransceiverEntity['id']): Promise<TransceiverEntity> {
+    //     const { boards, subracks, transceiver } = await this.getByIdDeleted(id);
+    //     if (boards.length > 0 || subracks.length > 0) throw 'Transceiver not deleted. The transceiver has associated bords or subracks';
+    //     const transceiverDeleted = await TransceiverModel.findByIdAndDelete(id).populate([{ path: 'vendor', select: 'vendorName' }]);
+    //     if (transceiverDeleted) {
+    //         return TransceiverEntity.fromObject(transceiverDeleted);
+    //     } else {
+    //         throw 'Error - Delete failed';
+    //     };
+    // };
 
 };
