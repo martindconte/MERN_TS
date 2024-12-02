@@ -92,8 +92,6 @@ export const getBoards = async (query = {}) => {
 export const getBoard = async (id: BoardType['id'], searchParams: string = '') => {
   try {
     const { data } = await api(`catalog/board/${id}` + searchParams);
-    console.log(data);
-    console.log(boardMapped(data));
     const response = boardSchema.safeParse(boardMapped(data));
     if (response.success) return response.data;
   } catch (error) {
@@ -110,17 +108,13 @@ export const getBoard = async (id: BoardType['id'], searchParams: string = '') =
 };
 
 export const updateBoard = async ({ id, formData, searchParams = '' }: { id: BoardType['id'], formData: BoardFormData, searchParams?: string }) => {
-  const { boardName, partNumber, ports } = formData
+  console.log(formData);
+  const { boardName, partNumber, ports, isDeleted } = formData
   
-  // const portsId = ports.map(port => ({
-  //   ...port,
-  //   equipments: port.equipments.map(equipment => equipment.id)
-  // }))
-
   const boardTransform = {
     ...formData,
-    boardName: regExHelper.containsDeleteSequence( boardName ) ? regExHelper.removeDeleteSequence( boardName ) : boardName,
-    partNumber: regExHelper.containsDeleteSequence( partNumber ) ? regExHelper.removeDeleteSequence( partNumber ) : partNumber,
+    boardName: isDeleted ? boardName : regExHelper.containsDeleteSequence( boardName ) ?? regExHelper.removeDeleteSequence( boardName ),
+    partNumber: isDeleted ? partNumber : regExHelper.containsDeleteSequence( partNumber ) ?? regExHelper.removeDeleteSequence( partNumber ),
     ports: ports.map(port => ({
       ...port,
       equipments: port.equipments.map(equipment => equipment.id)

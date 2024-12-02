@@ -38,10 +38,8 @@ export const createTransceiver = async ( formData: TransceiverFormData ) => {
 }
 
 export const getTransceivers = async ( query = {} ) => {
-    console.log(query);
     const baseURL = '/catalog/transceiver';
     const URL = buildURL( baseURL, query );
-    console.log({URL});
     try {
         const { data: { payload, pagination } } = await api(URL);
         const mappedData: { payload: TransceiverType[], pagination: TransceiverPaginationType  } = {

@@ -15,6 +15,7 @@ export default function EditTransceiverView() {
   const { mutationUpdateTransceiver } = useTransceiverMutation()
 
   const handleForm = async (formData: TransceiverFormData) => {
+    console.log('formData', formData);
     const data = await mutationUpdateTransceiver.mutateAsync({ id: transceiverId!, formData, searchParams: search })
     if (data) navigate(-1)
   };

@@ -9,8 +9,6 @@ interface Props {
 
 export const useTransceivers = ({ enabled = true, search = {} }: Props) => {
 
-    console.log('desde useQuery ----------->', search);
-
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
 

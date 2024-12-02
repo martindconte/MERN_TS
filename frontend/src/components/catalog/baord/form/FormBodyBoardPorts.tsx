@@ -1,8 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { BoardFormData, BoardPortType } from '../../../types';
-import { BtnAddPort } from './BtnAddPort';
+// import { BoardFormData, BoardPortType } from '../../../types';
+// import { BtnAddPort } from './BtnAddPort';
 import { AddPort } from './AddPort';
+import { BoardFormData, BoardPortType } from '../../../../types';
+import { BtnAddPort } from './BtnAddPort';
 
 interface Props {
     requiredFields?: boolean;

@@ -24,7 +24,7 @@ export class TransceiverController {
     };
 
     getAll = (req: Request, res: Response) => {
-        const search = SearchTransceiverDTO.createQueries(req.query);
+        const search = SearchTransceiverDTO.searchTransceivers(req.query);
         new TransceiverUseCase.GetTransceivers(this.transceiverRepository)
             .execute( search )
             .then(transceiver => res.json( transceiver ))
@@ -46,7 +46,7 @@ export class TransceiverController {
 
     getById = (req: Request, res: Response) => {
         const { transceiverid } = req.params
-        const queries = SearchTransceiverDTO.createQueries(req.query)
+        const queries = SearchTransceiverDTO.searchTransceivers(req.query)
         new TransceiverUseCase.GetTransceiver(this.transceiverRepository)
             .execute(transceiverid, queries)
             .then(transceiver => res.json(transceiver))
@@ -58,7 +58,7 @@ export class TransceiverController {
 
     updateById = (req: Request, res: Response) => {
         const { transceiverid } = req.params;
-        const queries = SearchTransceiverDTO.createQueries(req.query)
+        const queries = SearchTransceiverDTO.searchTransceivers(req.query)
         const [error, updateTransceiverDTO] = UpdateTransceiverDTO.update({ ...req.body, id: transceiverid });
         if (error) return res.status(400).json({ error });
         new TransceiverUseCase.UpdateTransceiver(this.transceiverRepository)

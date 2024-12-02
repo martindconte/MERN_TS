@@ -1,4 +1,4 @@
-import { ILogicalPort } from "../AddPortFacilitiesModal";
+import { ILogicalPort } from "../form/AddPortFacilitiesModal";
 import { LogicalPortRow } from "./LogicalPortRow"
 
 interface Props {

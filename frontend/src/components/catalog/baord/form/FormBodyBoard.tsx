@@ -1,9 +1,9 @@
 import { useFormContext } from 'react-hook-form'
 // import { UseFormRegister, FieldErrors, useFormContext } from 'react-hook-form'
-import { BitsRatesEnum, BoardFormData, RoadmapEnum, TechnologyEnum } from '../../../types'
-import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm'
-import { useVendors } from '../../../hook'
-import { Spinner } from '../../shared/spinners/Spinner'
+import { BitsRatesEnum, BoardFormData, RoadmapEnum, TechnologyEnum } from '../../../../types'
+import { ErrorMsgForm } from '../../../shared/errors/ErrorMsgForm'
+import { useVendors } from '../../../../hook'
+import { Spinner } from '../../../shared/spinners/Spinner'
 
 interface Props {
   // register: UseFormRegister<BoardFormData>
@@ -32,8 +32,7 @@ export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
             placeholder="TNG1M520SM06 TNU5N404C01 TNV3T220S01"
             {...register('boardName', {
               required: requiredFields && 'El Nombre es Obligatorio',
-              setValueAs: value => value.trim(),
-              validate: value => !value.includes('_DELETED_') || 'El nombre no puede contener "_DELETED_"',
+              setValueAs: value => value.trim()
             })}
           />
         </div>
@@ -49,8 +48,7 @@ export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
             placeholder="03033YQD 03030MVS 03025QVP"
             {...register('partNumber', {
               required: requiredFields && 'El Part Number es Obligatorio',
-              setValueAs: value => value.trim(),
-              validate: value => !value.includes('_DELETED_') || 'El nombre no puede contener "_DELETED_"',
+              setValueAs: value => value.trim()
             })}
           />
         </div>
@@ -211,9 +209,7 @@ export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
             <select
               className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
               id="isDeleted"
-              {...register('isDeleted', {
-                setValueAs: value => value === "true",
-              })}
+              {...register('isDeleted')}
             >
               <option value="true">ELIMINADO</option>
               <option value="false">NO!... VOLVER A HABILITAR</option>

@@ -1,4 +1,4 @@
-import { BoardEntityWithPagination, IBoard, IBoardResponse, IBoardsDeleted, IBoardSearch, IBoardsResponse } from '../../../interface';
+import { /* BoardEntityWithPagination */ IBoard, IBoardResponse, IBoardsDeleted, IBoardSearch, IBoardsResponse } from '../../../interface';
 import { CreateBoardDTO, UpdateBoardDTO } from '../../dtos';
 import { BoardEntity } from '../../entities';
 

@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { BoardFormData, BoardPortsType, LogicalSignal } from '../../../types';
-import { TablePortFacilities } from './logicalPorts/TablePortFacilities';
-import { BtnLogicalPortsModal } from './logicalPorts/BtnLogicalPortsModal';
+import { BoardFormData, BoardPortsType, LogicalSignal } from '../../../../types';
+import { TablePortFacilities } from '../logicalPorts/TablePortFacilities';
+import { BtnLogicalPortsModal } from '../logicalPorts/BtnLogicalPortsModal';
 
 interface Props {
     index: number;

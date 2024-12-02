@@ -23,6 +23,7 @@ export const EditBoardView = () => {
   const { mutationUpdateBoard } = useBoardMutation()
 
   const handleForm = async (formData: BoardFormData) => {
+    console.log('formData', formData);
     const data = await mutationUpdateBoard.mutateAsync({ id: boardId!, formData, searchParams: search })
     if (data) navigate(-1)
   };

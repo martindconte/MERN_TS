@@ -1,5 +1,5 @@
 import { FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove } from 'react-hook-form';
-import { BoardFormData } from '../../../types';
+import { BoardFormData } from '../../../../types';
 
 interface Props {
     index: number;

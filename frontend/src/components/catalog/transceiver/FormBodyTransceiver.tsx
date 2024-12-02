@@ -163,9 +163,7 @@ export const FormBodyTransceiver = ({ register, errors, vendors, requiredFields,
                         <select
                             className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
                             id="isDeleted"
-                            {...register('isDeleted', {
-                                setValueAs: value => value === "true",
-                            })}
+                            {...register('isDeleted')}
                         >
                             <option value="true">ELIMINADO</option>
                             <option value="false">NO... VOLVER A HABILITAR</option>

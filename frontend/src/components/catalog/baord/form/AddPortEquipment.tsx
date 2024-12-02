@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { SearchPortEquipment } from './portEquipment/SearchPortEquipment'
-import { BoardFormData, BoardPortsType, TransceiverType } from '../../../types'
+import { SearchPortEquipment } from '../portEquipment/SearchPortEquipment'
+import { BoardFormData, BoardPortsType, TransceiverType } from '../../../../types'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 interface Props {

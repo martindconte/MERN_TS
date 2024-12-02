@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FieldArrayWithId, useFormContext, useWatch } from 'react-hook-form'
-import { BoardFormData, BoardPortType } from '../../../types'
-import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm';
+import { BoardFormData, BoardPortType } from '../../../../types'
+import { ErrorMsgForm } from '../../../shared/errors/ErrorMsgForm';
 import { AddPortFacilitiesModal } from './AddPortFacilitiesModal';
 import { AddPortEquipment } from './AddPortEquipment';
 

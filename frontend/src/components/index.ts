@@ -2,11 +2,12 @@
 
 //* Catalog --> components/catalog/
 /* board --> components/catalog/board */
-export * from './catalog/baord/BtnFormBoard'
-export * from './catalog/baord/BtnNavBoard'
-export * from './catalog/baord/FormBoard'
-export * from './catalog/baord/FormBodyBoard'
-export * from './catalog/baord/FormBodyBoardPorts'
+export * from './catalog/baord'
+// export * from './catalog/baord/BtnFormBoard'
+// export * from './catalog/baord/BtnNavBoard'
+// export * from './catalog/baord/form/FormBoard'
+// export * from './catalog/baord/form/FormBodyBoard'
+// export * from './catalog/baord/FormBodyBoardPorts'
 
 /* signal --> components/catalog/signal */
 export * from './catalog/signal/BtnFormSignal'

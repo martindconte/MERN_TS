@@ -1,19 +1,22 @@
 import { Document, Model, Schema, Types } from 'mongoose'
-import { BitsRatesEnum, RoadmapEnum, TechnologyEnum } from '../../../../interface';
+import { BitsRatesEnum, ITransceiver, RoadmapEnum, TechnologyEnum } from '../../../../interface';
 import { model } from 'mongoose';
 
-interface TransceiverDocument extends Document {
-    partNumber: string;
+interface TransceiverDocument extends Omit<ITransceiver, 'vendor' | 'id'> {
     vendor: Types.ObjectId;
-    type?: string;
-    modelName?: string;
-    description?: string;
-    observations?: string;
-    technology?: TechnologyEnum;
-    bitsRates?: BitsRatesEnum[];
-    roadmap?: RoadmapEnum;
-    isDeleted: boolean;
-}
+  }
+// interface TransceiverDocument extends Document {
+//     partNumber: string;
+//     vendor: Types.ObjectId;
+//     type?: string;
+//     modelName?: string;
+//     description?: string;
+//     observations?: string;
+//     technology?: TechnologyEnum;
+//     bitsRates?: BitsRatesEnum[];
+//     roadmap?: RoadmapEnum;
+//     isDeleted: boolean;
+// }
 
 const transceiverSchema = new Schema<TransceiverDocument>(
     {
@@ -92,16 +95,5 @@ const transceiverSchema = new Schema<TransceiverDocument>(
           },
     }
 );
-
-// transceiverSchema.set('toJSON', {
-//     virtuals: true,
-//     versionKey: false,
-//     transform: function (doc, ret, options) {
-//         //! revisar si es necesario el ret.id = ret._id
-//         ret.id = ret._id
-//         delete ret._id;
-//         return ret;
-//     },
-// })
 
 export const TransceiverModel: Model<TransceiverDocument> = model('Transceiver', transceiverSchema);

@@ -69,7 +69,7 @@ export class UpdateBoardDTO {
 
     static update( board: UpdateBoardDTO ): [ string?, UpdateBoardDTO? ] {
 
-        const { id, boardName, partNumber, vendor, description, observations, ports, slotSize, technology, bandwidthMax, bitsRates, roadmap, createdAt, updatedAt } = board
+        const { id, boardName, partNumber, vendor, description, observations, ports, slotSize, technology, bandwidthMax, bitsRates, roadmap, createdAt, updatedAt, isDeleted = false } = board
 
         if ( !id ) throw ['Missinbg ID Transceiver'];
         if ( !boardName ) throw ['Missing BoardName Board'];
@@ -92,7 +92,7 @@ export class UpdateBoardDTO {
                 boardName,
                 partNumber,
                 vendor,
-                false,
+                isDeleted,
                 bitsRates,
                 description,
                 observations,

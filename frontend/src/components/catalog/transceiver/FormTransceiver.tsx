@@ -25,7 +25,6 @@ export const FormTransceiver = ({ onSubmit, status, requiredFields, buttonLabel,
         if (status === 'success') reset();
     }, [status, reset]);
 
-
     if (queryVendors.isLoading) return <Spinner />
 
     return (

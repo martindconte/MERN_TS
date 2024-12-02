@@ -1,4 +1,4 @@
-import { BoardEntity, SubrackEntity } from '../../domain';
+// import { BoardEntity, SubrackEntity } from '../../domain';
 import { BitsRatesEnum } from './bitsRates.interface';
 import { IPageLimit, IPagination, RoadmapEnum, TechnologyEnum } from './common.interface';
 import { ISubarck } from './subrack.interface';
@@ -35,7 +35,6 @@ export interface Port {
   physical: string;
   NMS: string;
   equipments?: string[] | Partial<ITransceiver>[];
-  // equipments?: string[] | Partial<TransceiverEntity>[];
   logicalFacilities?: Record<string, string[]>;
   fullName?: string;
 }
@@ -48,7 +47,6 @@ export interface IBoardsResponse {
 
 export interface IBoardSearch {
   searchParams?: Partial<IBoard>;
-  // searchParams?: Partial<BoardEntity>;
   paginationData?: IPageLimit;
   otherQueries?: { [key: string]: any };
 }
@@ -65,17 +63,17 @@ export interface IBoardsDeleted {
   // subracks: SubrackEntity[]; //!Crear Interfaz
 }
 
-//! NO USAR
-export interface BoardEntityWithPagination {
-  payload: BoardEntity[];
-  pagination: {
-    totalDocs: number;
-    totalResults: number;
-    totalPages: number;
-    prevPage: string | null;
-    nextPage: string | null;
-    page: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-  };
-}
+// //! NO USAR
+// export interface BoardEntityWithPagination {
+//   payload: BoardEntity[];
+//   pagination: {
+//     totalDocs: number;
+//     totalResults: number;
+//     totalPages: number;
+//     prevPage: string | null;
+//     nextPage: string | null;
+//     page: number;
+//     hasPrevPage: boolean;
+//     hasNextPage: boolean;
+//   };
+// }

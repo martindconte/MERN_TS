@@ -1,5 +1,5 @@
-import { BoardDatasource, BoardEntity, BoardRepository, CreateBoardDTO, QueriesDTO, UpdateBoardDTO } from '../../../domain';
-import { BoardEntityWithPagination, IBoard, IBoardResponse, IBoardsDeleted, IBoardSearch, IBoardsResponse } from '../../../interface';
+import { BoardDatasource, BoardEntity, BoardRepository, CreateBoardDTO, UpdateBoardDTO } from '../../../domain';
+import { IBoard, IBoardResponse, IBoardsDeleted, IBoardSearch, IBoardsResponse } from '../../../interface';
 
 export class BoardRepositoyImpl implements BoardRepository {
 

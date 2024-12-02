@@ -1,5 +1,5 @@
 import { LogicalSignal } from '../../../../types';
-import { ILogicalPort } from '../AddPortFacilitiesModal';
+import { ILogicalPort } from '../form/AddPortFacilitiesModal';
 
 interface Props {
     id: string;
