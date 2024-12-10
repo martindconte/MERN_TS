@@ -52,7 +52,6 @@ export class TransceiverEntity implements ITransceiver {
       updatedAt,
       isDeleted = false,
     } = object;
-    // const { id, _id, partNumber, model, vendor, type, description, observations, technology, bitsRates, signals, status, createdAt, updatedAt } = object;
 
     if (!id) throw CustomError.badRequest(`Missing id - id: ${id} - partNumber: ${partNumber}`);
     if (!partNumber) throw CustomError.badRequest('Missing partNumber Transceiver');
@@ -60,6 +59,7 @@ export class TransceiverEntity implements ITransceiver {
     if (bitsRates === '' && !Array.isArray(bitsRates)) throw CustomError.badRequest('Bits Rates must be Array');
     if (technology && !Object.values(TechnologyEnum).includes(technology.toUpperCase()))
       throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
+    if (roadmap && !Object.values(RoadmapEnum).includes(roadmap)) throw CustomError.badRequest('Invalid Roadmap Value in Transceiver');
     if (bitsRates && Array.isArray(bitsRates) && bitsRates.length > 0 && !bitsRates.every((rate: any) => Object.values(BitsRatesEnum).includes(rate)))
       CustomError.badRequest('Invalid bitsRate');
     if (roadmap && !Object.values(RoadmapEnum).includes(roadmap)) throw CustomError.badRequest('Invalid Status');

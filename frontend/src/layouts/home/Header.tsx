@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { VendorNav } from '../../components/header/VendorNav'
 import { BoardNav } from '../../components/header/BoardNav'
 import { TransceiverNav } from '../../components/header/TransceiverNav'
+import { SubrackNav } from '../../components/header/SubrackNav'
 
 export const Header = () => {
   const [showCatalogo, setShowCatalogo] = useState(false)
@@ -30,9 +31,10 @@ export const Header = () => {
               </div>
               {showCatalogo && (
                 <ul className='absolute left-0 top-full bg-black text-white shadow-lg py-2 w-36'>
-                  <VendorNav />
-                  <BoardNav />
                   <TransceiverNav />
+                  <BoardNav />
+                  <SubrackNav />
+                  <VendorNav />
                 </ul>
               )}
             </li>

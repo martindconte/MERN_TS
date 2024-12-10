@@ -1,94 +1,84 @@
-import { findDuplicateByKeys } from "../../../../helpers";
-import { ISlots, SubrackOwner, SubrackStatus, TechnologySubrack } from "../../../../interface";
+import { helpersDB } from '../../../../data';
+import { ISubrackCreateDTO, OwnerEnum, RoadmapEnum, TechnologyEnum } from '../../../../interface';
 
-export class CreateSubrackDTO {
+export class CreateSubrackDTO implements ISubrackCreateDTO {
+  constructor(
+    public readonly partNumber: string,
+    public readonly subrackFamily: string,
+    public readonly subrackType: string,
+    public readonly slots: { number: number; physical: string; logical: string; boards?: string[] }[],
+    public readonly totalSlots: number,
+    public readonly vendor: string,
+    public readonly isDeleted: boolean,
+    public readonly description?: string | undefined,
+    public readonly modelName?: string | undefined,
+    public readonly observations?: string | undefined,
+    public readonly owner?: OwnerEnum | undefined,
+    public readonly roadmap?: RoadmapEnum | undefined,
+    public readonly technology?: TechnologyEnum | undefined
+  ) {}
 
-    constructor(
-        public readonly partNumber: string,
-        public readonly slots: ISlots[],
-        public readonly subrackFamily: string,
-        public readonly subrackType: string,
-        public readonly totalSlot: number,
-        public readonly vendor: string,
-        public readonly boards?: string[],
-        public readonly description?: string,
-        public readonly model?: string,
-        public readonly observations?: string,
-        public readonly owner?: SubrackOwner,
-        public readonly status?: SubrackStatus,
-        public readonly technology?: TechnologySubrack,
-    ) { }
+  private static checkDataSlots(slots: ISubrackCreateDTO['slots'] | undefined): [string?, ISubrackCreateDTO['slots']?] {
+    if (!Array.isArray(slots)) return ['Slots must be Array'];
+    const setNumberSlots = new Set<number>();
+    const setLogicalSlots = new Set<string>();
+    const setPhysicalSlots = new Set<string>();
 
-    static create(subrack: { [key: string]: any }): [string?, CreateSubrackDTO?] {
+    for (const slot of slots) {
+      const { logical, number, physical, boards } = slot;
+      if (!logical && typeof logical !== 'string') return ['Logical Slot is Required and must be a String'];
+      if (!number || isNaN(number)) return ['Number Slot is Required and must be a Number'];
+      if (!physical && typeof physical !== 'string') return ['Physical Slot is Required and must be a String'];
+      if ( boards && boards?.length > 0 && !boards.some((board) => helpersDB.isMongoID(board))) return [`Invalid Board for Slot Number ${number}`];
 
-        const {
-            subrackType,
-            subrackFamily,
-            partNumber,
-            totalSlot,
-            slots,
-            vendor,
-            model,
-            description,
-            owner,
-            observations,
-            technology,
-            boards = [],
-            status,
-        } = subrack;
+      if (setNumberSlots.has(number)) return [`Port Number ${number} is Duplicated!`];
+      if (setLogicalSlots.has(logical)) return [`Logical Number ${number} is Duplicated!`];
+      if (setPhysicalSlots.has(physical)) return [`Physical Number ${number} is Duplicated!`];
 
-        const numberTotalSlots: number = +totalSlot;
-        // const numberServiceSlots: number = +serviceSlot
-        // let newModel: string = ''
-
-        if (!subrackType) throw ['Missing Subrack Type'];
-        if (!subrackFamily) throw ['Missing Subrack Family'];
-        if (!partNumber && typeof partNumber === 'string') throw ['Missing Part Number'];
-        if (!vendor) throw ['Missing Vendor'];
-        if (!totalSlot && isNaN(numberTotalSlots)) throw ['Missing Quantity Total Slots and must be a number'];
-        if (slots.length < 1) throw ['Slots need to be defined!'];
-        if (slots.length !== totalSlot) throw ['The number of Slots must be equal to total Slot!'];
-
-        // Verificación más segura para slot.boardId y boards.
-        if (boards.length > 0 && !slots.every((slot: ISlots) => slot.boardId && boards?.includes(slot.boardId))) {
-            throw ['Each slot must reference a valid boardId in boards'];
-        }
-
-        const portRepeat = findDuplicateByKeys( slots, [ 'number', 'physical', 'logical' ] )
-        if( portRepeat ) {
-            throw [ `Slot with Port Number: ${ portRepeat.number } / Port Physical ${ portRepeat.physical }  / Port Logical ${ portRepeat.logical } is already registred!` ]
-        }
-
-        // if ( typeof partNumber === 'string' ) {
-        //     newModel = model && typeof model === 'string' ? model.toUpperCase() : partNumber.toUpperCase();
-        // }
-
-        return [undefined, new CreateSubrackDTO(
-            partNumber,
-            slots,
-            subrackFamily,
-            subrackType,
-            totalSlot,
-            vendor.toUpperCase(),
-            boards,
-            description,
-            model.toUpperCase(),
-            observations,
-            owner.toUpperCase(),
-            status,
-            technology.toUpperCase(),
-            // subrackFamily,
-            // subrackType,
-            // totalSlot,
-            // vendor.toUpperCase(),
-            // boards,
-            // description,
-            // model.toUpperCase(),
-            // observations,
-            // owner.toUpperCase(),
-            // status.toUpperCase(),
-            // technology.toUpperCase(),
-
-        )];
+      setNumberSlots.add(number);
+      setLogicalSlots.add(logical);
+      setPhysicalSlots.add(physical);
     }
+
+    return [undefined, slots];
+  }
+
+  static create(subrack: { [key: string]: any }): [string?, CreateSubrackDTO?] {
+    const { subrackType, subrackFamily, partNumber, totalSlots, slots, vendor, modelName, description, owner, observations, technology, roadmap } = subrack;
+
+    const numberTotalSlots: number = +totalSlots;
+
+    if (!subrackType && typeof subrackType !== 'string') throw ['Missing Subrack Type'];
+    if (!subrackFamily && typeof subrackFamily !== 'string') throw ['Missing Subrack Family'];
+    if (!partNumber && typeof partNumber !== 'string') throw ['Missing Part Number'];
+    if (!vendor && helpersDB.isMongoID(vendor)) throw ['Missing Vendor. Invalid value'];
+    if (!totalSlots && isNaN(numberTotalSlots)) throw ['Missing Quantity Total Slots and must be a number'];
+    if (roadmap && !Object.values(RoadmapEnum).includes(roadmap)) throw ['Invalid Status'];
+    if (technology && !Object.values(TechnologyEnum).includes(technology))
+      throw ['Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO'];
+    if (!slots) ['Slots is Required!'];
+    if (slots.length !== totalSlots) throw ['The number of Slots must be equal to total Slot!'];
+    const [error, slotsCheck] = slots.length > 0 ? this.checkDataSlots(slots) : ['Slots is Required'];
+    if (error) throw [error];
+    if (!slotsCheck) throw ['SlotsCheck is undefined, but this should not happen based on the logic'];
+
+    return [
+      undefined,
+      new CreateSubrackDTO(
+        partNumber,
+        subrackFamily,
+        subrackType,
+        slotsCheck,
+        totalSlots,
+        vendor,
+        false,
+        description,
+        modelName ? modelName : partNumber,
+        observations,
+        owner,
+        roadmap,
+        technology
+      ),
+    ];
+  }
 }

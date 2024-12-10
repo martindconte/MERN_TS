@@ -11,10 +11,4 @@ export class CreateBoard implements CreateBoardUseCase {
   execute(dto: CreateBoardDTO): Promise<IBoardResponse> {
     return this.repository.create(dto);
   }
-  // constructor(
-  //     private readonly repository: BoardRepository
-  // ) {}
-  // execute(dto: CreateBoardDTO): Promise<BoardEntity> {
-  //     return this.repository.create( dto )
-  // }
 }

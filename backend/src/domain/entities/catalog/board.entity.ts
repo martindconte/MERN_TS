@@ -53,7 +53,12 @@ export class BoardEntity implements IBoard {
       if (!physical && typeof physical !== 'string') return ['PortPhysical is Required and must be a String'];
       if (!NMS && typeof NMS !== 'string') return ['PortNMS is Required and must be a String'];
       if (fullName && typeof fullName !== 'string') return ['Full Name Must be a String'];
-      if (equipments.length > 0 && !equipments.some(equipment => typeof equipment === 'string' ? helpersDB.isMongoID( equipment ) : helpersDB.isMongoID(equipment.id as string)))
+      if (
+        equipments.length > 0 &&
+        !equipments.some((equipment) =>
+          typeof equipment === 'string' ? helpersDB.isMongoID(equipment) : helpersDB.isMongoID(equipment.id as string)
+        )
+      )
         return [`Invalid Equipment value! ${fullName}`];
 
       if (logicalFacilities) {
@@ -64,13 +69,8 @@ export class BoardEntity implements IBoard {
           if (keysSet.has(key)) return [`Key "${key}" is duplicated`];
 
           for (const value of values) {
-              if (valuesSet.has(value)) return [`value ${value} is Duplicated!`];
-              valuesSet.add(value);
-            
-            // for (const data of value) {
-            //   if (valuesSet.has(data)) return [`value ${data} is Duplicated!`];
-            //   valuesSet.add(data);
-            // }
+            if (valuesSet.has(value)) return [`value ${value} is Duplicated!`];
+            valuesSet.add(value);
           }
         }
       }
@@ -114,9 +114,9 @@ export class BoardEntity implements IBoard {
       throw ['Invalid bitsRate'];
     if (technology && !Object.values(TechnologyEnum).includes(technology.toUpperCase()))
       throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
-    if (roadmap && !Object.values(RoadmapEnum).includes(roadmap)) throw CustomError.badRequest('Invalid Status');
+    if (roadmap && !Object.values(RoadmapEnum).includes(roadmap)) throw CustomError.badRequest('Invalid Roadmap Value in Board');
     if (typeof slotSize !== 'number' && slotSize < 0) throw CustomError.badRequest('Invalid Status');
-    const [error, portsCheck] = ports.length > 0 ? BoardEntity.checkDataPorts(ports) : [ undefined, [] ]
+    const [error, portsCheck] = ports.length > 0 ? this.checkDataPorts(ports) : [undefined, []];
     if (error) throw [error];
 
     return new BoardEntity(

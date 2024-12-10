@@ -12,6 +12,10 @@ export * from './catalog/signal/useSignal'
 export * from './catalog/signal/useSignalMutation'
 export * from './catalog/signal/useSignals'
 
+/* subrack */
+
+export * from './catalog/subrack/useSubrackMutation'
+
 /* transceiver*/
 export * from './catalog/transceiver/useTransceiver'
 export * from './catalog/transceiver/useTransceiverDeleted'

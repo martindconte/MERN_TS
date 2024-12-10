@@ -2,8 +2,6 @@ import { MutationStatus } from '@tanstack/react-query';
 import { BoardFormData } from '../../../../types';
 import { FormBodyBoard } from './FormBodyBoard';
 import { FormProvider, useForm } from 'react-hook-form';
-// import { BtnFormBoard } from '../BtnFormBoard';
-// import { FormBodyBoardPorts } from '../FormBodyBoardPorts';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BtnFormBoard } from './BtnFormBoard';

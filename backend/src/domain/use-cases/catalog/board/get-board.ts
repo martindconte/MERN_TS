@@ -11,11 +11,4 @@ export class GetBoard implements GetBoardUseCase {
   execute(id: IBoard['id'], queries?: IBoardSearch): Promise<IBoard> {
     return this.repository.getById(id, queries);
   }
-  // constructor(
-  //     private readonly repository: BoardRepository
-  // ) {}
-
-  // execute(id: BoardEntity["id"], queries?: IBoardSearch): Promise<BoardEntity> {
-  //     return this.repository.getById( id, queries )
-  // }
 }

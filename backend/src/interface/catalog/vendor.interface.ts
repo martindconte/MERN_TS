@@ -17,12 +17,6 @@ export interface IVendorsDeleted {
     boards: IBoard[];
     //todo subrack: 
 }
-// export interface IVendorsDeleted {
-//     vendors: VendorEntity[];
-//     transceivers: TransceiverEntity[];
-//     boards: BoardEntity[];
-//     //todo subrack: 
-// }
 
 export type VendorsDeletedType = Omit<IVendorsDeleted, 'vendors'> & {
     vendor: IVendor;

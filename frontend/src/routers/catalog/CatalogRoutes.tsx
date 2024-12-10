@@ -4,6 +4,7 @@ import { VendorRoutes } from './vendor/VendorRoutes'
 import { SignalRoutes } from './signal/SignalRoutes'
 import { TransceiverRoutes } from './transceiver/TransceiverRoutes'
 import { BoardRoutes } from './board/BoardRoutes'
+import { SubrackRoutes } from './subrack/SubrackRoutes'
 
 //* RUTA --> catalog/
 
@@ -15,6 +16,7 @@ export const CatalogRoutes = () => {
       <Route path='signal/*' element={ <SignalRoutes /> } />
       <Route path='transceiver/*' element={ <TransceiverRoutes /> } />
       <Route path='vendor/*' element={ <VendorRoutes /> } />
+      <Route path='subrack/*' element={ <SubrackRoutes /> } />
     </Routes>
   )
 }

@@ -9,10 +9,7 @@ export const NewTransceiverView = () => {
 
     const handleForm = async (data: TransceiverFormData) => {
         if( !data.bitsRates ) data.bitsRates = []
-        const response = await mutationCreateTransceiver.mutateAsync(data);
-
-        // todo: revisar response
-        console.log(response);
+        await mutationCreateTransceiver.mutateAsync(data);
     };
 
     return (
@@ -28,7 +25,7 @@ export const NewTransceiverView = () => {
                     requiredFields
                 />
             </div>
-            <div className="w-1/3 mx-auto">
+            <div className="w-3/4 mx-auto">
                 <BtnNavTransceiver />
             </div>
         </main>

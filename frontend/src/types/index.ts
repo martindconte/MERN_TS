@@ -13,6 +13,9 @@ export * from './catalog/commonTypes'
 /* signal --> types/catalog/signal */
 export * from './catalog/signalTypes'
 
+/* subrack --> types/catalog/subrack */
+export * from './catalog/subrackTypes'
+
 /* transceiver --> types/catalog/transceiver */
 export * from './catalog/transceiverTypes'
 

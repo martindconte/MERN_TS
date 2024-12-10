@@ -1,7 +1,7 @@
 // import { BoardEntity, SubrackEntity } from '../../domain';
 import { BitsRatesEnum } from './bitsRates.interface';
 import { IPageLimit, IPagination, RoadmapEnum, TechnologyEnum } from './common.interface';
-import { ISubarck } from './subrack.interface';
+import { ISubrack } from './subrack.interface';
 import { ITransceiver } from './transceiver.interface';
 import { IVendor } from './vendor.interface';
 
@@ -53,27 +53,10 @@ export interface IBoardSearch {
 
 export interface IBoardToClean {
   board: IBoard,
-  subracks: ISubarck[]
+  subracks: ISubrack[]
 }
 
-//todo: NO usar Entity
 export interface IBoardsDeleted {
   boards: IBoard[];
-  subracks: ISubarck[];
-  // subracks: SubrackEntity[]; //!Crear Interfaz
+  subracks: ISubrack[];
 }
-
-// //! NO USAR
-// export interface BoardEntityWithPagination {
-//   payload: BoardEntity[];
-//   pagination: {
-//     totalDocs: number;
-//     totalResults: number;
-//     totalPages: number;
-//     prevPage: string | null;
-//     nextPage: string | null;
-//     page: number;
-//     hasPrevPage: boolean;
-//     hasNextPage: boolean;
-//   };
-// }

@@ -1,10 +1,8 @@
 import { useFormContext } from 'react-hook-form';
-// import { useFormContext, UseFormReset } from 'react-hook-form';
 import { MutationStatus } from '@tanstack/react-query';
-import { BoardFormData } from '../../../types';
+import { BoardFormData } from '../../../../types';
 
 interface Props {
-    // reset: UseFormReset<BoardFormData>;
     status?: MutationStatus;
     buttonLabel: string;
 }

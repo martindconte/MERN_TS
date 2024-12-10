@@ -1,11 +1,9 @@
-import { SubrackEntityWithPagination } from '../../../../interface';
-import { QueriesDTO } from '../../../dtos';
-import { SubrackEntity } from '../../../entities';
+import { ISubrackSearch, ISubracksResponse } from '../../../../interface';
 import { SubrackRepository } from '../../../repositories';
 
 
 export interface GetSubracksUseCase {
-    execute( queries?: QueriesDTO ): Promise<SubrackEntity[] | SubrackEntityWithPagination>
+    execute( queries: ISubrackSearch ): Promise<ISubracksResponse>
 }
 
 export class GetSubracks implements GetSubracksUseCase {
@@ -13,7 +11,7 @@ export class GetSubracks implements GetSubracksUseCase {
         private readonly repository: SubrackRepository
     ) {}
 
-    execute( queries?: QueriesDTO ): Promise<SubrackEntity[] | SubrackEntityWithPagination> {
+    execute( queries: ISubrackSearch ): Promise<ISubracksResponse> {
         return this.repository.getAll( queries );
     }
 }

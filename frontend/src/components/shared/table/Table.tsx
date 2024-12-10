@@ -23,31 +23,47 @@ interface Identifiable {
   isDeleted?: boolean;
 }
 
+//! Se cambiaron las Props... cambio el 20241207
 type Props<T extends Identifiable> = {
   data: T[];
   selectedData?: T[];
   info: string;
   fnDelete?: (id: string) => Promise<any> | void;
-  // fnDelete?: UseMutationResult<DeleteResponse<T>, Error, { id: string }, unknown>;
-  // fnDelete?: ( id: string ) => DeleteResponse<T>
   fnSelected?: (selectedRows: T[]) => void;
   path?: string;
-} & (
-    | {
-      pagination: Pagination;
-      page: number;
-      setPage: Dispatch<React.SetStateAction<number>>;
-      limit: number;
-      setLimit: Dispatch<React.SetStateAction<number>>;
-    }
-    | {
-      pagination?: undefined;
-      page?: never;
-      setPage?: never;
-      limit?: never;
-      setLimit?: never;
-    }
-  );
+  pagination?: Pagination; // Pagination es opcional
+  page?: number; // También opcional
+  setPage?: Dispatch<React.SetStateAction<number>>; // Opcional
+  limit?: number; // Opcional
+  setLimit?: Dispatch<React.SetStateAction<number>>; // Opcional
+};
+
+
+// type Props<T extends Identifiable> = {
+//   data: T[];
+//   selectedData?: T[];
+//   info: string;
+//   fnDelete?: (id: string) => Promise<any> | void;
+//   // fnDelete?: UseMutationResult<DeleteResponse<T>, Error, { id: string }, unknown>;
+//   // fnDelete?: ( id: string ) => DeleteResponse<T>
+//   fnSelected?: (selectedRows: T[]) => void;
+//   path?: string;
+// } & (
+//     | {
+//       pagination: Pagination;
+//       page: number;
+//       setPage: Dispatch<React.SetStateAction<number>>;
+//       limit: number;
+//       setLimit: Dispatch<React.SetStateAction<number>>;
+//     }
+//     | {
+//       pagination?: undefined;
+//       page?: never;
+//       setPage?: never;
+//       limit?: never;
+//       setLimit?: never;
+//     }
+//   );
 
 //* type que paso a ButtonActions para usar en las paginas /*****/deleted. Para de esta manera poder armar el link con el condicional si esta o no eliminado
 // type BaseRowData = { id: string; isDeleted?: boolean };

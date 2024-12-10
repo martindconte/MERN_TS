@@ -4,60 +4,13 @@ import { transceiverSchema } from './transceiverTypes';
 import { RoadmapEnum, TechnologyEnum } from './commonTypes';
 
 //* enum
-// export enum BoardTechnologyEnum {
-//     dwdm = 'DWDM',
-//     sdh = 'SDH',
-//     rx = 'RX',
-//     cwdm = 'CWDM',
-//     ip = 'IP',
-//     generic = 'GENERIC'
-// };
-
-// export enum BoardStatusEnum {
-//     inService = 'InService',
-//     EndOfSupport = 'EndOfSupport',
-//     EndOfMarketing = 'EndOfMarketing',
-//     NA = ''
-// };
-
 export enum BoardPortType {
   client = 'CLIENT',
   line = 'LINE',
   any = 'ANY',
 }
 
-// export enum boardUnitType {
-//     mb = 'MB',
-//     gb = 'GB',
-//     tb = 'TB'
-// }
-
 //* schemas
-// const bandwidthSchema = z.object({
-//     amount: z.number(),
-//     unit: z.nativeEnum(boardUnitType),
-// });
-
-// const signalSchema = z.object({
-//     id: z.string(),
-//     type: z.string(),
-//     subType: z.string(),
-//     bandwidth: bandwidthSchema.optional(),
-// });
-
-// const equipmentsPortsSchema = z.object({
-//     id: z.string(),
-//     vendor: z.object({
-//         id: z.string(),
-//         vendorName: z.string(),
-//     }),
-//     partNumber: z.string(),
-//     model: z.string(),
-//     description: z.string(),
-//     status: z.string(),
-//     techonology: z.string(),
-// })
-
 const equipmentsPortsSchema = transceiverSchema.pick({
   id: true,
   partNumber: true,
@@ -70,7 +23,6 @@ const equipmentsPortsSchema = transceiverSchema.pick({
 
 //! transceiverTypes importa boardSchema y... boardSchema importa transceiverTypes esto creo una refrencia circular! Se soluciono con z.lazy (funcionalidad de zod)
 //! otra opcion es mover las partes comunes a un archivo y realizar las importantes desde ahi...
-
 const portsInBoardSchema = z.object({
   port: z.number(),
   type: z.nativeEnum(BoardPortType).default(BoardPortType.any),
@@ -128,10 +80,6 @@ export const respAPIBoardSchema = z.object({
   msg: z.string().optional(),
   payload: boardSchema.pick({ id: true, boardName: true, partNumber: true, vendor: true, description: true }),
 });
-// export const respAPIBoardSchema = z.object({
-//   msg: z.string().optional(),
-//   payload: boardSchema,
-// });
 
 export const respAPIBoardsSchema = z.object({
   payload: z.array(boardSchema),

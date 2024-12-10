@@ -12,8 +12,4 @@ export class UpdateBoard implements UpdateBoardUseCase {
   execute(dto: UpdateBoardDTO, queries?: IBoardSearch): Promise<IBoardResponse> {
     return this.repository.updateById(dto, queries);
   }
-  // constructor(private readonly repository: BoardRepository) {}
-  // execute(dto: UpdateBoardDTO, queries?: IBoardSearch): Promise<BoardEntity> {
-  //   return this.repository.updateById(dto, queries);
-  // }
 }

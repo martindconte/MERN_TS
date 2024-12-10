@@ -3,11 +3,6 @@
 //* Catalog --> components/catalog/
 /* board --> components/catalog/board */
 export * from './catalog/baord'
-// export * from './catalog/baord/BtnFormBoard'
-// export * from './catalog/baord/BtnNavBoard'
-// export * from './catalog/baord/form/FormBoard'
-// export * from './catalog/baord/form/FormBodyBoard'
-// export * from './catalog/baord/FormBodyBoardPorts'
 
 /* signal --> components/catalog/signal */
 export * from './catalog/signal/BtnFormSignal'
@@ -18,6 +13,9 @@ export * from './catalog/signal/FormSignal'
 /* signal --> components/catalog/signal */
 export * from './catalog/transceiver/FormTransceiver'
 export * from './catalog/transceiver/BtnNavTransceiver'
+
+/* subrack --> components/catalog/subrack */
+export * from './catalog/subrack/form/FormSubrack'
 
 /* vendor --> components/catalog/vendor */ 
 export * from './catalog/vendor/BtnFormVendor'
@@ -32,6 +30,8 @@ export * from './central/FormCentral'
 
 //* Shared
 export * from './shared/errors/ErrorMsgForm'
+
+export * from './shared/form/BtnForm'
 
 export * from './shared/hidden/HiddenComponent'
 

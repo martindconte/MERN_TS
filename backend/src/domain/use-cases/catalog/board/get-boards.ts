@@ -10,10 +10,4 @@ export class GetBoards implements GetBoardsUseCase {
   execute(queries?: IBoardSearch): Promise<IBoardsResponse> {
     return this.repository.getAll(queries);
   }
-  // constructor(
-  //     private readonly repository: BoardRepository
-  // ) {}
-  // execute( queries?: IBoardSearch ): Promise<BoardEntity[] | BoardEntityWithPagination> {
-  //     return this.repository.getAll( queries );
-  // }
 }

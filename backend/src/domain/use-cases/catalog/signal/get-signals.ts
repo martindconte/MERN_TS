@@ -1,19 +1,14 @@
-import { SubrackEntityWithPagination } from '../../../../interface';
-import { QueriesDTO } from '../../../dtos';
-import { SignalEntity, SubrackEntity } from '../../../entities';
-import { SignalRepository, SubrackRepository } from '../../../repositories';
-
+import { SignalEntity } from '../../../entities';
+import { SignalRepository } from '../../../repositories';
 
 export interface GetSignalsUseCase {
-    execute(): Promise<SignalEntity[]>
+  execute(): Promise<SignalEntity[]>;
 }
 
 export class GetSignals implements GetSignalsUseCase {
-    constructor(
-        private readonly repository: SignalRepository
-    ) {}
+  constructor(private readonly repository: SignalRepository) {}
 
-    execute(): Promise<SignalEntity[]> {
-        return this.repository.getAll();
-    }
+  execute(): Promise<SignalEntity[]> {
+    return this.repository.getAll();
+  }
 }

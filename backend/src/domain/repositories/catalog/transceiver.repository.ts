@@ -9,11 +9,4 @@ export abstract class TransceiverRepository {
     abstract deleteById( id: ITransceiver['id'] ): Promise<ITransceiver>;
     abstract getAllDeleted(): Promise<ITransceiversDeleted>;
     abstract clean( id: ITransceiver['id'] ): Promise<ITransceiver>;
-    // abstract create( createTransceiverDTO: CreateTransceiverDTO ): Promise<TransceiverEntity>;
-    // abstract getAll( queries?: QueriesDTO ): Promise<TransceiverEntity[] | TransceiverEntityWithPagination>;
-    // abstract getById( id: TransceiverEntity['id'], queries?: SearchTransceiverDTO ): Promise<TransceiverEntity>;
-    // abstract updateById( updateTransceiverDTO: UpdateTransceiverDTO, queries?: SearchTransceiverDTO ): Promise<TransceiverEntity>;
-    // abstract deleteById( id: TransceiverEntity['id'] ): Promise<TransceiverEntity>;
-    // abstract getAllDeleted(): Promise<ITransceiversDeleted>;
-    // abstract clean( id: TransceiverEntity['id'] ): Promise<TransceiverEntity>;
 };

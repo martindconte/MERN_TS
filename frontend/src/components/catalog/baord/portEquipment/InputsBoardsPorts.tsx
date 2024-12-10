@@ -40,8 +40,6 @@ export const InputsBoardsPorts = ({ handleSearch, selectedData, setSelectedData 
         handleSearch && handleSearch(search)
     }
 
-    console.log(search);
-
     if (queryVendors.isLoading) return <Spinner />
 
     return (

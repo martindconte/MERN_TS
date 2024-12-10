@@ -21,6 +21,13 @@ export * from './catalog/transceiver/EditTransceiverView';
 export * from './catalog/transceiver/NewTransceiverView';
 export * from './catalog/transceiver/SearchTransceiverView';
 export * from './catalog/transceiver/IndexTransceiverView';
+/* catalog/subrack */
+export * from './catalog/subrack/DeletedSubracksView'
+export * from './catalog/subrack/DetailsSubrackView'
+export * from './catalog/subrack/EditSubrackView'
+export * from './catalog/subrack/IndexSubrackView'
+export * from './catalog/subrack/NewSubrackView'
+export * from './catalog/subrack/SearchSubrackView'
 
 //* Central
 export * from './central/CentralIndexView';

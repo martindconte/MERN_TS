@@ -19,7 +19,7 @@ export const IndexBoardView = () => {
           <p className='text-sm'><span className='uppercase text-green-800 font-bold'>Crear</span> Nueva Placa</p>
         </Link>
         <Link to='deleted' className='flex flex-col justify-center py-2 px-3 rounded-md w-1/5 h-44 bg-red-400 hover:bg-red-800 hover:text-white hover:shadow-2xl hover:shadow-red-950 group'>
-          <p className='font-semibold'>PLacas Eliminadas</p>
+          <p className='font-semibold'>Placas Eliminadas</p>
           <span className="material-symbols-outlined text-6xl py-3 group-hover:text-white">mop</span>
           <p className='text-sm'><span className='uppercase font-bold'>Restaure o ELimine</span> DEFINITIVAMENTE una Placa</p>
         </Link>

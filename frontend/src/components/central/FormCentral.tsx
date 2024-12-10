@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { FormBodyCentral } from "./FormBodyCentral";
 import { CentralFormData } from "../../types";
 import { MutationStatus } from "@tanstack/react-query";
-import { BtnForm } from "./BtnForm";
+import { BtnFormCentral } from "./BtnFormCentral";
 
 interface Props {
     onSubmit: (data: CentralFormData) => void;
@@ -33,7 +33,7 @@ export const FormCentral = ({ onSubmit, status, requiredFields, buttonLabel, def
                 requiredFields={ requiredFields }
             />
 
-            <BtnForm
+            <BtnFormCentral
                 buttonLabel={ buttonLabel }
                 status={ status }
                 reset={ reset }

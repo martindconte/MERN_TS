@@ -43,12 +43,6 @@ export const createBoard = async ( formData: BoardFormData ) => {
 
   try {
     const { data } = await api.post('/catalog/board', transformedFormData);
-    // const { data: { msg, payload } } = await api.post('/catalog/board', transformedFormData);
-    // const dataMapped = {
-    //   msg,
-    //   payload: boardMapped(payload),
-    // };
-    // const response = respAPIBoardSchema.safeParse(dataMapped);
     const response = respAPIBoardSchema.safeParse( data );
     if (response.success) return response.data;
     throw new Error('Invalid response data');

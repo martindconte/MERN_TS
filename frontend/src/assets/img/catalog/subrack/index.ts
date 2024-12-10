@@ -1,0 +1,1 @@
+export { default as newSubrackLogo } from './newSubrackLogo.svg'

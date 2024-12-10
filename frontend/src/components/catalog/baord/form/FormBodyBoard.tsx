@@ -1,3 +1,4 @@
+// import { useForm } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 // import { UseFormRegister, FieldErrors, useFormContext } from 'react-hook-form'
 import { BitsRatesEnum, BoardFormData, RoadmapEnum, TechnologyEnum } from '../../../../types'
@@ -16,6 +17,7 @@ interface Props {
 export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
 
   const { queryVendors } = useVendors({ enabled: true })
+  // const { register, formState: { errors } } = useForm<BoardFormData>()
   const { register, formState: { errors } } = useFormContext<BoardFormData>()
 
   if (queryVendors.isLoading) return <Spinner />
@@ -183,10 +185,10 @@ export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
       </div>
       <div className='flex flex-col-reverse'>
         <div className="flex justify-between my-2 items-center space-x-3">
-          <label className="w-1/3 text-right" htmlFor="status">Estado</label>
+          <label className="w-1/3 text-right" htmlFor="roadmap">ROADMAP</label>
           <select
             className="w-2/3 border border-gray-300 p-1 outline-none rounded shadow-md"
-            id="status"
+            id="roadmap"
             {...register('roadmap', {
               required: requiredFields && 'Debe Seleccionar un Estado',
             })}

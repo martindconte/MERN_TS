@@ -1,4 +1,4 @@
-import { BoardDatasource, BoardEntity, BoardRepository, CreateBoardDTO, UpdateBoardDTO } from '../../../domain';
+import { BoardDatasource, BoardRepository, CreateBoardDTO, UpdateBoardDTO } from '../../../domain';
 import { IBoard, IBoardResponse, IBoardsDeleted, IBoardSearch, IBoardsResponse } from '../../../interface';
 
 export class BoardRepositoyImpl implements BoardRepository {
@@ -12,68 +12,19 @@ export class BoardRepositoyImpl implements BoardRepository {
     getAll(queries?: IBoardSearch): Promise<IBoardsResponse> {
         return this.datasource.getAll( queries )
     }
-    getById(id: BoardEntity['id'], queries?: IBoardSearch): Promise<IBoard> {
+    getById(id: IBoard['id'], queries?: IBoardSearch): Promise<IBoard> {
         return this.datasource.getById( id, queries )
     }
     updateById(updateBoardDTO: UpdateBoardDTO, queries?: IBoardSearch): Promise<IBoardResponse> {
         return this.datasource.updateById( updateBoardDTO, queries )
     }
-    deleteById(id: BoardEntity['id']): Promise<IBoardResponse> {
+    deleteById(id: IBoard['id']): Promise<IBoardResponse> {
         return this.datasource.deleteById( id )
     }
     getAllDeleted(): Promise<IBoardsDeleted> {
         return this.datasource.getAllDeleted()
     }
-    clean(id: BoardEntity['id']): Promise<IBoardResponse> {
+    clean(id: IBoard['id']): Promise<IBoardResponse> {
         return this.datasource.clean( id )
     }
-
-    // create(createBoardDTO: CreateBoardDTO): Promise<BoardEntity> {
-    //     return this.datasource.create( createBoardDTO )
-    // }
-    // getAll(queries?: IBoardSearch): Promise<BoardEntity[] | BoardEntityWithPagination> {
-    //     return this.datasource.getAll( queries )
-    // }
-    // getById(id: BoardEntity['id'], queries?: IBoardSearch): Promise<BoardEntity> {
-    //     return this.datasource.getById( id, queries )
-    // }
-    // updateById(UpdateBoardDTO: UpdateBoardDTO, queries?: IBoardSearch): Promise<BoardEntity> {
-    //     return this.datasource.updateById( UpdateBoardDTO, queries )
-    // }
-    // deleteById(id: BoardEntity['id']): Promise<BoardEntity> {
-    //     return this.datasource.deleteById( id )
-    // }
-    // getAllDeleted(): Promise<IBoardsDeleted> {
-    //     return this.datasource.getAllDeleted()
-    // }
-    // clean(id: BoardEntity['id']): Promise<BoardEntity> {
-    //     return this.datasource.clean( id )
-    // }
-
-    // constructor(
-    //     private readonly datasource: BoardDatasource
-    // ){}
-    // getAllDeleted(): Promise<IBoardsDeleted> {
-    //     throw new Error('Method not implemented.');
-    // }
-    // clean(id: BoardEntity['id']): Promise<BoardEntity> {
-    //     throw new Error('Method not implemented.');
-    // }
-
-    // create(createBoardDTO: CreateBoardDTO): Promise<BoardEntity> {
-    //     return this.datasource.create( createBoardDTO )
-    // }
-    // getAll(queries?: QueriesDTO): Promise<BoardEntity[] | BoardEntityWithPagination> {
-    //     return this.datasource.getAll( queries )
-    // }
-    // getById(id: BoardEntity['id']): Promise<BoardEntity> {
-    //     return this.datasource.getById( id )
-    // }
-    // updateById(updateTransceiverDTO: UpdateBoardDTO): Promise<BoardEntity> {
-    //     return this.datasource.updateById( updateTransceiverDTO )
-    // }
-    // deleteById(id: BoardEntity['id']): Promise<BoardEntity> {
-    //     return this.datasource.deleteById( id )
-    // }
-
 }

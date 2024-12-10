@@ -11,9 +11,9 @@ export const TransceiverNav = () => {
           onMouseEnter={() => setShowMenuTransceiver(true)}
           onMouseLeave={() => setShowMenuTransceiver(false)}
         >
-          <p className='flex items-center gap-1 cursor-pointer'>
+          <Link to='/catalog/transceiver'className='flex items-center gap-1 cursor-pointer'>
             Modulos <span className='material-symbols-outlined'>arrow_right</span>
-          </p>
+          </Link>
           {showMenuTransceiver && (
             <ul className='absolute left-full top-0 bg-neutral-700 text-white shadow-lg py-2 w-48 z-50'>
               <li className='px-4 py-2 hover:bg-neutral-500 cursor-pointer'>

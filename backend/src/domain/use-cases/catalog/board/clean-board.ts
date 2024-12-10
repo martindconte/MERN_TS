@@ -11,11 +11,3 @@ export class CleanBoard implements CleanBoardUseCase {
     return this.repository.clean(id);
   }
 }
-// export class DeleteBoard implements CleanBoardUseCase {
-//     constructor(
-//         private readonly repository: BoardRepository
-//     ) {}
-//     execute(id: BoardEntity["id"]): Promise<BoardEntity> {
-//         return this.repository.clean( id );
-//     };
-// };

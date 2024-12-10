@@ -3,11 +3,11 @@ import { CentralFormData } from "../../types";
 import { MutationStatus } from "@tanstack/react-query";
 
 interface Props {
+    buttonLabel: string;
     reset: UseFormReset<CentralFormData>;
     status?: MutationStatus;
-    buttonLabel: string;
 }
-export const BtnForm = ({ buttonLabel, reset, status }: Props) => {
+export const BtnFormCentral = ({ buttonLabel, reset, status }: Props) => {
     return (
         <div className="flex flex-col gap-1 mt-3">
             <button

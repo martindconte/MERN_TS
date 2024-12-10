@@ -7,6 +7,12 @@ export enum TechnologyEnum {
     generic = 'GENERICO'
 };
 
+export enum OwnerEnum {
+    tasa = 'TASA',
+    mvs = 'MVS',
+    other = 'OTHER',
+}
+
 export enum RoadmapEnum {
     InService = 'InService',
     EndOfSupport = 'EndOfSupport',
