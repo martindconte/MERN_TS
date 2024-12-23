@@ -14,9 +14,8 @@ interface Props {
 
 export const SearchBoardModal = ({ close, vendors, setValue, index, control }: Props) => {
 
-    console.log({control});
-
     const [boardsSelected, setBoardsSelected] = useState<BoardType[]>([]);
+    const [boardsIdsSelected, setBoardsIdsSelected] = useState<string[]>([]);
 
     const { boards } = useWatch({
         control,
@@ -25,30 +24,22 @@ export const SearchBoardModal = ({ close, vendors, setValue, index, control }: P
 
     const handleAddBoards = () => {
         // setValue(`slots.${index}.boards`, boardsSelected);
-        setValue(`slots.${index}.boards`, boardsSelected);
+        setValue(`slots.${index}.boards`, boardsIdsSelected);
         close(false);
     }
-
-    useEffect(() => {
-        //todo: la informacion a retornar a selectedData de Table deberia ser un string[]... para que devolver el objeto comkpleto???
-        setBoardsSelected(boards as BoardType[])
-    }, [ boards ])
-
-
-    
-    // const { equipments }: Partial<BoardPortsType> = useWatch( {
-    //     control,
-    //     name: `ports.${index}`,
-    // } );
-    
-    // const handleAddEquipment = () => {
-    //     setValue( `ports.${index}.equipments`, selectedData )
-    //     close( false )
+    // const handleAddBoards = () => {
+    //     // setValue(`slots.${index}.boards`, boardsSelected);
+    //     setValue(`slots.${index}.boards`, boardsSelected);
+    //     close(false);
     // }
 
-    // useEffect( () => {
-    //     setSelectedData( equipments as TransceiverType[] )
-    // }, [ equipments ] )
+    useEffect(() => {
+        setBoardsIdsSelected(boards)
+    }, [ boards ])
+    // useEffect(() => {
+    //     //todo: la informacion a retornar a selectedData de Table deberia ser un string[]... para que devolver el objeto comkpleto???
+    //     setBoardsSelected(boards as BoardType[])
+    // }, [ boards ])
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex justify-center items-center text-black z-50 font-oswald">
@@ -58,6 +49,9 @@ export const SearchBoardModal = ({ close, vendors, setValue, index, control }: P
                     vendors={vendors}
                     boardsSelected={boardsSelected}
                     setBoardsSelected={setBoardsSelected}
+                    // probando la nueva tabla
+                    boardsIdsSelected={boardsIdsSelected}
+                    setBoardsIdsSelected={setBoardsIdsSelected}
                 />
 
                 <div className='flex gap-3'>

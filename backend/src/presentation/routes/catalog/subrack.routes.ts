@@ -9,18 +9,24 @@ export class SubrackRoutes {
         const router = Router()
 
         const datasource = new SubrackDatasourceImpl()
-        const vendorRepository = new SubrackRepositoryImpl( datasource )
+        const vendorRepository = new SubrackRepositoryImpl(datasource)
 
-        const controller = new SubrackController( vendorRepository )
+        const controllerSubrack = new SubrackController(vendorRepository)
 
         router.route('/')
-            .post(controller.createSubrack)
-            .get(controller.getAllSubracks)
+            .post(controllerSubrack.create)
+            .get(controllerSubrack.getAll)
+
+        router.route('/deleted-subracks')
+            .get(controllerSubrack.getAllDeleted)
+
+        router.route('/deleted-subrack/:subrackid/permanently-delete')
+            .delete(controllerSubrack.cleanById)
 
         router.route('/:subrackid')
-            .get(controller.getSubrackById)
-            .put(controller.updateSubrackById)
-            .delete(controller.deleteSubrackById)
+            .get(controllerSubrack.getById)
+            .put(controllerSubrack.updateById)
+            .delete(controllerSubrack.deleteById)
 
         return router
     }

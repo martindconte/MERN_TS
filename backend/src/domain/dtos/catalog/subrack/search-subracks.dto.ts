@@ -35,7 +35,7 @@ type Mutable<T> = {
     }
   
     // Método para construir el objeto de búsqueda
-    static searchBoard(queryParams: Record<string, any>): ISubrackSearch {
+    static searchSubrack(queryParams: Record<string, any>): ISubrackSearch {
       const { limit, page, ...rest } = queryParams;
       // const result: IBoardSearch = {};
       const searchParams: Mutable<Partial<ISubrack>> = {};

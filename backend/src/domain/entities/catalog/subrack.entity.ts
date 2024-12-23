@@ -95,8 +95,8 @@ export class SubrackEntity implements ISubrack {
     if (!totalSlots) throw CustomError.badRequest('Missinbg Quantity Total Slots and must be a number bigger than 0');
     if (!roadmap) throw CustomError.badRequest('Invalid Roadmap Value in Subrack');
     if (!technology) throw CustomError.badRequest('Invalid Techonology value!. Must be DWDM, SDH, RX, CWDM, IP, GENERICO');
-    if (slots.length !== totalSlots) throw CustomError.badRequest('The number of Slots must be equal to total Slot!');
-    const [error, slotsCheck] = slots.length > 0 ? this.checkDataSlots(slots) : ['Slots is Required'];
+    if (slots && slots.length !== totalSlots) throw CustomError.badRequest('The number of Slots must be equal to total Slot!');
+    const [error, slotsCheck] = slots && slots.length > 0 ? this.checkDataSlots(slots) : [undefined, []];
     if (error) throw [error];
     if (!slotsCheck) throw ['SlotsCheck is undefined, but this should not happen based on the logic'];
 
@@ -108,7 +108,7 @@ export class SubrackEntity implements ISubrack {
       subrackFamily,
       subrackType,
       +totalSlots,
-      vendor,
+      { id: vendor._id, vendorName: vendor.vendorName },
       isDeleted,
       description,
       modelName,

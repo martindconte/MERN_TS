@@ -1,20 +1,6 @@
-import { SubrackEntity } from '../../domain';
-import { BoardPortType, IBoard } from './board.interface';
+import { IBoard } from './board.interface';
 import { IPageLimit, IPagination, OwnerEnum, RoadmapEnum, TechnologyEnum } from './common.interface';
 import { IVendor } from './vendor.interface';
-
-// export interface SubrackEntityWithPagination {
-//     payload: SubrackEntity[]
-//     pagination: {
-//         totalDocs: number
-//         totalPages: number
-//         prevPage: string | null
-//         nextPage: string | null
-//         page: number
-//         hasPrevPage: boolean
-//         hasNextPage: boolean
-//     }
-// }
 
 export interface ISlots {
   number: number;
@@ -76,7 +62,12 @@ export interface ISubracksResponse {
   pagination?: IPagination;
 }
 
+export interface ISubrackToClean {
+  subrack: ISubrack,
+  networkElements: []
+}
+
 export interface ISubracksDeleted {
-  boards: ISubrack[];
-  networkElement: string;
+  subracks: ISubrack[];
+  networkElement: [];
 }

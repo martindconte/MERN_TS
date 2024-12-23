@@ -63,13 +63,6 @@ const portSchema = new Schema<Port>(
       type: Object,
       default: {},
     },
-
-    // todo: DEJAR DE USAR MAP!!!!
-    // logicalFacilities: {
-    //   type: Map,
-    //   of: [String],
-    //   default: {},
-    // },
     fullName: {
       type: String,
       trim: true,
@@ -177,17 +170,5 @@ boardSchema.pre('validate', function (next) {
   });
   next();
 });
-
-// boardSchema.pre('save', async function (next) {
-//   await this.populate({
-//     path: 'ports.equipments',
-//     select: 'partNumber modelName vendor description bitsRates',
-//     populate: {
-//       path: 'vendor',
-//       select: 'vendorName _id', // Populación anidada
-//     },
-//   });
-//   next();
-// });
 
 export const BoardModel: Model<BoardDocument> = model('Board', boardSchema);

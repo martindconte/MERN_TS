@@ -1,5 +1,5 @@
 export * from './BtnNavBoard'
-export * from './deletedBoard/InputFilters'
+export * from './deletedBoard/FiltersBoardsDeleted'
 export * from './details'
 export * from './form'
 export * from './logicalPorts'

@@ -43,7 +43,7 @@ export const responseCentralsSchema = z.object({
 });
 
 export type Central = z.infer<typeof centralSchema>;
-export type Pagination = z.infer<typeof paginationSchema>;
+// type Pagination = z.infer<typeof paginationSchema>;
 export type CentralFormData = Pick<
   Central,
   | "centralName"

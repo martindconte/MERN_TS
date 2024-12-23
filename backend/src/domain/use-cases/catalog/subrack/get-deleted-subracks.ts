@@ -5,7 +5,7 @@ export interface GetDeletedSubracksUseCase {
   execute(): Promise<ISubracksDeleted>;
 }
 
-export class GetDeletedBoards implements GetDeletedSubracksUseCase {
+export class GetDeletedSubracks implements GetDeletedSubracksUseCase {
   constructor(private readonly respository: SubrackRepository) {}
   execute(): Promise<ISubracksDeleted> {
     return this.respository.getAllDeleted();

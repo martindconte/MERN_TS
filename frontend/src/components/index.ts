@@ -10,12 +10,18 @@ export * from './catalog/signal/BtnNavSignal'
 export * from './catalog/signal/FormBodySignal'
 export * from './catalog/signal/FormSignal'
 
-/* signal --> components/catalog/signal */
+/* transceiver --> components/catalog/transceiver */
+export * from './catalog/transceiver/FiltersTransceiversDeleted'
 export * from './catalog/transceiver/FormTransceiver'
 export * from './catalog/transceiver/BtnNavTransceiver'
+export * from './catalog/transceiver/details/BitsRatesTransceiver'
+export * from './catalog/transceiver/details/InfoTransceiver'
 
 /* subrack --> components/catalog/subrack */
+export * from './catalog/subrack/BtnNavSubrack'
 export * from './catalog/subrack/form/FormSubrack'
+export * from './catalog/subrack/details'
+export * from './catalog/subrack/deleted'
 
 /* vendor --> components/catalog/vendor */ 
 export * from './catalog/vendor/BtnFormVendor'
@@ -40,3 +46,5 @@ export * from './shared/modalDelete/ModalDelete'
 export * from './shared/spinners/Spinner'
 
 export * from './shared/table/Table'
+
+export * from './shared/table_v2/TableV2'

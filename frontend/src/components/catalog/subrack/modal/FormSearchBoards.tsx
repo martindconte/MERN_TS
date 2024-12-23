@@ -5,14 +5,19 @@ import { useBoards } from '../../../../hook'
 import { InputsSearchBoards } from './InputsSearchBoards'
 import { Table } from '../../../shared/table/Table'
 import { Spinner } from '../../../shared/spinners/Spinner'
+import { TableV2 } from '../../../shared/table_v2/TableV2'
 
 interface Props {
   vendors: VendorType[];
   boardsSelected: BoardType[];
   setBoardsSelected: Dispatch<SetStateAction<BoardType[]>>;
+  // probando nueva TablaV2
+  boardsIdsSelected: string[]
+  setBoardsIdsSelected: Dispatch<SetStateAction<string[]>>
+
 }
 
-export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected }: Props) => {
+export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected, setBoardsIdsSelected, boardsIdsSelected }: Props) => {
 
   const { register, handleSubmit, reset } = useForm<BoardFormData>({
     defaultValues: {
@@ -29,10 +34,6 @@ export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected }:
     setSearch(formData)
     setEnabled(true)
   }
-
-  // const handleBoardSelect = ( data: BoardType[] ) => {
-  //   setBoardsSelected( data )
-  // }
 
   if( queryBoards.isLoading ) return <Spinner />
 
@@ -56,7 +57,21 @@ export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected }:
         >Limpiar</button>
       </div>
       <div className='bg-gray-200 mt-2 rounded-lg'>
-        <Table
+        <TableV2
+          info='catalogBoard'
+          data={queryBoards.data?.payload || []}
+          pagination={queryBoards.data?.pagination}
+          limit={limit}
+          page={page}
+          setLimit={setLimit}
+          setPage={setPage}
+          fnSelectRows={setBoardsIdsSelected}
+          selectedRows={boardsIdsSelected}
+          // fnSelected={setBoardsIdsSelected}
+          // selectedRows={boardsIdsSelected}
+          // selectedData={boardsSelected}
+        />
+        {/* <Table
           info='catalogBoard'
           data={queryBoards.data?.payload ?? []}
           pagination={queryBoards.data?.pagination}
@@ -66,7 +81,7 @@ export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected }:
           setPage={setPage}
           fnSelected={setBoardsSelected}
           selectedData={boardsSelected}
-        />
+        /> */}
       </div>
     </div>
   )

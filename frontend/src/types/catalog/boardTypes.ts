@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { BitsRatesEnum, LogicalSignal } from './bitsRatesTypes';
 import { transceiverSchema } from './transceiverTypes';
 import { RoadmapEnum, TechnologyEnum } from './commonTypes';
+import { subrackSchema } from './subrackTypes';
 
 //* enum
 export enum BoardPortType {
@@ -88,7 +89,8 @@ export const respAPIBoardsSchema = z.object({
 
 export const boardsDeletedSchema = z.object({
   boards: z.array(boardSchema),
-  subracks: z.string().default('TODO... PENDIENTE SUBRACKS')
+  subracks: z.array(subrackSchema)
+  // subracks: z.string().default('TODO... PENDIENTE SUBRACKS')
 });
 
 //* types

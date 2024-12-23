@@ -32,7 +32,7 @@ export class UpdateSubrackDTO implements ISubrackUpdateDTO {
       if (!logical && typeof logical !== 'string') return ['Logical Slot is Required and must be a String'];
       if (!number || isNaN(number)) return ['Number Slot is Required and must be a Number'];
       if (!physical && typeof physical !== 'string') return ['Physical Slot is Required and must be a String'];
-      if (boards && !boards.some((board) => helpersDB.isMongoID(board))) return [`Invalid Board for Slot Number ${number}`];
+      if (boards && boards.length > 0 && !boards.some((board) => helpersDB.isMongoID(board))) return [`Invalid Board for Slot Number ${number}`];
 
       if (setNumberSlots.has(number)) return [`Port Number ${number} is Duplicated!`];
       if (setLogicalSlots.has(logical)) return [`Logical Number ${number} is Duplicated!`];
@@ -51,7 +51,7 @@ export class UpdateSubrackDTO implements ISubrackUpdateDTO {
       id,
       isDeleted = false,
       partNumber,
-      slots,
+      slots = [],
       subrackFamily,
       subrackType,
       totalSlots,

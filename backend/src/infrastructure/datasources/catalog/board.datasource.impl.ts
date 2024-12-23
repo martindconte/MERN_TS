@@ -4,7 +4,6 @@ import { generateRandomCode } from '../../../helpers';
 import { IBoardResponse, IBoardSearch, IBoardsResponse, IBoard, IBoardsDeleted, IBoardToClean } from '../../../interface';
 
 export class BoardDatasourceImpl implements BoardDatasource {
-
   async create(createBoardDTO: CreateBoardDTO): Promise<IBoardResponse> {
     const { boardName, partNumber } = createBoardDTO;
 
@@ -32,7 +31,7 @@ export class BoardDatasourceImpl implements BoardDatasource {
           .limit(limit)
           .skip((page - 1) * limit)
           .sort({
-            'vendor.vendorName': 1,
+            vendor: 1,
             boardName: 1,
             partNumber: 1,
             techonology: 1,
@@ -42,7 +41,7 @@ export class BoardDatasourceImpl implements BoardDatasource {
       ]);
 
       const totalPages = Math.ceil(totalDocs / limit);
-      const baseUrl = `api/catalog/board?limit=${limit}&page=${page}&${new URLSearchParams().toString()}`;
+      const baseUrl = `api/catalog/board?limit=${limit}`;
       return {
         payload: boards.map(BoardEntity.fromObject),
         pagination: {
@@ -63,7 +62,7 @@ export class BoardDatasourceImpl implements BoardDatasource {
       .select('-ports -bitsRates')
       .populate({ path: 'vendor', select: 'vendorName' })
       .sort({
-        'vendor.vendorName': 1,
+        vendor: 1,
         boardName: 1,
         partNumber: 1,
         techonology: 1,
@@ -88,46 +87,38 @@ export class BoardDatasourceImpl implements BoardDatasource {
         // select: 'partNumber modelName vendor description bitsRates logicalFacilities',
         populate: [{ path: 'vendor', select: 'vendorName', model: 'Vendor' }],
       },
-    ])
+    ]);
     return BoardEntity.fromObject(boardPopulate);
-  };
+  }
 
   async getByIdDeleted(id: IBoard['id']): Promise<IBoardToClean> {
-    const board = await this.getById(id, { otherQueries: { isDeleted: true }});
-    const subracks = await SubrackModel.find()
+    const board = await this.getById(id, { otherQueries: { isDeleted: true } });
+    const subracks = await SubrackModel.find();
 
     return {
-        board,
-        subracks: [] //todo: pendiente de desarrolar modulo de subracks
-    }
-}
-  
+      board,
+      subracks: [], //todo: pendiente de desarrolar modulo de subracks
+    };
+  }
+
   async updateById(updateBoardDTO: UpdateBoardDTO, queries?: IBoardSearch): Promise<IBoardResponse> {
     const { otherQueries } = queries || {};
     const { isDeleted = false } = otherQueries || {};
 
     await this.getById(updateBoardDTO.id, { otherQueries: { isDeleted } });
 
-      const boardDuplicated = await BoardModel.findOne({
-        $and: [
-          { _id: { $ne: updateBoardDTO.id } },
-          { partNumber: updateBoardDTO.partNumber },
-          { boardName: updateBoardDTO.boardName }
-        ],
-      });
+    const boardDuplicated = await BoardModel.findOne({
+      $and: [{ _id: { $ne: updateBoardDTO.id } }, { partNumber: updateBoardDTO.partNumber }, { boardName: updateBoardDTO.boardName }],
+    });
 
-      if (boardDuplicated)
-        throw new Error(
-          `The Transceiver whit this Part Number ${updateBoardDTO.partNumber} or Board Name ${updateBoardDTO.boardName}already registered`
-        );
+    if (boardDuplicated)
+      throw new Error(`The Board whit this Part Number ${updateBoardDTO.partNumber} or Board Name ${updateBoardDTO.boardName} already registered`);
 
-      const boardUpdate = await BoardModel.findByIdAndUpdate(updateBoardDTO.id, { ...updateBoardDTO }, { new: true })
-        .select('-ports -bitsRates')
-        .lean()
-        .populate([
-          { path: 'vendor', select: 'vendorName' },
-        ]);
-      return BoardEntity.fromObject(boardUpdate!)
+    const boardUpdate = await BoardModel.findByIdAndUpdate(updateBoardDTO.id, { ...updateBoardDTO }, { new: true })
+      .select('-ports -bitsRates')
+      .lean()
+      .populate([{ path: 'vendor', select: 'vendorName' }]);
+    return BoardEntity.fromObject(boardUpdate!);
   }
 
   async deleteById(id: BoardEntity['id']): Promise<IBoardResponse> {
@@ -141,9 +132,9 @@ export class BoardDatasourceImpl implements BoardDatasource {
         isDeleted: true,
       }
     )
-    .select('-ports -bitsRates')
-    .lean()
-    .populate({ path: 'vendor', select: 'vendorName' });
+      .select('-ports -bitsRates')
+      .lean()
+      .populate({ path: 'vendor', select: 'vendorName' });
 
     if (!boardDeleted) throw new Error('Board not deleted');
 
@@ -156,25 +147,35 @@ export class BoardDatasourceImpl implements BoardDatasource {
       .select('-ports -bitsRates')
       .lean()
       .populate({ path: 'vendor', select: 'vendorName' });
-    // const ids = boardsDeleted.map( baord => baord.id );
-    // const [ subracks ] = await Promise.all([
-    //   SubrackModel.find() //todo: Pendiente de realizar subracks
-    // ]);
-
-    return {
-      boards: boardsDeleted.map( BoardEntity.fromObject ),
-      subracks: [] // todo: PENDIENTE DE REALIZAR SUBRACKS
+    const ids = boardsDeleted.map((baord) => baord._id);
+    if (ids.length === 0) {
+      return {
+        boards: [],
+        subracks: [],
+      };
     }
+    const subracksWidthBoardsDeleted = await SubrackModel.find({ slots: { $elemMatch: { boards: { $in: ids } } } })
+      .lean()
+      .select('-slots')
+      .populate({ path: 'vendor', select: 'vendorName' })
+      .sort({ vendor: 1 });
+    return {
+      boards: boardsDeleted.map(BoardEntity.fromObject),
+      subracks: subracksWidthBoardsDeleted.map(SubrackEntity.fromObject),
+    };
   }
 
   async clean(id: BoardEntity['id']): Promise<IBoardResponse> {
     const { board, subracks } = await this.getByIdDeleted(id);
-    if ( board && subracks.length > 0) throw 'Board not deleted. The Board has associated Subracks';
-    const boardCleaned = await BoardModel.findByIdAndDelete(id).populate([{ path: 'vendor', select: 'vendorName' }]).lean().select('-ports');
+    if (board && subracks.length > 0) throw 'Board not deleted. The Board has associated Subracks';
+    const boardCleaned = await BoardModel.findByIdAndDelete(id)
+      .populate([{ path: 'vendor', select: 'vendorName' }])
+      .lean()
+      .select('-ports');
     if (boardCleaned) {
-        return BoardEntity.fromObject(boardCleaned);
+      return BoardEntity.fromObject(boardCleaned);
     } else {
-        throw 'Error - Delete failed';
-    };
+      throw 'Error - Delete failed';
+    }
   }
 }

@@ -27,7 +27,7 @@ export const SearchBoardView = () => {
     );
 
   const handleDelete = async (id: BoardType['id']) => {
-    return await mutationDeletedBoard.mutateAsync({ id })
+    await mutationDeletedBoard.mutateAsync({ id })
   }
 
   return (
