@@ -1,23 +1,17 @@
-// import { useForm } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
-// import { UseFormRegister, FieldErrors, useFormContext } from 'react-hook-form'
 import { BitsRatesEnum, BoardFormData, RoadmapEnum, TechnologyEnum } from '../../../../types'
 import { ErrorMsgForm } from '../../../shared/errors/ErrorMsgForm'
 import { useVendors } from '../../../../hook'
 import { Spinner } from '../../../shared/spinners/Spinner'
 
 interface Props {
-  // register: UseFormRegister<BoardFormData>
-  // errors: FieldErrors<BoardFormData>
   requiredFields?: boolean
   isDeleted?: boolean;
 }
 
-// export const FormBodyBoard = ({ register, errors, requiredFields }: Props) => {
 export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
 
   const { queryVendors } = useVendors({ enabled: true })
-  // const { register, formState: { errors } } = useForm<BoardFormData>()
   const { register, formState: { errors } } = useFormContext<BoardFormData>()
 
   if (queryVendors.isLoading) return <Spinner />
@@ -111,7 +105,6 @@ export const FormBodyBoard = ({ requiredFields, isDeleted }: Props) => {
               min: 1,
               setValueAs: value => parseInt(value),
               valueAsNumber: true,
-              // validate: value => value && value <= 1 || 'Debe ser un número válido',
               onChange: e => e.target.value < 1 ? '' : e.target.value
             })}
           />

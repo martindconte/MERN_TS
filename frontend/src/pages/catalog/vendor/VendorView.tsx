@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { BtnNavVendor, FormVendor, Spinner, Table } from '../../../components'
+import { BtnNavVendor, FormVendor, Spinner, /* Table, */ TableV2 } from '../../../components'
 import { useVendorMutation, useVendors } from '../../../hook'
 import { VendorFormData, VendorType } from '../../../types'
 
@@ -44,11 +44,16 @@ export const VendorView = () => {
           {queryVendors.isLoading ? (
             <Spinner />
           ) : (
-            <Table
+            <TableV2
               data={queryVendors.data || []}
               info='catalogVendor'
               fnDelete={handleDelete}
             />
+            // <Table
+            //   data={queryVendors.data || []}
+            //   info='catalogVendor'
+            //   fnDelete={handleDelete}
+            // />
           )}
         </div>
       </div>

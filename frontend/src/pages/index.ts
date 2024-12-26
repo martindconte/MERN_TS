@@ -3,7 +3,7 @@ export * from './catalog/CatalogIndexView';
 /* catalog/board */
 export * from './catalog/board/DeletedBoardsView';
 export * from './catalog/board/DetailsBoardView';
-export * from './catalog/board/EditBoard.View';
+export * from './catalog/board/EditBoardView';
 export * from './catalog/board/IndexBoardView';
 export * from './catalog/board/NewBoardView';
 export * from './catalog/board/SearchBoardView';

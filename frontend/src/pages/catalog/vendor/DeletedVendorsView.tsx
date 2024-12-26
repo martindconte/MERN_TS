@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { BtnNavVendor, Spinner, Table } from '../../../components'
+import { BtnNavVendor, Spinner, TableV2, /* Table */ } from '../../../components'
 import { useVendorMutation, useVendorsDeleted } from '../../../hook'
 import { VendorDeletedType, VendorType } from '../../../types'
 
@@ -51,28 +51,45 @@ export const DeletedVendorsView = () => {
             </div>
             <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
               <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Vendor Eliminados</p>
-              <Table
+              <TableV2
+                data={filteredVendor.vendors}
+                info='catalogVendor'
+                basePath='catalog/vendor'
+                fnDelete={ handlePermanentlyDeleteVendor }
+              />
+              {/* <Table
                 data={filteredVendor.vendors}
                 info='catalogVendor'
                 path='catalog/vendor'
                 fnDelete={ handlePermanentlyDeleteVendor }
-              />
+              /> */}
             </div>
             <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
               <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Transceivers Eliminados</p>
-              <Table
+              <TableV2
+                data={filteredVendor.transceivers}
+                info='catalogTransceiver'
+                basePath='catalog/transceiver'
+              />
+              {/* <Table
                 data={filteredVendor.transceivers}
                 info='catalogTransceiver'
                 path='catalog/transceiver'
-              />
+              /> */}
             </div>
             <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
               <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Placas Eliminadas</p>
+              <TableV2
+                data={filteredVendor.boards}
+                info='catalogBoard'
+                basePath='catalog/board'
+              />
+{/*               
               <Table
                 data={filteredVendor.boards}
                 info='catalogBoard'
                 path='catalog/board'
-              />
+              /> */}
             </div>
           </>
       }

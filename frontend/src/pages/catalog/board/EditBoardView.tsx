@@ -22,6 +22,7 @@ export const EditBoardView = () => {
   const { mutationUpdateBoard } = useBoardMutation()
 
   const handleForm = async (formData: BoardFormData) => {
+    console.log(formData);
     const data = await mutationUpdateBoard.mutateAsync({ id: boardId!, formData, searchParams: search })
     if (data) navigate(-1)
   }
@@ -37,6 +38,8 @@ export const EditBoardView = () => {
     return (
       <div className='flex-1 bg-stone-900 text-4xl text-white font-oswald uppercase font-bold text-center px-3 py-4'>No se Encontraron datos</div>
     )
+
+  console.log(queryBoard.data)
 
   return (
     <main className='flex-1 bg-stone-800'>
@@ -56,7 +59,11 @@ export const EditBoardView = () => {
 
       <FormBoard
         onSubmit={handleForm}
-        defaultValues={{ ...queryBoard.data, vendor: queryBoard.data.vendor.id }}
+        defaultValues={{
+          ...queryBoard.data,
+          vendor: queryBoard.data.vendor.id,
+          ports: queryBoard.data.ports.map(port => ({ ...port, equipments: port.equipments.map(equipment => equipment.id) })),
+        }}
         buttonLabel='Modificar Placa'
         requiredFields
         isDeleted={queryParams.get('isDeleted') === 'true'}

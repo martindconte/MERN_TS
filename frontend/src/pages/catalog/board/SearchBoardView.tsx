@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BtnNavBoard, FormBoard, HiddenComponent, Spinner, Table } from '../../../components';
+import { BtnNavBoard, FormBoard, HiddenComponent, Spinner, /* Table,*/ TableV2 } from '../../../components';
 import { useBoardMutation, useBoards } from '../../../hook';
 import { BoardFormData, BoardType } from '../../../types';
 import { cleanFormData } from '../../../helpers';
@@ -50,7 +50,7 @@ export const SearchBoardView = () => {
           <Spinner />
         ) : (
           queryBoards.data && (
-            <Table
+            <TableV2
               data={queryBoards.data?.payload}
               pagination={queryBoards.data.pagination}
               info="catalogBoard"
@@ -60,6 +60,16 @@ export const SearchBoardView = () => {
               setLimit={setLimit}
               fnDelete={ handleDelete }
             />
+            // <Table
+            //   data={queryBoards.data?.payload}
+            //   pagination={queryBoards.data.pagination}
+            //   info="catalogBoard"
+            //   page={page}
+            //   setPage={setPage}
+            //   limit={limit}
+            //   setLimit={setLimit}
+            //   fnDelete={ handleDelete }
+            // />
           )
         )}
         <div className="w-1/4 mx-auto">

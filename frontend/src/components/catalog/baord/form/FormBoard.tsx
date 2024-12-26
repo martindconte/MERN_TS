@@ -39,9 +39,7 @@ export const FormBoard = ( { onSubmit, status, requiredFields, buttonLabel, defa
             requiredFields={requiredFields}
             isDeleted={ isDeleted }
           />
-
           { !showFormBodyBoardPorts && <FormBodyBoardPorts requiredFields={requiredFields} /> }
-
         </div>
         <BtnFormBoard
           status={status}

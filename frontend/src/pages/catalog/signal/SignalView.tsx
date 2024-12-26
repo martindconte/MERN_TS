@@ -1,7 +1,8 @@
-import { BtnNavSignal, FormSignal, Spinner, Table } from '../../../components'
+import { BtnNavSignal, FormSignal, Spinner, /*Table, */ TableV2 } from '../../../components'
 import { useSignalMutation, useSignals } from '../../../hook';
 import { SignalFormData } from '../../../types';
 
+//TODO: Implementar la tabla de señales. ASOCIAR BITS RATES a las señales
 export const SignalView = () => {
 
   const { querySignals } = useSignals({})
@@ -33,11 +34,15 @@ export const SignalView = () => {
             querySignals.isLoading
               ? <Spinner />
               : (
-                <Table
+                <TableV2
                   data={querySignals.data || []}
-                  info="catalogSignal"
-                  // fnDelete={mutationDeleteVendor}
+                  info='catalogSignal'
                 />
+                // <Table
+                //   data={querySignals.data || []}
+                //   info="catalogSignal"
+                //   // fnDelete={mutationDeleteVendor}
+                // />
               )
           }
         </div>

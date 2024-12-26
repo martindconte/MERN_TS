@@ -1,7 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-// import { BoardFormData, BoardPortType } from '../../../types';
-// import { BtnAddPort } from './BtnAddPort';
 import { AddPort } from './AddPort';
 import { BoardFormData, BoardPortType } from '../../../../types';
 import { BtnAddPort } from './BtnAddPort';
@@ -32,7 +30,7 @@ export const FormBodyBoardPorts = ( { requiredFields }: Props ) => {
             ports.forEach( ( port, index ) => {
                 const expectedFullName = `${port.NMS}(${port.physical})`;
                 if ( port.physical && port.NMS && port.fullName !== expectedFullName ) {
-                    setValue( `ports.${index}.fullName`, expectedFullName );
+                    setValue(`ports.${index}.fullName` as const, expectedFullName);
                 }
             } );
         }

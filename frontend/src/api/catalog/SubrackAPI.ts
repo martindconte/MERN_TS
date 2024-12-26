@@ -3,7 +3,7 @@ import {
   respAPISubrackSchema,
   respAPISubracksSchema,
   SubrackFormData,
-  SubrackPaginationType /*SubrackType*/,
+  SubrackPaginationType,
   subrackSchema,
   subracksDeletedSchema,
   SubracksDeletedType,
@@ -100,8 +100,8 @@ export const updateSubrack = async ({
         ? partNumber
         : partNumber + '_DELETE_'
       : regExHelper.containsDeleteSequence(partNumber)
-      ? regExHelper.removeDeleteSequence(partNumber)
-      : partNumber,
+        ? regExHelper.removeDeleteSequence(partNumber)
+        : partNumber,
   }
   try {
     const { data } = await api.put(`/catalog/subrack/${id}` + searchParams, boardTransform)

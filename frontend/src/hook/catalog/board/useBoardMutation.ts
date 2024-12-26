@@ -36,6 +36,9 @@ export const useBoardMutation = () => {
     },
     onSuccess: response => {
       if (response) {
+        queryClient.invalidateQueries({
+          queryKey: ['board']
+        })
         const { msg, payload } = response
         toast.success(
           `${msg} // Vendor: ${

@@ -1,13 +1,16 @@
 import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react'
 import { useVendors } from '../../../../hook'
-import { BitsRatesEnum, RoadmapEnum, TechnologyEnum, TransceiverFormData, TransceiverType } from '../../../../types'
+import { BitsRatesEnum, BoardFormData, RoadmapEnum, TechnologyEnum, TransceiverFormData, TransceiverType } from '../../../../types'
 import { Spinner } from '../../../shared/spinners/Spinner'
 
 interface Props {
-    // setSearch?: Dispatch<React.SetStateAction<Partial<TransceiverFormData>>>;
     handleSearch?: (formData: Partial<TransceiverFormData>) => void;
-    selectedData?: TransceiverType[];
-    setSelectedData?: Dispatch<SetStateAction<TransceiverType[]>>;
+    // selectedData?: TransceiverType[];
+    // setSelectedData?: Dispatch<SetStateAction<TransceiverType[]>>;
+      selectedData: BoardFormData['ports'][number]['equipments'];
+    //   selectedData: TransceiverType[]
+    //   setSelectedData: Dispatch<SetStateAction<TransceiverType[]>>;
+      setSelectedData: Dispatch<SetStateAction<BoardFormData['ports'][number]['equipments']>>;
 }
 
 // export const InputsBoardsPorts = () => {

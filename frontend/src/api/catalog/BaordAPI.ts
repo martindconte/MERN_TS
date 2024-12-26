@@ -44,16 +44,17 @@ export const boardMapped = (board: BoardType): BoardType => ({
 
 export const createBoard = async (formData: BoardFormData) => {
   // export const createBoard = async ( formData: BoardFormData ): Promise<{ msg?: string; payload: BoardType }> => {
-  const transformedFormData = {
-    ...formData,
-    ports: formData.ports.map(port => ({
-      ...port,
-      equipments: port.equipments?.map(equipment => equipment.id),
-    })),
-  }
+  // const transformedFormData = {
+  //   ...formData,
+  //   ports: formData.ports.map(port => ({
+  //     ...port,
+  //     equipments: port.equipments?.map(equipment => equipment.id),
+  //   })),
+  // }
 
   try {
-    const { data } = await api.post('/catalog/board', transformedFormData)
+    const { data } = await api.post('/catalog/board', formData)
+    // const { data } = await api.post('/catalog/board', transformedFormData)
     const response = respAPIBoardSchema.safeParse(data)
     if (response.success) return response.data
     throw new Error('Invalid response data')
@@ -119,17 +120,24 @@ export const updateBoard = async ({ id, formData, searchParams = '' }: { id: Boa
 
   const boardTransform = {
     ...formData,
-    boardName: isDeleted ? boardName : regExHelper.containsDeleteSequence(boardName) ?? regExHelper.removeDeleteSequence(boardName),
-    partNumber: isDeleted ? partNumber : regExHelper.containsDeleteSequence(partNumber) ?? regExHelper.removeDeleteSequence(partNumber),
-    ports: ports.map(port => ({
-      ...port,
-      equipments: port.equipments.map(equipment => equipment.id),
-    })),
+    // boardName: isDeleted ? boardName : regExHelper.containsDeleteSequence(boardName) ?? regExHelper.removeDeleteSequence(boardName),
+    partNumber: isDeleted
+    ? regExHelper.containsDeleteSequence(partNumber)
+      ? partNumber
+      : partNumber + '_DELETE_'
+    : regExHelper.containsDeleteSequence(partNumber)
+      ? regExHelper.removeDeleteSequence(partNumber)
+      : partNumber,
+    // ports: ports.map(port => ({
+    //   ...port,
+    //   equipments: port.equipments.map(equipment => equipment.id),
+    // })),
   }
+
+  console.log('modificado', boardTransform);
 
   try {
     const { data: boardData } = await api.put(`/catalog/board/${id}` + searchParams, boardTransform)
-    // const { data: boardData} = await api.put(`/catalog/board/${id}` + searchParams, { ...formData, ports: portsId });
     const { success, data } = respAPIBoardSchema.safeParse(boardData)
     if (success) return data
   } catch (error) {
@@ -160,15 +168,15 @@ export const deleteBoard = async (id: BoardType['id']) => {
 
 export const getAllBoardsDeleted = async () => {
   try {
-    const { data: { boards, subracks }}: { data: BoardsDeletedType } = await api('/catalog/board/clean-board')
-    console.log({boards}, {subracks});
-    console.warn('Pendiente PARTE SUBRACKS', { subracks })
+    const {
+      data: { boards, subracks },
+    }: { data: BoardsDeletedType } = await api('/catalog/board/clean-board')
     const dataMapped: BoardsDeletedType = {
-      boards: boards.map( boardMapped ),
-      subracks: subracks.map( subrackMapped )
+      boards: boards.map(boardMapped),
+      subracks: subracks.map(subrackMapped),
     }
     const { success, data } = boardsDeletedSchema.safeParse(dataMapped)
-    console.log(success);
+    console.log(success)
     if (success) {
       return data
     } else {

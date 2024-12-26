@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BtnNavCentral, FormCentral, HiddenComponent, Spinner, Table } from '../../components'
+import { BtnNavCentral, FormCentral, HiddenComponent, Spinner, Table, TableV2 } from '../../components'
 import { Central, CentralFormData } from '../../types';
 import { cleanFormData } from '../../helpers';
 import { useCentralMutation, useCentrals } from '../../hook';
@@ -50,7 +50,7 @@ export const SearchCentralView = () => {
         queryCentrals.isLoading
           ? <Spinner />
           : (
-            queryCentrals.data && <Table
+            queryCentrals.data && <TableV2
               data={queryCentrals.data.payload}
               pagination={queryCentrals.data.pagination}
               info={'central'}
@@ -61,6 +61,17 @@ export const SearchCentralView = () => {
               fnDelete={ handleDelete }
               // fnDelete={ mutationDeleteCentral }
             />
+            // queryCentrals.data && <Table
+            //   data={queryCentrals.data.payload}
+            //   pagination={queryCentrals.data.pagination}
+            //   info={'central'}
+            //   page={page}
+            //   setPage={setPage}
+            //   limit={limit}
+            //   setLimit={setLimit}
+            //   fnDelete={ handleDelete }
+            //   // fnDelete={ mutationDeleteCentral }
+            // />
           )
       }
     </main>
