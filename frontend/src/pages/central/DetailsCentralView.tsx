@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom'
 import { useCentral } from '../../hook'
 import { BtnNavCentral, Spinner } from '../../components'
-import { keyToShowInTable } from '../../components/shared/table/keysToShowInTable'
+import { infoToShowInTable } from '../../components/shared/table_v2/infoToShowInTable'
 
 export const DetailsCentralView = () => {
-  const centralKeys = keyToShowInTable['central']
+  const centralKeys = infoToShowInTable['central']
   const { centralId } = useParams<{ centralId: string }>()
   const { queryCentral } = useCentral({ id: centralId! })
 
