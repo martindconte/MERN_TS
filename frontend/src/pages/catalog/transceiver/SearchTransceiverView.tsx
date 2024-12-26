@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BtnNavTransceiver, FormTransceiver, HiddenComponent, Spinner, Table, TableV2 } from '../../../components'
+import { BtnNavTransceiver, FormTransceiver, HiddenComponent, Spinner, TableV2 } from '../../../components'
 import { cleanFormData } from '../../../helpers'
 import { useTransceiverMutation, useTransceivers } from '../../../hook'
 import { TransceiverFormData, TransceiverType } from '../../../types'
@@ -60,17 +60,6 @@ export const SearchTransceiverView = () => {
               setLimit={setLimit}
               fnDelete={handleDelete}
             />
-            // <Table
-            //   data={queryTransceivers.data.payload}
-            //   pagination={queryTransceivers.data.pagination}
-            //   info={'catalogTransceiver'}
-            //   page={page}
-            //   setPage={setPage}
-            //   limit={limit}
-            //   setLimit={setLimit}
-            //   fnDelete={ handleDelete }
-            //   // fnDelete={ mutationDeleteTransceiver }
-            // />
           )
       }
     </main>

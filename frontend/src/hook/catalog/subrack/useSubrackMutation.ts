@@ -31,6 +31,9 @@ export const useSubrackMutation = () => {
     },
     onSuccess: response => {
       if (response) {
+        queryClient.invalidateQueries({
+          queryKey: ['subrack', response.payload.id],
+        })
         const { msg, payload } = response
         toast.success(
           `${msg} // Vendor: ${payload.vendor.vendorName} // Board Namer: ${payload.subrackType} ${payload.subrackFamily}

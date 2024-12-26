@@ -6,7 +6,6 @@
 
 .th,
 .td {
-  /* box-shadow: inset 0 0 0 1px #888888; */
   padding: 0.5rem;
   width: 100%;
 }
@@ -15,7 +14,6 @@
   font-size: 15px;
   text-align: center;
   font-weight: 300;
-  /* box-shadow: inset 0 0 0 .25px #000000; */
   border: 1px solid #5c5c5c;
 }
 
@@ -34,19 +32,13 @@
 
 .thContent {
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
-  /* gap: 4px; */
 }
 
 .tableContainer {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  /* Para un desplazamiento suave en dispositivos móviles */
-  /* scrollbar-width: thin; Para Firefox */
   scrollbar-color: #ffffff #5a5a5a;
-  /* Para Firefox */
   margin: 20px 10px;
   padding-bottom: 10px;
 }

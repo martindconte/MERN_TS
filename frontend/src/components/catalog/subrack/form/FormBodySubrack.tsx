@@ -121,7 +121,6 @@ export const FormBodySubrack = ({ errors, register, vendors, isDeleted, required
             step={1}
             id='totalSlots'
             placeholder='Cantidad de Slots'
-            // readOnly={true}
             {...register('totalSlots', {
               valueAsNumber: true,
               validate: value => !requiredFields || value > 0 || 'Debe Poseer al menos un Slot',

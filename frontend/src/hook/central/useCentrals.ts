@@ -1,32 +1,30 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getCentrals } from '../../api';
+import { getCentrals } from '../../api'
 
 interface Props {
-    enabled: boolean;
-    search: { [key: string]: any }
+  enabled: boolean
+  search: { [key: string]: any }
 }
 
-export const useCentrals = ({ enabled = true , search = {} }: Props) => {
+export const useCentrals = ({ enabled = true, search = {} }: Props) => {
+  const [page, setPage] = useState(1)
+  const [limit, setLimit] = useState(10)
 
-    const [page, setPage] = useState(1)
-    const [limit, setLimit] = useState(10)
+  const queryCentrals = useQuery({
+    queryKey: ['centrals', { search, page, limit }],
+    queryFn: async () => await getCentrals({ ...search, page, limit }),
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled,
+  })
 
-    const queryCentrals = useQuery({
-        queryKey: [ 'centrals', { search, page, limit } ],
-        queryFn: async () => await getCentrals({ ...search, page, limit }),
-        retry: false,
-        refetchOnWindowFocus: false,
-        enabled
-    })
+  return {
+    queryCentrals,
 
-
-    return {
-        queryCentrals,
-
-        page,
-        setPage,
-        limit,
-        setLimit,
-    }
+    page,
+    setPage,
+    limit,
+    setLimit,
+  }
 }

@@ -1,21 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
-import { getAllSubracksDeleted } from "../../../api";
+import { useQuery } from '@tanstack/react-query'
+import { getAllSubracksDeleted } from '../../../api'
 
 interface Props {
-    enabled?: boolean;
+  enabled?: boolean
 }
 
 export const useSubracksDeleted = ({ enabled = true }: Props) => {
+  const querySubracksDeleted = useQuery({
+    queryKey: ['subracksDeleted'],
+    queryFn: async () => await getAllSubracksDeleted(),
+    retry: false,
+    refetchOnWindowFocus: false,
+    enabled,
+  })
 
-    const querySubracksDeleted = useQuery({
-        queryKey: ['subracksDeleted'],
-        queryFn: async () => await getAllSubracksDeleted(),
-        retry: false,
-        refetchOnWindowFocus: false,
-        enabled
-    })
-
-    return {
-        querySubracksDeleted
-    }
+  return {
+    querySubracksDeleted,
+  }
 }

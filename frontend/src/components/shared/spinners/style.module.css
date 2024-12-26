@@ -27,8 +27,8 @@
 }
 
 .loader::before,
-.loader::after {    
-  content: "";
+.loader::after {
+  content: '';
   grid-area: 1/1;
   margin: 2px;
   border: inherit;
@@ -41,6 +41,8 @@
   animation-duration: 3s;
 }
 
-@keyframes l15 { 
-  100% { transform: rotate(1turn); }
+@keyframes l15 {
+  100% {
+    transform: rotate(1turn);
+  }
 }

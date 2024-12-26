@@ -12,13 +12,14 @@ export const EditSubrackView = () => {
   const { querySubrack } = useSubrack({ id: subrackId!, searchParams: search })
   const { mutationUpdateSubrack } = useSubrackMutation()
 
-  console.log(querySubrack.data)
-
-  const handleSubmit = async (formData: SubrackFormData) => {
+   const handleSubmit = async (formData: SubrackFormData) => {
     console.log(formData)
     const data = await mutationUpdateSubrack.mutateAsync({ id: subrackId!, formData, searchParams: search })
     if (data) navigate(-1)
   }
+
+  console.log(querySubrack.data);
+
 
   if (!subrackId) {
     return (

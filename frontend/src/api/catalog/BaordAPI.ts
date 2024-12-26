@@ -43,15 +43,6 @@ export const boardMapped = (board: BoardType): BoardType => ({
 })
 
 export const createBoard = async (formData: BoardFormData) => {
-  // export const createBoard = async ( formData: BoardFormData ): Promise<{ msg?: string; payload: BoardType }> => {
-  // const transformedFormData = {
-  //   ...formData,
-  //   ports: formData.ports.map(port => ({
-  //     ...port,
-  //     equipments: port.equipments?.map(equipment => equipment.id),
-  //   })),
-  // }
-
   try {
     const { data } = await api.post('/catalog/board', formData)
     // const { data } = await api.post('/catalog/board', transformedFormData)
@@ -116,11 +107,10 @@ export const getBoard = async (id: BoardType['id'], searchParams: string = '') =
 }
 
 export const updateBoard = async ({ id, formData, searchParams = '' }: { id: BoardType['id']; formData: BoardFormData; searchParams?: string }) => {
-  const { boardName, partNumber, ports, isDeleted } = formData
+  const { partNumber, isDeleted } = formData
 
   const boardTransform = {
     ...formData,
-    // boardName: isDeleted ? boardName : regExHelper.containsDeleteSequence(boardName) ?? regExHelper.removeDeleteSequence(boardName),
     partNumber: isDeleted
     ? regExHelper.containsDeleteSequence(partNumber)
       ? partNumber
@@ -128,13 +118,7 @@ export const updateBoard = async ({ id, formData, searchParams = '' }: { id: Boa
     : regExHelper.containsDeleteSequence(partNumber)
       ? regExHelper.removeDeleteSequence(partNumber)
       : partNumber,
-    // ports: ports.map(port => ({
-    //   ...port,
-    //   equipments: port.equipments.map(equipment => equipment.id),
-    // })),
   }
-
-  console.log('modificado', boardTransform);
 
   try {
     const { data: boardData } = await api.put(`/catalog/board/${id}` + searchParams, boardTransform)

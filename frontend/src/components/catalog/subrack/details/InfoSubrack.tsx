@@ -42,7 +42,7 @@ export const InfoSubrack = ({ data }: Props) => {
               )
             )
           }
-        })
+        }),
       )}
     </div>
   )

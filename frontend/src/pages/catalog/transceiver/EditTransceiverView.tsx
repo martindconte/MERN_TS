@@ -23,7 +23,6 @@ export default function EditTransceiverView() {
   if (queryTransceiver.isLoading) return <Spinner />;
   if (!queryTransceiver.data) return <div className="flex-1 bg-stone-900 text-4xl text-white font-oswald uppercase font-bold text-center px-3 py-4">No se Encontraron datos</div>;
 
-  //todo: SOLUCIONAR EL PROBLEMA DE CARGAR EL VENDOR EN EL FORMULARIO... 
   return (
     <main className="flex-1 bg-stone-900 px-2 py-4">
       <h2 className="uppercase text-2xl font-extrabold text-center text-white"><span className="text-blue-800">Modifica / Actualiza</span> los datos del Transceiver/Modulo:</h2>

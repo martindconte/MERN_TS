@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { FiltersTransceiversDeleted, Spinner, /* Table, */ TableV2 } from '../../../components'
+import { FiltersTransceiversDeleted, Spinner, TableV2 } from '../../../components'
 import { useTransceiverMutation, useTransceiversDeleted } from '../../../hook'
 import { TransceiversDeletedType, TransceiverType } from '../../../types'
 
@@ -58,34 +58,6 @@ export const DeletedTransceiversView = () => {
                 vendorValue={filterVendor}
                 onChangeVendor={setFilterVendor}
               />
-              {/* <div className='flex flex-col gap-3 bg-emerald-200 px-3 py-1 rounded-md basis-3/5'>
-                <div className='flex items-center px-2 py-1 rounded-md bg-white text-right font-oswald'>
-                  <label htmlFor='filterVendor' className='w-1/2 uppercase'>
-                    Filtrar Vendor
-                  </label>
-                  <input
-                    className='mx-3 px-2 py-1 border border-gray-400 rounded-md outline-none grow'
-                    type='text'
-                    name='filterVendor'
-                    id='filterVendor'
-                    value={filterVendor}
-                    onChange={e => setFilterVendor(e.target.value)}
-                  />
-                </div>
-                <div className='flex items-center px-2 py-1 rounded-md bg-white text-right font-oswald'>
-                  <label htmlFor='filterPartNumber' className='w-1/2 uppercase'>
-                    Filtrar Part Number Transceiver
-                  </label>
-                  <input
-                    className='mx-3 px-2 py-1 border border-gray-400 rounded-md outline-none grow'
-                    type='text'
-                    name='filterPartNumber'
-                    id='filterPartNumber'
-                    value={filterPartNumber}
-                    onChange={e => setFilterPartNumber(e.target.value)}
-                  />
-                </div>
-              </div> */}
             </div>
             <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
               <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Transceivers Eliminados</p>
@@ -95,28 +67,12 @@ export const DeletedTransceiversView = () => {
                 basePath='catalog/transceiver'
                 fnDelete={handlePermanentlyDeleteTransceiver}
               />
-              {/* <Table
-                data={filteredTransceiver.transceivers}
-                info='catalogTransceiver'
-                path='catalog/transceiver'
-                fnDelete={handlePermanentlyDeleteTransceiver}
-              /> */}
             </div>
             <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
               <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>
                 Placas Con Transceivers Eliminados
               </p>
-              <TableV2
-                data={filteredTransceiver.boards}
-                info='catalogBoard'
-                basePath='catalog/board'
-              />
-              {/* <Table
-                data={filteredTransceiver.boards}
-                info='catalogBoard'
-                path='catalog/board'
-                // fnDelete={ handlePermanentlyDeleteTransceiver }
-              /> */}
+              <TableV2 data={filteredTransceiver.boards} info='catalogBoard' basePath='catalog/board' />
             </div>
           </>
         )

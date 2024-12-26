@@ -1,23 +1,20 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { BoardFormData, TransceiverFormData, TransceiverType } from '../../../../types'
+import { BoardFormData, TransceiverFormData } from '../../../../types'
 import { InputsBoardsPorts } from './InputsBoardsPorts'
-import { useTransceivers /* useTransceiversDeleted */ } from '../../../../hook'
-import { Table } from '../../../shared/table/Table'
+import { useTransceivers } from '../../../../hook'
 import { Spinner } from '../../../shared/spinners/Spinner'
 import { TableV2 } from '../../../shared/table_v2/TableV2'
 
 interface Props {
-  selectedData: BoardFormData['ports'][number]['equipments'];
-//   selectedData: TransceiverType[]
-//   setSelectedData: Dispatch<SetStateAction<TransceiverType[]>>;
-  setSelectedData: Dispatch<SetStateAction<BoardFormData['ports'][number]['equipments']>>;
+  selectedData: BoardFormData['ports'][number]['equipments']
+  setSelectedData: Dispatch<SetStateAction<BoardFormData['ports'][number]['equipments']>>
 }
 
 export const SearchPortEquipment = ({ selectedData, setSelectedData }: Props) => {
   const [search, setSearch] = useState<Partial<TransceiverFormData>>({ isDeleted: true })
   const [enabled, setEnabled] = useState(false)
   const { queryTransceivers, limit, page, setLimit, setPage } = useTransceivers({ enabled, search })
- 
+
   useEffect(() => {
     setPage(1)
   }, [limit])
@@ -37,29 +34,16 @@ export const SearchPortEquipment = ({ selectedData, setSelectedData }: Props) =>
         ) : (
           queryTransceivers.data && (
             <TableV2
-                data={queryTransceivers.data.payload}
-                pagination={queryTransceivers.data.pagination}
-                info={'catalogTransceiver'}
-                page={page}
-                setPage={setPage}
-                limit={limit}
-                setLimit={setLimit}
-                fnSelectRows={setSelectedData}
-                selectedRows={selectedData}
-                // fnSelected={setSelectedData}
-                // selectedData={selectedData || []}
+              data={queryTransceivers.data.payload}
+              pagination={queryTransceivers.data.pagination}
+              info={'catalogTransceiver'}
+              page={page}
+              setPage={setPage}
+              limit={limit}
+              setLimit={setLimit}
+              fnSelectRows={setSelectedData}
+              selectedRows={selectedData}
             />
-            // <Table
-            //   data={queryTransceivers.data.payload}
-            //   pagination={queryTransceivers.data.pagination}
-            //   info={'catalogTransceiver'}
-            //   page={page}
-            //   setPage={setPage}
-            //   limit={limit}
-            //   setLimit={setLimit}
-            //   fnSelected={setSelectedData}
-            //   selectedData={selectedData || []}
-            // />
           )
         )}
       </div>

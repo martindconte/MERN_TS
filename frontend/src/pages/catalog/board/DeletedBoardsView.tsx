@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { FiltersBoardsDeleted, Spinner, /* Table, */ TableV2 } from '../../../components'
+import { FiltersBoardsDeleted, Spinner, TableV2 } from '../../../components'
 import { useBoardsDeleted } from '../../../hook/catalog/board/useBoardsDeleted'
 import { BoardsDeletedType, BoardType } from '../../../types'
 import { useBoardMutation } from '../../../hook'
@@ -74,19 +74,11 @@ export const DeletedBoardsView = () => {
       </div>
       <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
         <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Placas Eliminados</p>
-        <TableV2
-          data={filteredBoards.boards}
-          info='catalogBoard'
-          basePath='catalog/board'
-          fnDelete={handlePermanentlyDeleteBoard} />
+        <TableV2 data={filteredBoards.boards} info='catalogBoard' basePath='catalog/board' fnDelete={handlePermanentlyDeleteBoard} />
       </div>
       <div className='border border-gray-600 mx-3 mt-4 text-center rounded-lg bg-gray-50 px-3 py-2 '>
         <p className='uppercase text-xl font-bold font-roboto underline decoration-red-500 underline-offset-4'>Subracks con Placas Eliminadas</p>
-        <TableV2
-          data={filteredBoards.subracks}
-          info='catalogSubrack'
-          basePath='catalog/subrack'
-        />
+        <TableV2 data={filteredBoards.subracks} info='catalogSubrack' basePath='catalog/subrack' />
       </div>
     </main>
   )

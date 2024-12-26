@@ -45,6 +45,4 @@ export * from './shared/modalDelete/ModalDelete'
 
 export * from './shared/spinners/Spinner'
 
-// export * from './shared/table/Table'
-
 export * from './shared/table_v2/TableV2'

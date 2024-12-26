@@ -4,7 +4,6 @@ import { toast } from 'react-toastify'
 import { BoardType } from '../../../types'
 
 export const useBoardMutation = () => {
-
   const queryClient = useQueryClient()
 
   const mutationCreateBoard = useMutation({
@@ -37,7 +36,7 @@ export const useBoardMutation = () => {
     onSuccess: response => {
       if (response) {
         queryClient.invalidateQueries({
-          queryKey: ['board']
+          queryKey: ['board'],
         })
         const { msg, payload } = response
         toast.success(
@@ -52,39 +51,49 @@ export const useBoardMutation = () => {
         )
       }
     },
-  });
+  })
 
   const mutationDeletedBoard = useMutation({
-    mutationFn: async ({ id }: { id: BoardType['id'] }) => await deleteBoard( id ),
-    onError: (error) => toast.error(error.message, { theme: 'colored' }),
-    onSuccess: (response) => {
-      console.log(response);
+    mutationFn: async ({ id }: { id: BoardType['id'] }) => await deleteBoard(id),
+    onError: error => toast.error(error.message, { theme: 'colored' }),
+    onSuccess: response => {
+      console.log(response)
       if (response) {
         const { msg, payload } = response
         queryClient.invalidateQueries({
-          queryKey: ['boards']
+          queryKey: ['boards'],
         })
-        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.boardName} / Description: ${payload.description}`, {
-          theme: 'colored'
-        })
+        toast.success(
+          `${msg} // Vendor: ${payload.vendor.vendorName} // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${
+            payload?.boardName
+          } / Description: ${payload.description}`,
+          {
+            theme: 'colored',
+          },
+        )
       }
-    }
+    },
   })
 
   const mutationPermanentlyDeleteBoard = useMutation({
-    mutationFn: async ( id: BoardType['id'] ) => await cleanBoard( id ),
-    onError: (error) => toast.error(error.message, { theme: 'colored' }),
-    onSuccess: (response) => {
+    mutationFn: async (id: BoardType['id']) => await cleanBoard(id),
+    onError: error => toast.error(error.message, { theme: 'colored' }),
+    onSuccess: response => {
       if (response) {
         const { msg, payload } = response
         queryClient.invalidateQueries({
-          queryKey: ['boardsDeleted']
+          queryKey: ['boardsDeleted'],
         })
-        toast.success(`${msg} // Vendor: ${ payload.vendor.vendorName } // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${payload?.boardName} / Description: ${payload.description}`, {
-          theme: 'colored'
-        })
+        toast.success(
+          `${msg} // Vendor: ${payload.vendor.vendorName} // Part Number: ${payload.partNumber.toUpperCase()} / Model: ${
+            payload?.boardName
+          } / Description: ${payload.description}`,
+          {
+            theme: 'colored',
+          },
+        )
       }
-    }
+    },
   })
 
   return {

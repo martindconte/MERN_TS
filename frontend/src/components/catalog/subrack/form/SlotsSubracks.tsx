@@ -1,5 +1,15 @@
 import { useState } from 'react'
-import { Control, FieldArrayWithId, FieldErrors, UseFieldArrayAppend, UseFieldArrayMove, UseFieldArrayRemove, UseFormRegister, UseFormSetValue, useWatch } from 'react-hook-form'
+import {
+  Control,
+  FieldArrayWithId,
+  FieldErrors,
+  UseFieldArrayAppend,
+  UseFieldArrayMove,
+  UseFieldArrayRemove,
+  UseFormRegister,
+  UseFormSetValue,
+  useWatch,
+} from 'react-hook-form'
 import { VendorType } from '../../../../types'
 import { SubrackFormData } from '../../../../types/catalog/subrackTypes'
 import { SearchBoardModal } from '../modal/SearchBoardModal'
@@ -54,7 +64,6 @@ export const SlotsSubracks = ({ index, value, register, errors, move, remove, to
                 },
               })}
             />
-            {/* {errors?.slots?.[index]?.number && <ErrorMsgForm>{errors?.slots?.[index]?.number.message}</ErrorMsgForm>} */}
           </div>
           <div className='space-x-2'>
             <label htmlFor={`slots.${index}.physical`}>Slot Fisico:</label>
@@ -71,7 +80,6 @@ export const SlotsSubracks = ({ index, value, register, errors, move, remove, to
                 },
               })}
             />
-            {/* {errors?.slots?.[index]?.physical && <span>{errors?.slots?.[index]?.physical.message}</span>} */}
           </div>
           <div className='space-x-2'>
             <label htmlFor={`slots.${index}.logical`}>Slot Logico:</label>
@@ -88,7 +96,6 @@ export const SlotsSubracks = ({ index, value, register, errors, move, remove, to
                 },
               })}
             />
-            {/* {errors?.slots?.[index]?.logical && <span>Campo requerido</span>} */}
           </div>
           <button
             type='button'

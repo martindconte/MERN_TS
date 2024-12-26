@@ -22,7 +22,7 @@ export const EditBoardView = () => {
   const { mutationUpdateBoard } = useBoardMutation()
 
   const handleForm = async (formData: BoardFormData) => {
-    console.log(formData);
+    console.log(formData)
     const data = await mutationUpdateBoard.mutateAsync({ id: boardId!, formData, searchParams: search })
     if (data) navigate(-1)
   }
@@ -54,7 +54,6 @@ export const EditBoardView = () => {
       )}
       <h2 className='w-1/2 mx-auto text-3xl font-extrabold uppercase my-5 text-center text-white'>
         <span className='text-green-400 border border-emerald-700 px-2 py-1'>Editar / Modificar</span> Placa
-        {/* <span className="text-green-400 underline underline-offset-8">Editar / Modificar</span> Placa */}
       </h2>
 
       <FormBoard

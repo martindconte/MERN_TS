@@ -1,23 +1,19 @@
 import { useForm } from 'react-hook-form'
-import { BoardFormData, BoardType, RoadmapEnum, TechnologyEnum, VendorType } from '../../../../types'
+import { BoardFormData, RoadmapEnum, TechnologyEnum, VendorType } from '../../../../types'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useBoards } from '../../../../hook'
 import { InputsSearchBoards } from './InputsSearchBoards'
-import { Table } from '../../../shared/table/Table'
 import { Spinner } from '../../../shared/spinners/Spinner'
 import { TableV2 } from '../../../shared/table_v2/TableV2'
 
 interface Props {
   vendors: VendorType[];
-  boardsSelected: BoardType[];
-  setBoardsSelected: Dispatch<SetStateAction<BoardType[]>>;
-  // probando nueva TablaV2
   boardsIdsSelected: string[]
   setBoardsIdsSelected: Dispatch<SetStateAction<string[]>>
 
 }
 
-export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected, setBoardsIdsSelected, boardsIdsSelected }: Props) => {
+export const FormSearchBoards = ({ vendors, setBoardsIdsSelected, boardsIdsSelected }: Props) => {
 
   const { register, handleSubmit, reset } = useForm<BoardFormData>({
     defaultValues: {
@@ -67,21 +63,7 @@ export const FormSearchBoards = ({ vendors, boardsSelected, setBoardsSelected, s
           setPage={setPage}
           fnSelectRows={setBoardsIdsSelected}
           selectedRows={boardsIdsSelected}
-          // fnSelected={setBoardsIdsSelected}
-          // selectedRows={boardsIdsSelected}
-          // selectedData={boardsSelected}
         />
-        {/* <Table
-          info='catalogBoard'
-          data={queryBoards.data?.payload ?? []}
-          pagination={queryBoards.data?.pagination}
-          limit={limit}
-          page={page}
-          setLimit={setLimit}
-          setPage={setPage}
-          fnSelected={setBoardsSelected}
-          selectedData={boardsSelected}
-        /> */}
       </div>
     </div>
   )

@@ -18,12 +18,10 @@ export const FormSignal = ({ onSubmit, defaultValues, requiredFields = true, but
   const [showBandwidth, setShowBandwidth] = useState<boolean>(false)
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
-    // const { register, handleSubmit, reset, formState: { errors }, control, setError, clearErrors } = useForm({
     defaultValues: defaultValues || {
       type: '',
       subType: '',
       observation: '',
-      // bandwidth: { amount: '', unit: '' }
     }
   });
 
@@ -43,9 +41,6 @@ export const FormSignal = ({ onSubmit, defaultValues, requiredFields = true, but
         register={register}
         errors={errors}
         requiredFields={requiredFields}
-        // control={control}
-        // setError={setError}
-        // clearErrors={clearErrors}
         showBandwidth={showBandwidth}
         setShowBandwidth={setShowBandwidth}
       />

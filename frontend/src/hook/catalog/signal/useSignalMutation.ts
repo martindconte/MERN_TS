@@ -3,26 +3,25 @@ import { toast } from 'react-toastify'
 import { createSignal } from '../../../api'
 
 export const useSignalMutation = () => {
-
   const queryClient = useQueryClient()
 
   const mutationCreateSignal = useMutation({
     mutationFn: createSignal,
-    onError: (error) => toast.error(error.message, { theme: 'colored' }),
-    onSuccess: (response) => {
+    onError: error => toast.error(error.message, { theme: 'colored' }),
+    onSuccess: response => {
       if (response) {
         const { msg, payload } = response
         queryClient.invalidateQueries({
-          queryKey: ['signals']
+          queryKey: ['signals'],
         })
         toast.success(`${msg} // ${payload.type.toUpperCase()} ${payload.subType.toUpperCase()}`, {
-          theme: 'colored'
+          theme: 'colored',
         })
       }
-    }
+    },
   })
 
   return {
-    mutationCreateSignal
+    mutationCreateSignal,
   }
 }

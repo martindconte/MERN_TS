@@ -16,16 +16,7 @@ export const useVendors = ({ enabled = true }: Props) => {
         enabled
     });
 
-    // const queryVendorsDeleted = useQuery({
-    //     queryKey: ['vendorsDeleted'],
-    //     queryFn: async () => await getAllDeletedVendors(),
-    //     retry: false,
-    //     refetchOnWindowFocus: false,
-    //     enabled
-    // })
-
     return {
         queryVendors,
-        // queryVendorsDeleted
     }
 }

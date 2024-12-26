@@ -10,19 +10,12 @@ interface Props {
 
 export const AddPortEquipment = ( { close, index }: Props ) => {
 
-    // const [selectedData, setSelectedData] = useState<TransceiverType[]>( [] )
     const [selectedData, setSelectedData] = useState<BoardFormData['ports'][number]['equipments']>([]);
-
     const { control, setValue } = useFormContext<BoardFormData>()
-
     const { equipments } = useWatch( {
         control,
         name: `ports.${index}`,
     } );
-    // const { equipments }: Partial<BoardPortsType> = useWatch( {
-    //     control,
-    //     name: `ports.${index}`,
-    // } );
     
     const handleAddEquipment = () => {
         setValue( `ports.${index}.equipments`, selectedData )
