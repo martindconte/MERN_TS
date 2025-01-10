@@ -55,7 +55,8 @@ export const SlotsSubracks = ({ index, value, register, errors, move, remove, to
               type='number'
               id={`slots.${index}.number`}
               className='w-12 px-2 py-1'
-              defaultValue={value.number} // Cambiar value a defaultValue
+              value={index + 1} // Cambiar value a defaultValue
+              readOnly
               {...register(`slots.${index}.number` as const, {
                 required: true,
                 validate: value => {

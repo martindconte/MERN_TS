@@ -7,6 +7,7 @@ import { AppLayout } from '../layouts/home'
 import { HomePageView } from '../pages'
 import { CentralRoutes } from './central/CentralRoutes'
 import { CatalogRoutes } from './catalog/CatalogRoutes'
+import { NetworkElementRoutes } from './networrkElement/NetworkElementRoutes'
 
 const queryClient = new QueryClient()
 
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
             <Route index element={ <HomePageView /> } />
             <Route path='/central/*' element={ <CentralRoutes /> } />
             <Route path='/catalog/*' element={ <CatalogRoutes /> } />
+            <Route path='/network-element/*' element={ <NetworkElementRoutes /> } />
           </Route>
         </Routes>
       </BrowserRouter>

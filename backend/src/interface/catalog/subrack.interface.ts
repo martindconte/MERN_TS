@@ -2,6 +2,16 @@ import { IBoard } from './board.interface';
 import { IPageLimit, IPagination, OwnerEnum, RoadmapEnum, TechnologyEnum } from './common.interface';
 import { IVendor } from './vendor.interface';
 
+export enum QueryParamsSubrackEnum {
+  isDeleted = 'isDeleted',
+  subrackBoardsPorts = 'subrack-boards-ports',
+}
+
+export interface IOtherQueries {
+  isDeleted: boolean;
+  subrackBoardsPorts: boolean;
+}
+
 export interface ISlots {
   number: number;
   physical: string;
@@ -54,7 +64,8 @@ export interface ISubrackResponse
 export interface ISubrackSearch {
   searchParams?: Partial<ISubrack>;
   paginationData?: IPageLimit;
-  otherQueries?: { [key: string]: any };
+  otherQueries?: Partial<IOtherQueries>;
+  // otherQueries?: { [key: string]: any };
 }
 
 export interface ISubracksResponse {

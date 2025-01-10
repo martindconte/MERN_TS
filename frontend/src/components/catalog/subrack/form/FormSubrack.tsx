@@ -29,6 +29,7 @@ export const FormSubrack = ({ onSubmit, buttonLabel, status, requiredFields, def
     reset,
     setValue,
   } = useForm<SubrackFormData>({ defaultValues })
+  
   const { append, fields, move, remove } = useFieldArray({
     control,
     name: 'slots',
@@ -49,6 +50,8 @@ export const FormSubrack = ({ onSubmit, buttonLabel, status, requiredFields, def
         <Spinner />
       </div>
     )
+
+    console.log(fields);
 
   return (
     <form className='flex items-start font-roboto_condensed gap-3 my-2' noValidate onSubmit={handleSubmit(onSubmit)}>

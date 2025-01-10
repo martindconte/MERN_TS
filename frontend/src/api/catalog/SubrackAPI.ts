@@ -40,7 +40,6 @@ export const createSubrack = async (formData: SubrackFormData) => {
 export const getSubrtacks = async (queries: { [key: string]: any } = {}) => {
   const baseURL = '/catalog/subrack'
   const URL = buildURL(baseURL, queries)
-  console.log(URL)
   try {
     const {
       data: { payload, pagination },

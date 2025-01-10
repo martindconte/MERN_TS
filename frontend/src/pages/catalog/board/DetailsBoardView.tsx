@@ -9,6 +9,8 @@ export const DetailsBoardView = () => {
   const { boardId } = useParams<{ boardId: string }>()
   const { queryBoard } = useBoard({ id: boardId!, searchParams: search })
 
+  console.log(queryBoard.data);
+
   if (queryBoard.isError)
     return (
       <div className='flex-1 bg-stone-950 text-white uppercase text-2xl font-bold py-6 px-4 text-center'>

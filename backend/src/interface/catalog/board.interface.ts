@@ -8,6 +8,7 @@ import { IVendor } from './vendor.interface';
 export enum BoardPortType {
   client = 'CLIENT',
   line = 'LINE',
+  dwdm = 'DWDM',
   any = 'ANY',
 }
 

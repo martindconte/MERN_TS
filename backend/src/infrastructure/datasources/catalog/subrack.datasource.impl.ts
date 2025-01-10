@@ -3,6 +3,7 @@ import { SubrackModel } from '../../../data';
 import { CreateSubrackDTO, SubrackDatasource, SubrackEntity, UpdateSubrackDTO } from '../../../domain';
 import { ISubrackResponse, ISubrackSearch, ISubracksResponse, ISubrack, ISubracksDeleted, ISubrackToClean } from '../../../interface';
 import { generateRandomCode } from '../../../helpers';
+import path from 'path';
 
 export class SubrackDatasourceImpl implements SubrackDatasource {
   async create(createSubrackDTO: CreateSubrackDTO): Promise<ISubrackResponse> {
@@ -87,27 +88,38 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
 
   async getById(id: ISubrack['id'], queries?: ISubrackSearch): Promise<ISubrack> {
     const { otherQueries } = queries || {};
-    const { isDeleted = false } = otherQueries || {};
+    const { isDeleted = false, subrackBoardsPorts = false } = otherQueries || {};
     const subrack = await SubrackModel.findOne({ _id: id, isDeleted }).populate([
       { path: 'vendor', select: 'vendorName' },
       {
         path: 'slots.boards', // Popular boards dentro de slots
-        populate: { path: 'vendor', select: 'vendorName' },
-        select: 'boardName partNumber description slotSize isDeleted', // Campos de board
+        select: `boardName partNumber description slotSize isDeleted ${subrackBoardsPorts ? 'ports' : ''} `, // Campos de board. Solo populo los ports si `subrackBoardsPorts` es true
+        populate: [
+          { path: 'vendor', select: 'vendorName' },
+          ...(subrackBoardsPorts // si `subrackBoardsPorts` es true, popular los ports de cada board
+            ? [
+                {
+                  path: 'ports.equipments', // Popular los equipments dentro de ports
+                  select: 'partNumber modelName description type vendor bitsRates', // Selecciona solo los campos necesarios
+                  populate: { path: 'vendor', select: 'vendorName' }, // Popular el vendor de cada equipment
+                },
+              ]
+            : []),
+        ],
       },
     ]);
     if (!subrack) throw new Error('Subrack not Found!');
-    return SubrackEntity.fromObject(subrack);
+    return SubrackEntity.fromObject(subrack.toObject());
   }
 
-    async getByIdDeleted(id: ISubrack['id']): Promise<ISubrackToClean> {
-      const subrack = await this.getById(id, { otherQueries: { isDeleted: true }});
-      const networkElements: [] = [] //TODO: Pendiente modulo de network elements
-  
-      return {
-        subrack,
-        networkElements  //todo: pendiente de desarrolar modulo de subracks
-      }
+  async getByIdDeleted(id: ISubrack['id']): Promise<ISubrackToClean> {
+    const subrack = await this.getById(id, { otherQueries: { isDeleted: true } });
+    const networkElements: [] = []; //TODO: Pendiente modulo de network elements
+
+    return {
+      subrack,
+      networkElements, //todo: pendiente de desarrolar modulo de subracks
+    };
   }
 
   async updateById(updateSubrackDTO: UpdateSubrackDTO, queries?: ISubrackSearch): Promise<ISubrackResponse> {
@@ -173,10 +185,7 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
   }
 
   async getAllDeleted(): Promise<ISubracksDeleted> {
-    const subracksDeleted = await SubrackModel.find({ isDeleted: true })
-      .select('-slots')
-      .lean()
-      .populate({ path: 'vendor', select: 'vendorName' });
+    const subracksDeleted = await SubrackModel.find({ isDeleted: true }).select('-slots').lean().populate({ path: 'vendor', select: 'vendorName' });
     // const ids = subracksDeleted.map( baord => baord.id );
     // const [ subracks, networksElements ] = await Promise.all([
     //   SubrackModel.find() //todo: Pendiente de realizar subracks
@@ -196,7 +205,7 @@ export class SubrackDatasourceImpl implements SubrackDatasource {
       .lean()
       .select('-slots');
     if (subrackCleaned) {
-      return SubrackEntity.fromObject( subrackCleaned );
+      return SubrackEntity.fromObject(subrackCleaned);
     } else {
       throw 'Error - Delete failed';
     }

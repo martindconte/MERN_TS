@@ -47,7 +47,7 @@ export class BoardController {
       .catch((error) =>
         res.status(400).json({
           status: 'error',
-          msg: error.message,
+          msg: error.message || error,
         })
       );
   };

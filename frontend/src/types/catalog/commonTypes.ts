@@ -1,5 +1,14 @@
 import z from 'zod'
 
+export enum OwnerEnum {
+  TASA = 'TASA',
+  MVS = 'MVS',
+  TELXIUS = 'TELXIUS',
+  CLIENT = 'CLIENT',
+  OTHER = 'OTHER',
+  sd = 's/d',
+}
+
 export enum TechnologyEnum {
     DWDM = 'DWDM',
     SDH = 'SDH',

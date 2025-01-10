@@ -10,7 +10,6 @@ interface Props {
   vendors: VendorType[];
   boardsIdsSelected: string[]
   setBoardsIdsSelected: Dispatch<SetStateAction<string[]>>
-
 }
 
 export const FormSearchBoards = ({ vendors, setBoardsIdsSelected, boardsIdsSelected }: Props) => {

@@ -8,6 +8,7 @@ import { subrackSchema } from './subrackTypes'
 export enum BoardPortType {
   client = 'CLIENT',
   line = 'LINE',
+  dwdm = 'DWDM',
   any = 'ANY',
 }
 
@@ -31,10 +32,6 @@ const portsInBoardSchema = z.object({
   NMS: z.string(),
   fullName: z.string(),
   equipments: z.array(equipmentsPortsSchema).optional().default([]),
-  // equipment: z.union([
-  //     z.array( z.lazy(() => transceiverSchema )).optional().default([]),
-  //     z.array( equipmentsPortsSchema ).optional().default([])
-  // ]),
   logicalFacilities: z.record(z.nativeEnum(LogicalSignal), z.array(z.string())),
 })
 

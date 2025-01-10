@@ -29,6 +29,9 @@ export * from './catalog/subrack/IndexSubrackView'
 export * from './catalog/subrack/NewSubrackView'
 export * from './catalog/subrack/SearchSubrackView'
 
+//* NetworkElement
+export * from './networkElement';
+
 //* Central
 export * from './central/CentralIndexView';
 export * from './central/DeletedCentralsView';

@@ -2,7 +2,6 @@ import z from 'zod'
 import { paginationSchema, RoadmapEnum, TechnologyEnum } from './commonTypes'
 import { boardSchema } from './boardTypes'
 
-
 //! Se utiliza lazy para evitar referencia circular. boardType utiliza subrackSchema y a su vez subrackSchema utiliza boardSchema
 export const boardsInSubracks = z.lazy(() =>
   boardSchema.pick({
@@ -12,16 +11,9 @@ export const boardsInSubracks = z.lazy(() =>
     slotSize: true,
     description: true,
     vendor: true,
+    ports: true, //agregado por NE
   })
 );
-// export const boardsInSubracks = boardSchema.pick({
-//   id: true,
-//   partNumber: true,
-//   boardName: true,
-//   slotSize: true,
-//   description: true,
-//   vendor: true,
-// })
 
 export const slotsSchema = z.object({
   number: z.number().nonnegative({ message: 'Slot number must be a positive number' }),

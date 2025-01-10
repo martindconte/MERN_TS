@@ -9,9 +9,11 @@ interface Props {
   basePath?: string
   isDeleted?: boolean
   onSelectRowsIds?: (id: string) => void
+  onSelectRowsData: () => void
 }
 
-export const BtnActions = ({ id, isDeleted, basePath, setSelectedRowId, btnDelete, setModalView, onSelectRowsIds }: Props) => {
+export const BtnActions = ({ id, isDeleted, basePath, setSelectedRowId, btnDelete, setModalView, onSelectRowsIds, onSelectRowsData }: Props) => {
+
   const { pathname } = useLocation()
 
   const pathToNavigate = (basePath || window.location.pathname)
@@ -63,6 +65,16 @@ export const BtnActions = ({ id, isDeleted, basePath, setSelectedRowId, btnDelet
           onClick={() => onSelectRowsIds(id)}
         >
           start
+        </button>
+      )}
+      {onSelectRowsData && (
+        <button
+          type='button'
+          className='material-symbols-outlined hover:cursor-pointer text-[16px] bg-yellow-400 hover:bg-yellow-800 hover:text-white p-1 rounded-full'
+          title='Seleccionar'
+          onClick={onSelectRowsData}
+        >
+          task
         </button>
       )}
     </td>

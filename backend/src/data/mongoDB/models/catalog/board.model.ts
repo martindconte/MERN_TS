@@ -38,7 +38,7 @@ const portSchema = new Schema<Port>(
       required: [true, 'Port type is required!'],
       trim: true,
       uppercase: true,
-      enum: ['LINE', 'CLIENT', 'ANY'],
+      enum: Object.values(BoardPortType),
     },
     physical: {
       type: String,
@@ -145,7 +145,7 @@ const boardSchema = new Schema<BoardDocument>(
       virtuals: true,
       transform: (doc, ret) => {
         ret.id = ret._id?.toString(); // Convierte _id a string y crea un campo id legible
-        delete ret._id; // Elimina el campo _id original
+        // delete ret._id; // Elimina el campo _id original
         delete ret.__v; // Opcional: elimina __v si no lo necesitas
         return ret;
       },
@@ -154,7 +154,7 @@ const boardSchema = new Schema<BoardDocument>(
       virtuals: true,
       transform: (doc, ret) => {
         ret.id = ret._id?.toString();
-        delete ret._id;
+        // delete ret._id;
         delete ret.__v;
         return ret;
       },

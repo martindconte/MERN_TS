@@ -78,18 +78,46 @@ export class BoardDatasourceImpl implements BoardDatasource {
   async getById(id: IBoard['id'], queries?: IBoardSearch): Promise<IBoard> {
     const { otherQueries } = queries || {};
     const { isDeleted = false } = otherQueries || {};
-    const board = await BoardModel.findOne({ _id: id, isDeleted }).lean();
-    if (!board) throw new Error('Board not Found!');
-    const boardPopulate = await BoardModel.populate(board, [
-      { path: 'vendor', select: 'vendorName' },
+    const board = await BoardModel.findOne({ _id: id, isDeleted })
+      .populate([
+        { path: 'vendor', select: 'vendorName' },
       {
         path: 'ports.equipments',
         // select: 'partNumber modelName vendor description bitsRates logicalFacilities',
         populate: [{ path: 'vendor', select: 'vendorName', model: 'Vendor' }],
       },
-    ]);
-    return BoardEntity.fromObject(boardPopulate);
+      ])
+
+      if (!board) throw new Error('Board not Found!');
+
+
+    // const boardPopulate = await BoardModel.populate(board, [
+    //   { path: 'vendor', select: 'vendorName' },
+    //   {
+    //     path: 'ports.equipments',
+    //     // select: 'partNumber modelName vendor description bitsRates logicalFacilities',
+    //     populate: [{ path: 'vendor', select: 'vendorName', model: 'Vendor' }],
+    //   },
+    // ]);
+    return BoardEntity.fromObject(board.toObject());
+    // return BoardEntity.fromObject(boardPopulate);
   }
+  // async getById(id: IBoard['id'], queries?: IBoardSearch): Promise<IBoard> {
+  //   const { otherQueries } = queries || {};
+  //   const { isDeleted = false } = otherQueries || {};
+  //   const board = await BoardModel.findOne({ _id: id, isDeleted }).lean();
+  //   if (!board) throw new Error('Board not Found!');
+  //   const boardPopulate = await BoardModel.populate(board, [
+  //     { path: 'vendor', select: 'vendorName' },
+  //     {
+  //       path: 'ports.equipments',
+  //       // select: 'partNumber modelName vendor description bitsRates logicalFacilities',
+  //       populate: [{ path: 'vendor', select: 'vendorName', model: 'Vendor' }],
+  //     },
+  //   ]);
+  //   console.log(board);
+  //   return BoardEntity.fromObject(boardPopulate);
+  // }
 
   async getByIdDeleted(id: IBoard['id']): Promise<IBoardToClean> {
     const board = await this.getById(id, { otherQueries: { isDeleted: true } });

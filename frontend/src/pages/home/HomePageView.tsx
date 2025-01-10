@@ -22,6 +22,11 @@ export const HomePageView = () => {
           className='w-1/5 text-black text-center justify-center bg-orange-300 mx-2 my-5 inline-flex flex-col px-3 py-4 gap-2 font-semibold rounded-md transition hover:bg-orange-700 hover:shadow-lg hover:shadow-orange-500/95 hover:text-white'>
           <p className='uppercase text-lg'>Catalogo</p>
         </Link>
+        <Link
+          to='/network-element'
+          className='w-1/5 text-black text-center justify-center bg-fuchsia-400 mx-2 my-5 inline-flex flex-col px-3 py-4 gap-2 font-semibold rounded-md transition hover:bg-fuchsia-700 hover:shadow-lg hover:shadow-orange-500/95 hover:text-white'>
+          <p className='uppercase text-lg'>NE / Equipos</p>
+        </Link>
       </div>
     </main>
   )

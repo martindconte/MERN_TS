@@ -44,15 +44,17 @@ export const AddPort = ({ field, index, requiredFields }: Props) => {
 
       <div className='flex flex-wrap px-2 py-1 rounded-md bg-stone-200'>
         <div className='flex gap-2 items-center px-2 py-1 rounded-md'>
-          <label htmlFor={`${field.id}-${index}-${field.port}`}>Port</label>
+          <label htmlFor={`${field.id}-${index}-${field.port}`}>No.</label>
           <input
             id={`${field.id}-${index}-${field.port}`}
             className='px-1 py-1 w-12 outline-none'
             type='number'
             min={1}
+            readOnly
+            value={index + 1}
             {...register(`ports.${index}.port` as const, {
               required: requiredFields && 'Port Invalido - Debe ser un Numero',
-              setValueAs: value => parseInt(value),
+              setValueAs: value => value = parseInt(value),
               valueAsNumber: true,
               validate: value => {
                 const isUnique = ports.every((port, i) => i === index || port.port !== value)

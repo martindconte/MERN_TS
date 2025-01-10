@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { FormSearchBoards } from './FormSearchBoards';
-import { BoardType, VendorType } from '../../../../types';
+import { VendorType } from '../../../../types';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import { SubrackFormData } from '../../../../types/catalog/subrackTypes';
 
@@ -14,7 +14,7 @@ interface Props {
 
 export const SearchBoardModal = ({ close, vendors, setValue, index, control }: Props) => {
 
-    const [boardsSelected, setBoardsSelected] = useState<BoardType[]>([]);
+    // const [boardsSelected, setBoardsSelected] = useState<BoardType[]>([]);
     const [boardsIdsSelected, setBoardsIdsSelected] = useState<string[]>([]);
 
     const { boards } = useWatch({
