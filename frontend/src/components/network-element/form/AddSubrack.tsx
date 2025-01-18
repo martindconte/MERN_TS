@@ -38,15 +38,6 @@ export const AddSubrack = ({ vendors, vendorNE, append, quantitySubracks, setSub
         })
         append({
           id: data.id,
-          // vendor: data.vendor.id,
-          // subrackType: data.subrackType,
-          // subrackFamily: data.subrackFamily,
-          // partNumber: data.partNumber,
-          // modelName: data.modelName,
-          // totalSlots: data.totalSlots,
-          // owner: data.owner,
-          // observations: data.observations,
-          // technology: data.technology,
           position: '',
           shelfNumber: quantitySubracks,
           shelfName: `Shelf${quantitySubracks}`,

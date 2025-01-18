@@ -7,7 +7,6 @@ interface Props {
     indexShelf: number;
     indexSlot: number;
     isBoardConfirm: boolean;
-    // handleChangeBoard: (idBoard: string, indexSlot: number) => void;
 }
 
 export const NESlotInput = ({ register, slot, indexShelf, indexSlot, isBoardConfirm /* handleChangeBoard  */ }: Props) => {
