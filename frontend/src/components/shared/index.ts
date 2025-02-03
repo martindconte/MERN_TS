@@ -1,0 +1,7 @@
+export * from './errors/ErrorMsgForm'
+export * from './form/BtnForm'
+export * from './hidden/HiddenComponent'
+export * from './modalDelete/ModalDelete'
+export * from './spinners/Spinner'
+export * from './table_v2/TableV2'
+export * from './toggle/ToggleComponent'

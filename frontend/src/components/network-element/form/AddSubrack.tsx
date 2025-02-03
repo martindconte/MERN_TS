@@ -45,10 +45,10 @@ export const AddSubrack = ({ vendors, vendorNE, append, quantitySubracks, setSub
             number: slot.number,
             physical: slot.physical,
             logical: slot.logical,
-            board: {
-              id: '',
-              ports: [],
-            },
+            // board: {
+            //   id: '',
+            //   ports: [],
+            // },
             // board: {} as NEFormData['subracks'][number]['slots'][number]['board'],
           })),
         })

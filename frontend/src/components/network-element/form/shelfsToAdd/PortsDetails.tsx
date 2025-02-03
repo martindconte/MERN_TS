@@ -1,0 +1,37 @@
+import { Control, UseFormRegister } from 'react-hook-form'
+import { NEFormData, SubrackType } from '../../../../types'
+import { PathDataInput, PortInfo, TransceiverDetail } from './portsDetailsComponents'
+
+interface Props {
+  register: UseFormRegister<NEFormData>
+  control: Control<NEFormData, any>
+  portInfo: NonNullable<NEFormData['subracks'][number]['slots'][number]['board']>['ports'][number]
+  transceiverData?: Pick<NonNullable<SubrackType['slots'][number]['boards']>[number]['ports'][number], 'equipments'>
+  indexShelf: number
+  indexSlot: number
+  indexPort: number
+}
+
+export const PortsDetails = ({ register, control, portInfo, transceiverData, indexShelf, indexSlot, indexPort }: Props) => {
+  return (
+    <div className='relative flex items-center gap-2 px-2 pt-3 pb-2 border-2 border-black hover:ring-2 hover:ring-blue-800 group'>
+      <PortInfo {...portInfo} />
+      <TransceiverDetail
+        register={register}
+        control={control}
+        indexShelf={indexShelf}
+        indexSlot={indexSlot}
+        indexPort={indexPort}
+        transceivers={transceiverData?.equipments || []}
+      />
+      <PathDataInput
+        register={register}
+        control={control}
+        indexShelf={indexShelf}
+        indexSlot={indexSlot}
+        indexPort={indexPort}
+        toggleName='Accesible'
+      />
+    </div>
+  )
+}

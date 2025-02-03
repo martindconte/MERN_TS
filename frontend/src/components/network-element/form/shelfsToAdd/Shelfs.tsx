@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Control, FieldArrayWithId, UseFormRegister, UseFormSetValue, useWatch } from 'react-hook-form';
+import { Control, FieldArrayWithId, UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { NEFormData, SubrackType } from '../../../../types';
 import { ListOfShelfs } from './ListOfShelfs';
 import { ShelfDetails } from './ShelfDetails';
@@ -26,18 +26,17 @@ export const Shelfs = ({ fields, subracksAdded, register, control, setValue }: P
     if( keyField !== subrackKeySelected ) setSubrackKeySelected(keyField);
   };
 
-  const subracks = useWatch({
-    control,
-    name: 'subracks'
-  })
-
-  console.log(subracks);
+  // const subracks = useWatch({
+  //   control,
+  //   name: 'subracks'
+  // })
 
   return (
     <div className="flex flex-col gap-4">
       {/* List of Subracks */}
       <div className="flex gap-3 px-3 py-2 items-center justify-start overflow-x-auto">
         {fields.map((field, index) => (
+          // listado de los subracks agregados al NE
           <ListOfShelfs
             key={field.key}
             control={control}
@@ -49,7 +48,7 @@ export const Shelfs = ({ fields, subracksAdded, register, control, setValue }: P
       </div>
 
       {/* //todo: Revisar codigo para evitar el map sobre fields... Ver si es posible pasar directamente el key del subrack a renderizar  */}
-      {/* Subrack Details */}
+      {/* Detalle del subrack seleccionado */}
       {fields.map((field, index) =>
         subrackKeySelected && subrackKeySelected === field.key ? (
           <ShelfDetails
@@ -59,7 +58,7 @@ export const Shelfs = ({ fields, subracksAdded, register, control, setValue }: P
             setValue={setValue}
             subracksAdded={subracksAdded}
             id={field.id}
-            index={index}
+            indexShelf={index}
           />
         ) : null
       )}

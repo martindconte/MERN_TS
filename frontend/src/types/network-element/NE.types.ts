@@ -5,6 +5,7 @@ import { OwnerEnum } from '../catalog/commonTypes'
 import { subrackSchema } from '../catalog/subrackTypes'
 import { BoardPortType } from '../catalog/boardTypes'
 import { LogicalSignal } from '../catalog/bitsRatesTypes'
+import { PathType } from '../path/path.types'
 
 export enum NESettingEnum {
   ROADM = 'ROADM',
@@ -85,15 +86,6 @@ export type NEFormData = Pick<
   vendor: string
   subracks: {
     id: string,
-    // vendor: string,
-    // subrackType: string,
-    // subrackFamily: string,
-    // partNumber: string,
-    // modelName: string,
-    // totalSlots: number,
-    // owner: string,
-    // observations: string,
-    // technology: string,
     position: string,
     shelfNumber: number,
     shelfName: string,
@@ -110,7 +102,18 @@ export type NEFormData = Pick<
           type: BoardPortType,
           fullName: string,
           equipment: string,
-          logicalFacilities: Record<LogicalSignal, string[]>,
+          logicalFacilities: Partial<Record<LogicalSignal, string[]>>,
+          path: {
+            // id?: string, // ObjectId Base de Datos --> Mongoose
+            // plannerId?: string, // ID PLANIFICACION
+            IUId?: string, // ID IU
+            pathName?: string, // Nombre del Path IU
+            datoBasico?: string, // Dato Básico
+            type?: PathType, // Tipo de Path
+            client?: string, // Cliente
+            available?: boolean, // Disponible
+            observation?: string, // Observación
+          }
         }[]
       },
     }[]

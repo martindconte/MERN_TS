@@ -71,6 +71,7 @@ export const FormNE = ({ buttonLabel, onSubmit, defaultValues, status, isDeleted
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className='w-1/4'>
+          {/* Formulado con los datos del subrack */}
           <FormBodyNE
             errors={errors}
             isDeleted={isDeleted}
@@ -83,6 +84,7 @@ export const FormNE = ({ buttonLabel, onSubmit, defaultValues, status, isDeleted
           <BtnForm buttonLabel={buttonLabel} reset={reset} status={status} />
         </div>
         <div className='flex flex-col gap-2 w-3/4'>
+        {/* Agregar subracks */}
           <AddSubrack
             append={append}
             vendorNE={vendorNE}
@@ -90,9 +92,11 @@ export const FormNE = ({ buttonLabel, onSubmit, defaultValues, status, isDeleted
             quantitySubracks={fields.length}
             setSubracksAdded={setSubracksAdded}
           />
+          {/* Mustro y listo los subracks agregados */}
           <Shelfs control={control} register={register} setValue={setValue} fields={fields} subracksAdded={subracksAdded}/>
         </div>
       </form>
+      {/* Modal Para buscar el centro a cargar el equipo */}
       {showModalCentral && <SearchCentralModal onCentralSelect={handleCentralSelect} onClose={setShowModalCentral} />}
     </>
   )

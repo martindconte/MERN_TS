@@ -35,14 +35,17 @@ export * from './central/FormBodyCentral'
 export * from './central/FormCentral'
 
 //* Shared
-export * from './shared/errors/ErrorMsgForm'
+export * from './shared'
+// export * from './shared/errors/ErrorMsgForm'
 
-export * from './shared/form/BtnForm'
+// export * from './shared/form/BtnForm'
 
-export * from './shared/hidden/HiddenComponent'
+// export * from './shared/hidden/HiddenComponent'
 
-export * from './shared/modalDelete/ModalDelete'
+// export * from './shared/modalDelete/ModalDelete'
 
-export * from './shared/spinners/Spinner'
+// export * from './shared/spinners/Spinner'
 
-export * from './shared/table_v2/TableV2'
+// export * from './shared/table_v2/TableV2'
+
+// export * from './shared/toggle/ToggleComponent' 

@@ -27,3 +27,6 @@ export * from './central/centralTypes'
 
 //* NetworkElement
 export * from './network-element/NE.types'
+
+//* Path
+export * from './path/path.types'

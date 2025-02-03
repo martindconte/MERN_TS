@@ -1,12 +1,21 @@
-import { UseFormRegister } from 'react-hook-form'
+import { Control, UseFormRegister, useWatch } from 'react-hook-form'
 import { NEFormData } from '../../../../types'
 
 interface Props {
   register: UseFormRegister<NEFormData>
+  control: Control<NEFormData, any>;
   indexShelf: number
 }
 
-export const ShelfDataInputs = ({ indexShelf, register }: Props) => {
+export const ShelfDataInputs = ({ control, indexShelf, register }: Props) => {
+
+  const subracks = useWatch({
+    control,
+    name: `subracks`
+  })
+
+  console.log('subrack', subracks);
+
   return (
     <div className='flex flex-wrap items-center justify-center gap-2 border border-black px-2 py-1 rounded-lg bg-orange-100'>
       <div className='flex gap-2 items-center'>
