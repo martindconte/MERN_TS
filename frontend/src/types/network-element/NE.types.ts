@@ -78,6 +78,12 @@ export const NESchema = z.object({
   updatedAt: z.date(),
 })
 
+// response APIs
+export const respAPINESchema = z.object({
+  msg: z.string().optional(),
+  payload: NESchema.pick({ id: true, neName: true, vendor: true, description: true }),
+})
+
 export type NEFormData = Pick<
   NEType,
   | 'neName' | 'type' | 'setting' | 'neIp' | 'dbTx' | 'remarks' | 'description' | 'owner' | 'observations'

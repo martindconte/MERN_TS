@@ -9,3 +9,6 @@ export * from './catalog/VendorAPI'
 
 //* Central
 export * from './central/CentralAPI'
+
+//* Network Element
+export * from './networkElements/networkElementAPI'

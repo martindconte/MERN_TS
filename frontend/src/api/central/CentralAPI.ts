@@ -42,6 +42,8 @@ export const createCentral = async (formData: CentralFormData) => {
 
 export const getCentrals = async ( query = {} ) => {
 
+    console.log('se ejecuta getCentrals con query', query);
+
     const baseURL = '/central'
     const URL = buildURL( baseURL, query )
 

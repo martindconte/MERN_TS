@@ -1,11 +1,9 @@
 import { Dispatch, SetStateAction } from 'react'
-import { FieldErrors, UseFormRegister } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { NEFormData, NESettingEnum, NETypeEnum, OwnerEnum, VendorType } from '../../../types'
 import { ErrorMsgForm } from '../../shared/errors/ErrorMsgForm'
 
 interface Props {
-  register: UseFormRegister<NEFormData>;
-  errors: FieldErrors<NEFormData>;
   vendors: VendorType[];
   centralName: string;
   showCentralModal: Dispatch<SetStateAction<boolean>>;
@@ -14,8 +12,6 @@ interface Props {
   isDeleted?: boolean;
 }
 export const FormBodyNE = ({
-  errors,
-  register,
   vendors,
   isDeleted,
   requiredFields = true,
@@ -23,6 +19,9 @@ export const FormBodyNE = ({
   showCentralModal,
   cleanCentral,
 }: Props) => {
+
+  const { register, formState: { errors } } = useFormContext<NEFormData>()
+
   return (
     <div className='flex flex-col gap-1'>
       <div className='flex flex-col-reverse'>

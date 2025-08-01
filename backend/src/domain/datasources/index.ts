@@ -9,3 +9,6 @@ export * from './catalog/vendor.datasource'
 
 //* datasources/central
 export * from './central/central.datasource'
+
+//* network-element --> datasources/network-element
+export * from './network-element/networkElement.datasource'

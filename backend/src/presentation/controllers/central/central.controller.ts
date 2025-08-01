@@ -1,84 +1,96 @@
 import { Request, Response } from 'express';
-import { CreateCentralDTO, CentralUseCase, UpdateCentralDTO, CentralRepository, SearchCentralDTO } from '../../../domain'
+import { CreateCentralDTO, CentralUseCase, UpdateCentralDTO, CentralRepository, SearchCentralDTO } from '../../../domain';
 
 export class CentralController {
+  // DI
+  constructor(private readonly centralRepository: CentralRepository) {}
 
-    // DI
-    constructor(
-        private readonly centralRepository: CentralRepository
-    ) { }
+  createCentral = (req: Request, res: Response) => {
+    const [error, centralDTO] = CreateCentralDTO.create(req.body);
+    if (error)
+      return res.status(400).json({
+        status: 'error',
+        msg: error,
+      });
 
-    createCentral = (req: Request, res: Response) => {
-        const [error, centralDTO] = CreateCentralDTO.create(req.body)
-        if (error) return res.status(400).json({
-            status: 'error',
-            msg: error
+    new CentralUseCase.CreateCentral(this.centralRepository)
+      .execute(centralDTO!)
+      .then((central) =>
+        res.json({
+          status: 'success',
+          msg: 'The Central has been successfully created',
+          payload: central,
         })
+      )
+      .catch((error) =>
+        res.status(400).json({
+          status: 'error',
+          msg: error,
+        })
+      );
+  };
 
-        new CentralUseCase.CreateCentral(this.centralRepository)
-            .execute( centralDTO! )
-            .then(central => res.json({
-                status: 'success',
-                msg: 'The Central has been successfully created',
-                payload: central
-            }))
-            .catch(error => res.status(400).json({
-                status: 'error',
-                msg: error
-            }))
-    }
+  getAllCentrals = (req: Request, res: Response) => {
+    const search = SearchCentralDTO.searchCentral(req.query);
+    new CentralUseCase.GetCentrals(this.centralRepository)
+      .execute(search)
+      .then((centrals) => res.send(centrals))
+      .catch((error) =>
+        res.status(400).json({
+          status: 'error',
+          msg: error.message,
+        })
+      );
+  };
 
-    getAllCentrals = (req: Request, res: Response) => {
-        const search = SearchCentralDTO.createQueries( req.query )
-        new CentralUseCase.GetCentrals(this.centralRepository)
-            .execute( search )
-            .then(centrals => res.send( centrals ))
-            .catch(error => res.status(400).json({
-                status: 'error',
-                msg: error.message
-            }))
-    }
+  getCentralsById = (req: Request, res: Response) => {
+    const { centralid } = req.params;
+    console.log('centralid', centralid);
+    new CentralUseCase.GetCentral(this.centralRepository)
+      .execute(centralid)
+      .then((central) => res.json(central))
+      .catch((error) => res.status(400).json({ error }));
+  };
 
-    getCentralsById = (req: Request, res: Response) => {
-        const { centralid } = req.params
+  updateCentral = (req: Request, res: Response) => {
+    const { centralid } = req.params;
+    const [error, updateCentralDTO] = UpdateCentralDTO.update({ id: centralid, ...req.body });
+    if (error) return res.status(400).json({ error });
 
-        new CentralUseCase.GetCentral(this.centralRepository)
-            .execute(centralid)
-            .then(central => res.json(central))
-            .catch(error => res.status(400).json({ error }))
-    }
+    new CentralUseCase.UpdateCentral(this.centralRepository)
+      .execute(updateCentralDTO!)
+      .then((central) =>
+        res.json({
+          status: 'success',
+          msg: 'The Central has been updated successfully',
+          payload: central,
+        })
+      )
+      .catch((error) =>
+        res.status(400).json({
+          status: 'error',
+          msg: error.message,
+        })
+      );
+  };
 
-    updateCentral = (req: Request, res: Response) => {
-        const { centralid } = req.params
-        const [error, updateCentralDTO] = UpdateCentralDTO.update({ id: centralid, ...req.body })
-        if (error) return res.status(400).json({ error })
-        
-        new CentralUseCase.UpdateCentral(this.centralRepository)
-            .execute( updateCentralDTO! )
-            .then(central => res.json({
-                status: 'success',
-                msg: 'The Central has been updated successfully',
-                payload: central
-            }))
-            .catch(error => res.status(400).json({
-                status: 'error',
-                msg: error.message
-            }))
-    }
+  deleteCentral = (req: Request, res: Response) => {
+    const { centralid } = req.params;
 
-    deleteCentral = (req: Request, res: Response) => {
-        const { centralid } = req.params
-
-        new CentralUseCase.DeleteCentral(this.centralRepository)
-            .execute(centralid)
-            .then(central => res.json({
-                status: 'success',
-                msg: 'The Central has been deleted successfully',
-                payload: central
-            }))
-            .catch(error => res.status(400).json({
-                status: 'error',
-                msg: error.message
-            }))
-    }
+    new CentralUseCase.DeleteCentral(this.centralRepository)
+      .execute(centralid)
+      .then((central) =>
+        res.json({
+          status: 'success',
+          msg: 'The Central has been deleted successfully',
+          payload: central,
+        })
+      )
+      .catch((error) =>
+        res.status(400).json({
+          status: 'error',
+          msg: error.message,
+        })
+      );
+  };
 }

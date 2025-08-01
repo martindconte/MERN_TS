@@ -9,3 +9,6 @@ export * from './catalog/vendor.entity';
 
 //* Central
 export * from './central/central.entity'
+
+//* Network Element
+export * from './network-element/networkElement.entity';

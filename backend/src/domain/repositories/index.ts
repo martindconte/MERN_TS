@@ -9,3 +9,6 @@ export * from './catalog/vendor.repository'
 
 //* Central
 export * from './central/central.repository'
+
+//* Network Element
+export * from './network-element/network-element.repository'

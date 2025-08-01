@@ -1,10 +1,14 @@
 import { FormNE } from '../../components/network-element'
+import { useNetworkElementMutation } from '../../hook/networkElement/useNetworkElementMutation'
 import { NEFormData } from '../../types'
 
 export const NewNEView = () => {
-  //todo: define type
-  const handleForm = (data: NEFormData) => {
-    console.log(data)
+
+  const { mutationCreateNetworkElement } = useNetworkElementMutation()
+
+  const handleForm = async (formData: NEFormData) => {
+    console.log('Desde NewNEWView', formData);
+    await mutationCreateNetworkElement.mutateAsync(formData);
   }
 
   return (

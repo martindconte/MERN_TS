@@ -16,7 +16,7 @@ export interface ISlots {
   number: number;
   physical: string;
   logical: string;
-  boards?: string[] | Partial<IBoard>[];
+  boards?: string[] | Partial<IBoard>[]; // sera sitring (id) cuando se crea/actualiza el subrack y Partial<IBoard> cuando se popula con la informacion
 }
 
 export interface ISubrack {

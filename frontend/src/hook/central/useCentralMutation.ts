@@ -26,6 +26,9 @@ export const useCentralMutation = () => {
     onError: error => toast.error(error.message, { theme: 'colored' }),
     onSuccess: response => {
       if (response) {
+        queryClient.invalidateQueries({
+          queryKey: ['central'],
+        })
         const { msg, payload } = response
         toast.success(`${msg} // ${payload.codeName.toUpperCase()} - ${payload.centralName.toUpperCase()} - ${payload.siteCode.toUpperCase()}`, {
           theme: 'colored',

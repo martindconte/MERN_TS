@@ -5,7 +5,7 @@ import { TransceiverEntity } from '../../../entities';
 export class SearchTransceiverDTO {
   private static validKeys = new Set<keyof ITransceiver>(Object.values(TransceiverEntity.getPublicKeysTransceiver) as Array<keyof ITransceiver>);
 
-  private static otherValidKeys = new Set<string>(['']);
+  // private static otherValidKeys = new Set<string>(['']);
 
   private static processValue(key: keyof ITransceiver, value: any): any {
     const decodedValue = decodeURIComponent(value as string);

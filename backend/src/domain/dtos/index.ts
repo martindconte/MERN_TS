@@ -27,8 +27,11 @@ export * from './catalog/vendor/update-vendor.dto';
 
 //* Central --> dtos/central
 export * from './central/create-central.dto';
-export * from './central/seacrh-central.dto';
+export * from './central/search-central.dto';
 export * from './central/update-central.dto';
+
+//* Network Element --> dtos/network-element
+export * from './network-element/create-networkElement.dto';
 
 //* Shared
 export * from './shared/queries.dto';

@@ -1,28 +1,20 @@
-import { useState } from 'react'
-import { Control, UseFormRegister, UseFormSetValue, useWatch } from 'react-hook-form'
-import { NEFormData, SubrackType } from '../../../../types'
-import { AddBoardInSlotModal } from './AddBoardInSlotModal'
-import { BoardDataInShelf } from './BoardDataInShelf'
+import { useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { NEFormData, SubrackType } from '../../../../types';
+import { BoardDataInShelf, AddBoardInSlotModal } from './';
 
 interface Props {
-  register: UseFormRegister<NEFormData>
-  setValue: UseFormSetValue<NEFormData>
-  control: Control<NEFormData, any>
-  slotData: SubrackType['slots'][number]
-  indexShelf: number
-  indexSlot: number
+  slotData: SubrackType['slots'][number];
+  indexShelf: number;
+  indexSlot: number;
 }
 
-export const NESlotInput = ({
-  register,
-  control,
-  slotData,
-  indexShelf,
-  indexSlot,
-  setValue /* isBoardConfirm */ /* handleChangeBoard  */,
-}: Props) => {
-  const [showModalSelectBoard, setShowModalSelectBoard] = useState<boolean>(false)
+export const NESlotInput = ({ slotData, indexShelf, indexSlot }: Props) => {
 
+  const [showModalSelectBoard, setShowModalSelectBoard] = useState<boolean>(false)
+  const { control, register } = useFormContext<NEFormData>()
+
+  //todo: Revisar necesidad de usar useWatch
   const { board } = useWatch({
     control,
     name: `subracks.${indexShelf}.slots.${indexSlot}`,
@@ -31,7 +23,7 @@ export const NESlotInput = ({
   return (
     <>
       <div className='flex gap-2 items-center'>
-        <label htmlFor='physical' className='uppercase font-semibold'>
+        <label htmlFor={`physical-${indexShelf}-${indexSlot}`} className='uppercase font-semibold'>
           Slot:
         </label>
         <input
@@ -39,7 +31,7 @@ export const NESlotInput = ({
           type='string'
           min={0}
           step={1}
-          id='physical'
+          id={`physical-${indexShelf}-${indexSlot}`}
           placeholder='Slot Fisico del Equipo'
           readOnly
           value={slotData.physical}
@@ -47,7 +39,7 @@ export const NESlotInput = ({
         />
       </div>
       <div className='flex gap-2 items-center'>
-        <label htmlFor='logical' className='uppercase font-semibold'>
+        <label htmlFor={`logical-${indexShelf}-${indexSlot}`} className='uppercase font-semibold'>
           NMS:
         </label>
         <input
@@ -55,7 +47,7 @@ export const NESlotInput = ({
           type='string'
           min={0}
           step={1}
-          id='logical'
+          id={`logical-${indexShelf}-${indexSlot}`}
           placeholder='Slot Fisico del Equipo'
           readOnly
           value={slotData.logical}
@@ -65,8 +57,6 @@ export const NESlotInput = ({
 
       {/* Muestro la informacion de la placa seleccionado en caso de haber hecho una seleccion o EMPTY */}
       <BoardDataInShelf
-        control={control}
-        setValue={setValue}
         indexShelf={indexShelf}
         indexSlot={indexSlot}
         slotData={slotData}
@@ -82,9 +72,6 @@ export const NESlotInput = ({
       {/* Modal que se muestra en caso de presionar el boton "Selccion Placa". Abre el Modal de seleccion de placa*/}
       {showModalSelectBoard && (
         <AddBoardInSlotModal
-          register={register}
-          control={control}
-          setValue={setValue}
           slotData={slotData}
           indexShelf={indexShelf}
           indexSlot={indexSlot}

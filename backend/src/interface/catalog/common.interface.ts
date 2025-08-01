@@ -11,6 +11,8 @@ export enum OwnerEnum {
   tasa = 'TASA',
   mvs = 'MVS',
   other = 'OTHER',
+  teco = 'TECO',
+  na = 'NA',
 }
 
 export enum RoadmapEnum {
@@ -20,11 +22,13 @@ export enum RoadmapEnum {
   NA = '',
 }
 
+//todo: Optimizar este interface, ya que se repite en varios lugares. Sacar de Calatalog y Central y usar una unica interface
 export interface IPageLimit {
   page: number;
   limit: number;
 }
 
+//todo: Optimizar este interface, ya que se repite en varios lugares. Sacar de Calatalog y Central y usar una unica interface
 export interface IPagination {
   totalDocs: number;
   totalResults: number;

@@ -7,6 +7,9 @@
 - Configurar Logs
 - Configurar Morgan para registros de logs para dev y production
 
+## Vendor
+- Pendiente de borrar una central. Se debe verificar que no se tengan equipos creados
+
 ### Catalogo
 
 #### Board

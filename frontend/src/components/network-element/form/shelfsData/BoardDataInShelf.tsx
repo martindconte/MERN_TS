@@ -1,18 +1,18 @@
-import { Control, UseFormSetValue, useWatch } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { NEFormData, SubrackType } from '../../../../types'
 import { Dispatch, SetStateAction } from 'react';
 // import { BtnActions, BtnActionsShelf } from './BtnActionsShelf'
 
 interface Props {
-  control: Control<NEFormData, any>;
-  setValue: UseFormSetValue<NEFormData>;
   setShowModalSelectBoard: Dispatch<SetStateAction<boolean>>
   slotData: SubrackType['slots'][number];
   indexShelf: number;
   indexSlot: number;
 }
 
-export const BoardDataInShelf = ({ setValue, control, setShowModalSelectBoard, indexShelf, indexSlot, slotData }: Props) => {
+export const BoardDataInShelf = ({ setShowModalSelectBoard, indexShelf, indexSlot, slotData }: Props) => {
+
+  const { control, setValue } = useFormContext<NEFormData>()
   
   const { slots } = useWatch({
     control,

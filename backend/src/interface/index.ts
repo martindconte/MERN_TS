@@ -12,3 +12,6 @@ export * from './central/central.interface';
 
 //* Network Element
 export * from './network-element/NE.interface';
+
+//* Common
+export * from './common/enums';

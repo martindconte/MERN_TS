@@ -2,10 +2,8 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Central, CentralFormData } from '../../../types'
 import { useCentrals } from '../../../hook'
-import { TableV2 } from '../../shared/table_v2/TableV2'
-import { Spinner } from '../../shared/spinners/Spinner'
 import { InputsSearchCentral } from './InputsSearchCentral'
-import { BtnForm } from '../../shared/form/BtnForm'
+import { BtnForm, Spinner, TableV2 } from '../../shared'
 
 interface Props {
   onCentralSelect: (centrals: Central[]) => void
